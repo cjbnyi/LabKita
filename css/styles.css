@@ -1,0 +1,25 @@
+:root {
+    
+}
+
+.hidden {
+    display: none;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    position: absolute;
+    z-index: 1050;
+    max-width: 100vw;
+    left: auto;
+    right: 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.content-area {
+    padding-top: 100px;
+}
