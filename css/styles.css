@@ -21,10 +21,9 @@
 }
 
 .content-area {
-    padding-top: 100px;
+    margin-top: 80px;
+    padding: 0 10px;
 }
-
-/* Reservation System */
 
 .reservation-header {
     display: flex;
@@ -48,4 +47,3 @@
 table.calendar td, table.calendar th {
     width: 100px;
 }
-
