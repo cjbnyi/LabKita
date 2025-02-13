@@ -46,3 +46,12 @@
 table.calendar td, table.calendar th {
     width: 100px;
 }
+
+.lab-card-img {
+    width: 100%; /* Ensures responsiveness */
+    height: 200px; /* Adjust to preferred height */
+    object-fit: cover; /* Ensures images fill the space without distortion */
+    border-radius: 8px; /* Optional: rounded corners */
+}
+
+
