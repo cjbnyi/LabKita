@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="../css/styles.css">
+
     </head>
     <body>
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
@@ -95,51 +96,10 @@
         </nav>
         
         <div class="content-area">
-            <!-- Description -->
-            <div class="container mt-5">
-                <h1>Manage Reservations</h1>
-                <p>Managing reservations for our high-quality computer labs has never been easier. With our streamlined online system, users can effortlessly book, modify, or cancel their reservations at any time, ensuring that access to state-of-the-art facilities is just a few clicks away. Whether you're a student needing a quiet space to focus or a group requiring specialized software, our reservation platform offers flexibility and convenience to meet all your lab needs. </p>
-            </div>
 
-            <!-- If unlogged. -->
-            <div id="loggedInMessage" class="alert alert-danger d-none" role="alert">
-                You need to be logged in to manage your reservations.
-                <a href="#" id="loginLink" class="btn btn-link">Auto-Login</a> or  or <a href> Sign-Up</a>?
-            </div>
-
-            <!-- If logged in-->
-            <div id="reservationsSection" class="container mt-5 d-none">
-                <h3>Your Reservations</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Reservation ID</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Time</th>
-                            <th scope="col">Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Example Reservations (Replace with dynamic data) -->
-                        <tr>
-                            <td>1</td>
-                            <td>2025-02-03</td>
-                            <td>10:00 AM</td>
-                            <td>G106</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>2025-02-04</td>
-                            <td>02:00 PM</td>
-                            <td>G213</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        
         </div>
 
-        <script src="/js/scripts.js"></script>
+        <script src="../js/scripts.js"></script>
         <script src="https://unpkg.com/@popperjs/core@2"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>

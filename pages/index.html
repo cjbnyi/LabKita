@@ -6,7 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="../css/styles.css">
+        <link rel="stylesheet" href="../css/styles.css">
+
     </head>
     <body>
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
@@ -93,13 +94,102 @@
                 </ul>
             </div>
         </nav>
-        
+            
         <div class="content-area">
-            <h1>Homepage</h1>
-            <p>This is the home page.</p>
+            <!-- Hero Section -->
+            <section class="hero-section text-center text-white bg-primary py-5">
+                <div class="container">
+                    <h1>Welcome to LabKita!</h1>
+                    <p class="lead">Happy Valentine's! Reserve a lab now, with or without a date.</p>
+                </div>
+            </section>
+
+            <!-- Quick Actions Grid -->
+            <section class="quick-actions py-5">
+                <div class="container">
+                    <h2 class="text-center mb-4">Quick Actions</h2>
+                    <div class="row g-4">
+                        <div class="col-md-3">
+                            <a href="view-labs.html" class="btn btn-outline-primary w-100 py-3">View Labs</a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="manage-reservations.html" class="btn btn-outline-primary w-100 py-3">Manage Reservations</a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="admin.html" class="btn btn-outline-primary w-100 py-3">Admin Panel</a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="faq.html" class="btn btn-outline-primary w-100 py-3">Help / FAQ</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upcoming Reservations -->
+            <section class="upcoming-reservations py-5 bg-light">
+                <div class="container">
+                    <h2 class="text-center mb-4">Upcoming Reservations</h2>
+                    <div class="card mx-auto" style="max-width: 600px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">No upcoming reservations</h5>
+                            <p class="card-text">Book a lab now to see your scheduled reservations here.</p>
+                            <a href="manage-reservations.html" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- View Labs Section -->
+            <section class="view-labs py-5">
+                <div class="container">
+                    <h2 class="text-center mb-4">Available Labs</h2>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <img src="../images/lab-placeholder.jpg" class="card-img-top" alt="Lab Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">Lab A</h5>
+                                    <p class="card-text">State-of-the-art lab equipped with high-performance computers.</p>
+                                    <a href="#" class="btn btn-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <img src="../images/lab-placeholder.jpg" class="card-img-top" alt="Lab Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">Lab B</h5>
+                                    <p class="card-text">Ideal for programming workshops and collaborative projects.</p>
+                                    <a href="#" class="btn btn-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <img src="../images/lab-placeholder.jpg" class="card-img-top" alt="Lab Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">Lab C</h5>
+                                    <p class="card-text">Fully equipped with advanced hardware for research purposes.</p>
+                                    <a href="#" class="btn btn-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ / Help Section -->
+            <section class="faq-help py-5 bg-light text-center">
+                <div class="container">
+                    <h2>Need Help?</h2>
+                    <p>Check out our FAQ or reach out for support.</p>
+                    <a href="faq.html" class="btn btn-primary">Visit FAQ</a>
+                </div>
+            </section>
+
         </div>
 
-        <script src="/js/scripts.js"></script>
+        <script src="../js/scripts.js"></script>
         <script src="https://unpkg.com/@popperjs/core@2"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>

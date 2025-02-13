@@ -14,17 +14,6 @@ function toggleLoginProfile() {
     }
 }
 
-// Simulate Google login (replace with actual Google login code)
-function googleLogin() {
-    // Simulate the user being logged in
-    userLoggedIn = true;
-    toggleLoginProfile();  // Update navbar visibility
-}
-
-function logout() {
-
-}
-
 // Initialize all tooltips on the page
 document.addEventListener('DOMContentLoaded', function () {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -32,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 });
-
 
 // Call the function to update navbar when page loads
 toggleLoginProfile();
