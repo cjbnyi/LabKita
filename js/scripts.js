@@ -24,3 +24,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Call the function to update navbar when page loads
 toggleLoginProfile();
+
+ // Simulate user login when the "Login" link is clicked
+ document.getElementById('loginLink').addEventListener('click', function(event) {
+    event.preventDefault();  // Prevent default anchor behavior
+
+    // Simulate successful login
+    let isLoggedIn = true;  // Change this logic as per your actual login flow
+
+    // Update page based on login status
+    if (!isLoggedIn) {
+        document.getElementById('loggedInMessage').classList.remove('d-none');
+    } else {
+        document.getElementById('reservationsSection').classList.remove('d-none');
+        document.getElementById('loginLink').classList.add('d-none');  // Hide login link
+        document.getElementById('signUpLink').classList.add('d-none');  // Hide sign-up link
+    }
+});

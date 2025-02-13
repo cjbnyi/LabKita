@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="../css/styles.css">
     </head>
+  
     <body>
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
             <div class="container-fluid">
@@ -95,8 +96,43 @@
         </nav>
         
         <div class="content-area">
-            <h1>View Labs</h1>
-            <p>This is the view labs page.</p>
+            <!-- Welcome to the Lab!-->
+            <div class="container mt-3">
+                <h1> Welcome to the Lab Reservation System </h1>
+                <p> In the rapidly evolving world of tech education, Imaginary Complabs represents the cutting-edge integration of technology, innovation, and efficiency within the LabKita computer lab reservation system. This virtual concept of labs goes beyond the boundaries of traditional physical spaces. Imagine having a lab environment where users can seamlessly transition between virtual and real-world settings, all while ensuring maximum resource utilization and personalized user experiences.</p>
+            </div>
+
+            <!-- Available slots table --> 
+            <div class="container mt-4">
+                <h2 class="mb-3">Available Computer Labs</h2>
+                
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Lab Name</th>
+                            <th>Available Time Slots</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Lab A</td>
+                            <td>9:00 AM - 12:00 PM, 2:00 PM - 5:00 PM</td>
+                            <td class="text-success">Available</td>
+                        </tr>
+                        <tr>
+                            <td>Lab B</td>
+                            <td>10:00 AM - 1:00 PM, 3:00 PM - 6:00 PM</td>
+                            <td class="text-danger">Full</td>
+                        </tr>
+                        <tr>
+                            <td>Lab C</td>
+                            <td>8:00 AM - 11:00 AM, 1:00 PM - 4:00 PM</td>
+                            <td class="text-success">Available</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <script src="../js/scripts.js"></script>
