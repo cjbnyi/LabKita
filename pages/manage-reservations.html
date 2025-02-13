@@ -94,10 +94,135 @@
                 </ul>
             </div>
         </nav>
-        
-        <div class="content-area">
-            <h1>Manage Reservations</h1>
-            <p>This is the manage reservation page.</p>
+
+        <div class="content-area-manage-reservations">
+            <div class="container mt-5">
+                <!-- Tabs -->
+                <ul class="nav nav-tabs" id="reservationTabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#upcoming">Upcoming Reservations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#past">Past Reservations</a>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content mt-3">
+                    <!-- Upcoming Reservations -->
+                    <div class="tab-pane fade show active" id="upcoming">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>Reservation ID</th>
+                                    <th>Lab Name</th>
+                                    <th>Lab Slot/s</th>
+                                    <th>Start Date & Time</th>
+                                    <th>End Date & Time</th>
+                                    <th>Requester’s Name</th>
+                                    <th>Reservers’ Names</th>
+                                    <th>Purpose</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2</td>
+                                    <td>GK602</td>
+                                    <td>A1, B2</td>
+                                    <td>February 14, 2025 2:30 PM</td>
+                                    <td>February 14, 2025 3:00 PM</td>
+                                    <td>Enzo Rafael Chan</td>
+                                    <td>Christian Bunyi, Enzo Rafael Chan</td>
+                                    <td>ruan mei appreciation</td>
+                                    <td><span class="badge bg-success">Approved</span></td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm">Modify</button>
+                                        <button class="btn btn-danger btn-sm">Cancel</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>LS603</td>
+                                    <td>A1, B2, C3</td>
+                                    <td>February 14, 2025 4:00 PM</td>
+                                    <td>February 14, 2025 5:00 PM</td>
+                                    <td>Widenmar Embuscado</td>
+                                    <td>Christian Bunyi, Enzo Rafael Chan, Widenmar Embuscado</td>
+                                    <td>(the) herta appreciation</td>
+                                    <td><span class="badge bg-warning text-dark">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm">Modify</button>
+                                        <button class="btn btn-danger btn-sm">Cancel</button>
+                                    </td>
+                                </tr>                      
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Past Reservations -->
+                    <div class="tab-pane fade" id="past">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th>Reservation ID</th>
+                                    <th>Lab Name</th>
+                                    <th>Lab Slot/s</th>
+                                    <th>Start Date & Time</th>
+                                    <th>End Date & Time</th>
+                                    <th>Requester’s Name</th>
+                                    <th>Reservers’ Names</th>
+                                    <th>Purpose</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>AG601</td>
+                                    <td>A1</td>
+                                    <td>February 14, 2025 1:00 PM</td>
+                                    <td>February 14, 2025 2:00 PM</td>
+                                    <td>Christian Bunyi</td>
+                                    <td>Christian Bunyi</td>
+                                    <td>maki nishikino appreciation</td>
+                                    <td><span class="badge bg-primary">Completed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>SJ604</td>
+                                    <td>A1, B2, C3, D4</td>
+                                    <td>February 15, 2025 11:00 AM</td>
+                                    <td>February 15, 2025 12:00 PM</td>
+                                    <td>Rovin Montaño</td>
+                                    <td>Christian Bunyi, Enzo Rafael Chan, Widenmar Embuscado, Rovin Montaño</td>
+                                    <td>feixiao appreciation</td>
+                                    <td><span class="badge bg-secondary">Canceled</span></td>
+                                </tr>       
+                                <tr>
+                                    <td>5</td>
+                                    <td>VL605</td>
+                                    <td>E1, E2, E3, E4</td>
+                                    <td>February 15, 2025 12:00 PM</td>
+                                    <td>February 15, 2025 1:00 PM</td>
+                                    <td>Christian Bunyi</td>
+                                    <td>Christian Bunyi, Enzo Rafael Chan, Widenmar Embuscado, Rovin Montaño</td>
+                                    <td>venti appreciation</td>
+                                    <td><span class="badge bg-danger">Rejected</span></td>
+                                </tr>   
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Reserve Lab Button -->
+                    <div class="text-center mt-4">
+                        <a href="reservation-form.html" class="btn btn-primary btn-lg">
+                            📅 Make a Reservation
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script src="../js/scripts.js"></script>
