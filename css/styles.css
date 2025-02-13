@@ -22,6 +22,7 @@
 
 .content-area {
     margin-top: 75px;
+    padding-bottom: 50px;
 }
 
 .reservation-header {
@@ -47,11 +48,14 @@ table.calendar td, table.calendar th {
     width: 100px;
 }
 
-.lab-card-img {
-    width: 100%; /* Ensures responsiveness */
-    height: 200px; /* Adjust to preferred height */
-    object-fit: cover; /* Ensures images fill the space without distortion */
-    border-radius: 8px; /* Optional: rounded corners */
+.hero-card {
+    padding: 30px 20px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hero-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 
