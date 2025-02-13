@@ -44,7 +44,7 @@
                         <a class="nav-link" href="admin.html">
                             <div class="d-flex flex-column">
                                 <i class="fas fa-cogs mb-1"></i>
-                                <span class="fs-6">Admin</span>
+                                <span class="fs-6">Admin Panel</span>
                             </div>
                         </a>
                     </li>
@@ -97,96 +97,70 @@
             <section class="hero-section text-center text-white bg-primary py-5">
                 <div class="container">
                     <h1>Welcome to LabKita!</h1>
-                    <p class="lead">Happy Valentine's! Reserve a lab now, with or without a date.</p>
+                    <p class="lead">Happy Valentine's!!! Reserve a lab now, with or without a date.</p>
                 </div>
             </section>
 
-            <!-- Quick Actions Grid -->
-            <section class="quick-actions py-5">
-                <div class="container">
-                    <h2 class="text-center mb-4">Quick Actions</h2>
+            <div class="container mt-5">
+                <div class="row g-4">
+                    <!-- View Labs -->
+                    <div class="col-md-4">
+                        <a href="view-labs.html" class="text-decoration-none">
+                            <div class="card text-center shadow-sm h-100 d-flex flex-column align-items-center justify-content-center hero-card">
+                                <i class="fas fa-laptop fa-3x mb-3 text-primary"></i>
+                                <h5 class="card-title">View Labs</h5>
+                                <p class="card-text">Browse available computer labs and their details.</p>
+                            </div>
+                        </a>
+                    </div>
+            
+                    <!-- Manage Reservations -->
+                    <div class="col-md-4">
+                        <a href="manage-reservations.html" class="text-decoration-none">
+                            <div class="card text-center shadow-sm h-100 d-flex flex-column align-items-center justify-content-center hero-card">
+                                <i class="fas fa-calendar-check fa-3x mb-3 text-success"></i>
+                                <h5 class="card-title">Manage Reservations</h5>
+                                <p class="card-text">Book and manage lab reservations efficiently.</p>
+                            </div>
+                        </a>
+                    </div>
+            
+                    <!-- Admin Panel -->
+                    <div class="col-md-4">
+                        <a href="admin.html" class="text-decoration-none">
+                            <div class="card text-center shadow-sm h-100 d-flex flex-column align-items-center justify-content-center hero-card">
+                                <i class="fas fa-cogs fa-3x mb-3 text-warning"></i>
+                                <h5 class="card-title">Admin Panel</h5>
+                                <p class="card-text">Manage lab settings and oversee reservations.</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="container mt-4">
                     <div class="row g-4">
-                        <div class="col-md-3">
-                            <a href="view-labs.html" class="btn btn-outline-primary w-100 py-3">View Labs</a>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="manage-reservations.html" class="btn btn-outline-primary w-100 py-3">Manage Reservations</a>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="admin.html" class="btn btn-outline-primary w-100 py-3">Admin Panel</a>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="faq.html" class="btn btn-outline-primary w-100 py-3">Login</a>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="faq.html" class="btn btn-outline-primary w-100 py-3">Login</a>
-                        </div>
+                    <!-- Help / FAQ -->
+                    <div class="col-md-4">
+                        <a href="faq.html" class="text-decoration-none">
+                            <div class="card text-center shadow-sm h-100 d-flex flex-column align-items-center justify-content-center hero-card">
+                                <i class="fas fa-question-circle fa-3x mb-3 text-info"></i>
+                                <h5 class="card-title">Help / FAQ</h5>
+                                <p class="card-text">Find answers to common questions and get assistance.</p>
+                            </div>
+                        </a>
+                    </div>
+            
+                    <!-- View Profile -->
+                    <div class="col-md-4">
+                        <a href="view-profile.html" class="text-decoration-none">
+                            <div class="card text-center shadow-sm h-100 d-flex flex-column align-items-center justify-content-center hero-card">
+                                <i class="fas fa-user-circle fa-3x mb-3 text-secondary"></i>
+                                <h5 class="card-title">View Profile</h5>
+                                <p class="card-text">Manage your account settings and personal information.</p>
+                            </div>
+                        </a>
                     </div>
                 </div>
-            </section>
-
-            <!-- Upcoming Reservations -->
-            <section class="upcoming-reservations py-5 bg-light">
-                <div class="container">
-                    <h2 class="text-center mb-4">Upcoming Reservations</h2>
-                    <div class="card mx-auto" style="max-width: 600px;">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">No upcoming reservations</h5>
-                            <p class="card-text">Book a lab now to see your scheduled reservations here.</p>
-                            <a href="manage-reservations.html" class="btn btn-primary">Book Now</a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- View Labs Section -->
-            <section class="view-labs py-5">
-                <div class="container">
-                    <h2 class="text-center mb-4">Available Labs</h2>
-                    <div class="row g-4">
-                        <div class="col-md-4">
-                            <div class="lab-card">
-                                <img src="../assets/images/com_lab_1.jpg" class="lab-card-img" alt="Lab Image">
-                                <div class="card-body">
-                                    <h5 class="card-title">Lab A</h5>
-                                    <p class="card-text">State-of-the-art lab equipped with high-performance computers.</p>
-                                    <a href="#" class="btn btn-primary">View Details</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="lab-card">
-                                <img src="../assets/images/com_lab_2.jpg" class="lab-card-img" alt="Lab Image">
-                                <div class="card-body">
-                                    <h5 class="card-title">Lab B</h5>
-                                    <p class="card-text">Ideal for programming workshops and collaborative projects.</p>
-                                    <a href="#" class="btn btn-primary">View Details</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="lab-card">
-                                <img src="../assets/images/com_lab_3.jpg" class="lab-card-img" alt="Lab Image">
-                                <div class="card-body">
-                                    <h5 class="card-title">Lab C</h5>
-                                    <p class="card-text">Fully equipped with advanced hardware for research purposes.</p>
-                                    <a href="#" class="btn btn-primary">View Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- FAQ / Help Section -->
-            <section class="faq-help py-5 bg-light text-center">
-                <div class="container">
-                    <h2>Need Help?</h2>
-                    <p>Check out our FAQ.</p>
-                    <a href="faq.html" class="btn btn-primary">Visit FAQ</a>
-                </div>
-            </section>
-
+            </div>
         </div>
 
         <script src="../js/scripts.js"></script>
