@@ -53,6 +53,11 @@
 
                 <!-- Right: Other Links & Profile Links -->
                 <ul class="navbar-nav ms-auto align-items-center">
+                    <form class="d-flex me-3" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search users..." aria-label="Search">
+                        <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+
                     <!-- Log In and Sign Up Buttons (Visible when not logged in) -->
                     <li class="nav-item" id="loginItem">
                         <a class="nav-link" href="login.html">
@@ -62,13 +67,6 @@
                     <li class="nav-item" id="signUpItem">
                         <a class="nav-link" href="sign-up.html">
                             <button type="button" class="btn btn-outline-light me-1">Sign-Up</button>
-                        </a>
-                    </li>
-
-                    <!-- Help / FAQ Icon -->
-                    <li class="nav-item" id="helpItem">
-                        <a class="nav-link" href="faq.html" id="helpIcon" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Help / FAQ">
-                            <i class="fas fa-question-circle"></i>
                         </a>
                     </li>
 
@@ -225,7 +223,7 @@
 
                     <!-- Reserve Lab Button -->
                     <div class="text-center mt-4">
-                        <a href="reservation-form.html" class="btn btn-primary btn-lg">
+                        <a href="reserve-slot.html" class="btn btn-primary btn-lg">
                             📅 Make a Reservation
                         </a>
                     </div>
