@@ -101,56 +101,68 @@
                 </ul>
             </div>
         </nav>
-        
-        <div class="content-area">
-            <div class="container mt-5">
-                <div class="card shadow-sm p-4">
-                    <h3 class="mb-4 text-center">Privacy Settings</h3>
-                    
-                    <!-- Change Password -->
-                    <h5>Change Password</h5>
-                    <form>
-                        <div class="mb-3">
-                            <label class="form-label">Current Password</label>
-                            <input type="password" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">New Password</label>
-                            <input type="password" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Confirm New Password</label>
-                            <input type="password" class="form-control">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Update Password</button>
-                    </form>
-                    
-                    <hr>
-                    
-                    <!-- Notifications -->
-                    <h5>Notifications</h5>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
-                        <label class="form-check-label" for="emailNotifications">Email Notifications</label>
+
+        <div class="container mt-5 pt-4">
+            <div class="card shadow-sm p-4">
+                <h3 class="mb-4 text-center">Privacy Settings</h3>
+
+                <!-- Change Password -->
+                <h5>Change Password</h5>
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Current Password</label>
+                        <input type="password" class="form-control">
                     </div>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="systemAlerts">
-                        <label class="form-check-label" for="systemAlerts">System Alerts</label>
+                    <div class="mb-3">
+                        <label class="form-label">New Password</label>
+                        <input type="password" class="form-control">
                     </div>
-                    
-                    <hr>
-                    
-                    <!-- Delete Account -->
-                    <h5 class="text-danger">Delete Account</h5>
-                    <p class="text-muted">Enter your password to confirm account deletion.</p>
-                    <form>
-                        <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" class="form-control">
-                        </div>
-                        <button type="submit" class="btn btn-danger">Delete Account</button>
-                    </form>
+                    <div class="mb-3">
+                        <label class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Password</button>
+                </form>
+
+                <hr>
+
+                <!-- Notifications -->
+                <h5>Notification Preferences</h5>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                    <label class="form-check-label" for="emailNotifications">Email Notifications</label>
                 </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="systemAlerts">
+                    <label class="form-check-label" for="systemAlerts">System Alerts</label>
+                </div>
+
+                <hr>
+
+                <!-- Delete Search History -->
+                <h5>Delete Search History</h5>
+                <p class="text-muted">Clear your search history from our system.</p>
+                <button type="button" class="btn btn-warning">Delete Search History</button>
+
+                <hr>
+
+                <!-- Privacy Policy -->
+                <h5>Privacy Policy</h5>
+                <p class="text-muted">Read more about how we handle your data.</p>
+                <a href="privacy-policy.html" class="btn btn-info">View Privacy Policy</a>
+
+                <hr>
+
+                <!-- Delete Account -->
+                <h5 class="text-danger">Delete Account</h5>
+                <p class="text-muted">Enter your password to confirm account deletion.</p>
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-danger">Delete Account</button>
+                </form>
             </div>
         </div>
 
