@@ -28,7 +28,7 @@ body {
 }
 
 .list-group-item.bg-soft-pink {
-    background-color: #E6A8D7 !important;
+    background-color: rgba(230, 168, 215, 0.4) !important;
     color: black !important;
 }
 
