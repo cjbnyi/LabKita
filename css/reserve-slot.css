@@ -9,7 +9,7 @@ body {
     background: linear-gradient(to bottom, #DD2D4A, #F49CBB );
   }
   
-  .container {
+  .containers {
     background: #CBEEF3;
     padding: 20px;
     border-radius: 8px;
@@ -28,10 +28,10 @@ body {
     display: block;
     margin: 10px 0 5px;
     font-size: 14px;
-    color: #black;
+    color: black;
   }
   
-  select, input[type="date"], button {
+  select, input[type="date"], button.reserve {
     width: 100%;
     padding: 8px;
     margin-bottom: 15px;
