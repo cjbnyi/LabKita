@@ -1,41 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>LabKita!</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../css/styles.css">
-        <link rel="stylesheet" href="../css/login.css">
-    </head>
-    <body>
-        <div class="container">
-            <!-- Left Section -->
-            <div class="left">
-                <div class="form-container">
-                    <h1>Login</h1>
-                    <form>
-                    <input type="email" placeholder="Email" required>
-                    <input type="password" placeholder="Password" required>
-                    <label>
-                        <input type="checkbox"> Remember Me
-                    </label>
-                    <a href="dashboard.html" style="text-decoration: none;">
-                        <button type="button">Login</button>
-                    </a>
-                    </form>
-                </div>
-            </div>
-        
-            <!-- Right Section -->
-            <div class="right">
-                <img class="computer-picture" src="../assets/images/computer.png">
-            </div>
-        </div>
 
-        <script src="../js/scripts.js"></script>
-        <script src="https://unpkg.com/@popperjs/core@2"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
+<head>
+  <title>Login Page</title>
+  <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Left Section -->
+    <div class="arrow-container">
+      <a href="index.html">
+        <img src="../assets/images/arrow.png" class="arrow">
+      </a>
+    </div>
+    <div class="left">
+      <div class="form-container">
+        <h1>Login</h1>
+        <form>
+          <input type="email" placeholder="Email" required>
+          <input type="password" placeholder="Password" required>
+          <label>
+            <input type="checkbox"> Remember Me
+          </label>
+          <a href="index.html" style="text-decoration: none;">
+            <button type="button">Login</button>
+          </a>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right Section -->
+    <div class="right">
+      <img class="computer-picture" src="../assets/images/computer.png">
+    </div>
+  </div>
+</body>
 </html>
