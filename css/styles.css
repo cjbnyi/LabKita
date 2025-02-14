@@ -25,11 +25,7 @@
     padding-bottom: 50px;
 }
 
-.content-area-manage-reservations {
-    margin-top: 100px;
-}
-
-.content-area-admin {
+.content-area-manage-reservations, .content-area-admin, .content-area-view-labs {
     margin-top: 100px;
 }
 
