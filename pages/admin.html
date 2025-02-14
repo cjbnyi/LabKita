@@ -44,7 +44,7 @@
                         <a class="nav-link" href="admin.html">
                             <div class="d-flex flex-column">
                                 <i class="fas fa-cogs mb-1"></i>
-                                <span class="fs-6">Admin</span>
+                                <span class="fs-6">Admin Panel</span>
                             </div>
                         </a>
                     </li>
@@ -102,11 +102,98 @@
             </div>
         </nav>
         
-        <div class="content-area">
-            <h1>Admin</h1>
-            <p>This is the admin page.</p>
         <div class="content-area-admin">
             <div class="container mt-5">
+                <!-- Filtering Options -->
+                <div class="card p-3 mb-3">
+                    <h5>Filter Reservations</h5>
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <label class="form-label">Lab</label>
+                            <div id="filterLab">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="labAll" value="All">
+                                    <label class="form-check-label" for="labAG601">All</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="labAG601" value="AG601">
+                                    <label class="form-check-label" for="labAG601">AG601</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="labGK602" value="GK602">
+                                    <label class="form-check-label" for="labGK602">GK602</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="labSJ603" value="SJ603">
+                                    <label class="form-check-label" for="labSJ603">SJ603</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="labVL604" value="VL604">
+                                    <label class="form-check-label" for="labVL604">VL604</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="labY605" value="Y605">
+                                    <label class="form-check-label" for="labY605">Y605</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label class="form-label">Status</label>
+                            <div id="filterStatus">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="statusAll" value="All">
+                                    <label class="form-check-label" for="statusAll">All</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="statusPending" value="Pending">
+                                    <label class="form-check-label" for="statusPending">Pending</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="statusApproved" value="Approved">
+                                    <label class="form-check-label" for="statusApproved">Approved</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="statusCanceled" value="Canceled">
+                                    <label class="form-check-label" for="statusCanceled">Canceled</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="statusRejected" value="Rejected">
+                                    <label class="form-check-label" for="statusRejected">Rejected</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="statusCompleted" value="Completed">
+                                    <label class="form-check-label" for="statusCompleted">Completed</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="filterStartDate" class="form-label">Start Date & Time</label>
+                            <input type="datetime-local" id="filterStartDate" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filterEndDate" class="form-label">End Date & Time</label>
+                            <input type="datetime-local" id="filterEndDate" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filterRequester" class="form-label">Requester’s Name</label>
+                            <input type="text" id="filterRequester" class="form-control" placeholder="Enter name">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filterCredited" class="form-label">Credited Individuals</label>
+                            <input type="text" id="filterCredited" class="form-control" placeholder="Enter names (comma-separated)">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filterPurpose" class="form-label">Purpose</label>
+                            <input type="text" id="filterPurpose" class="form-control" placeholder="e.g., nahida appreciation">
+                        </div>
+                        <div class="col-md-3 align-self-end">
+                            <button class="btn btn-primary w-100">Apply Filters</button>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Tabs for Reservation Categories -->
                 <ul class="nav nav-tabs" id="adminReservationTabs">
                     <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#all-reservations">All Reservations</a></li>
