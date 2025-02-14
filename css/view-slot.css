@@ -1,0 +1,78 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #DD2D4A, #F26A8D, #F49CBB );
+    color: #CBEEF3;
+    padding-top: 100px;
+    padding-left: 20px;
+    height: 200vh;
+    margin: 0;
+}
+
+h2 {
+    color: #1A5276;
+    font-size: 2em; /* Increase the font size for the heading */
+}
+
+.view-slot {
+    background-color: #880D1E;
+    padding: 15px 20px;
+    border-radius: 10px; /* Rounded corners */
+    color: white;
+    width: 90%; /* Match the table width */
+    max-width: 350px; /* Match the table max-width */
+    text-align: center;
+}
+
+.availability-heading {
+    background-color: #880D1E; /* Dark red background */
+    color: white; /* White text */
+    padding: 15px 20px; /* Padding for spacing */
+    text-align: center; /* Center the text */
+    border-radius: 10px; /* Rounded corners */
+    margin: 20px auto; /* Center the header and add spacing */
+    width: 90%; /* Match the table width */
+    max-width: 1200px; /* Match the table max-width */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    font-size: 1.5em; /* Increase font size */
+    font-weight: bold; /* Make the text bold */
+}
+
+select {
+    margin: 10px 0;
+    padding: 8px;
+    font-size: 1.2em; /* Increase the font size for the select dropdown */
+    border-radius: 15px;
+    background: #CBEEF3;
+    
+}
+
+table {
+    width: 90%; /* Adjust the width as needed */
+    max-width: 1200px; /* Increase the maximum width */
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-left: auto; /* Center the table */
+    margin-right: auto; /* Center the table */
+    background-color: #CBEEF3; /* Add a background color to the table */
+    text-align: center;
+    font-size: 1.2em; /* Increase the font size for the table */
+    border-radius: 15px;
+}
+
+th, td {
+    padding: 15px; /* Increase padding to make cells larger */
+    text-align: center;
+    
+}
+
+th {
+    background-color: #880D1E;
+    color: white;
+    font-size: 1.3em; /* Increase the font size for table headers */
+}
+
+td {
+    background-color: #CBEEF3; /* Add a background color to table cells */
+    color: #000; /* Ensure text color contrasts with the cell background */
+    border-radius: 35px;
+}
