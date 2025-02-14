@@ -105,6 +105,204 @@
         <div class="content-area">
             <h1>Admin</h1>
             <p>This is the admin page.</p>
+        <div class="content-area-admin">
+            <div class="container mt-5">
+                <!-- Tabs for Reservation Categories -->
+                <ul class="nav nav-tabs" id="adminReservationTabs">
+                    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#all-reservations">All Reservations</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#approved-reservations">Approved Reservations</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#pending-reservations">Pending Reservations</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#past-reservations">Past Reservations</a></li>
+                </ul>
+                
+                <!-- Tab Content -->
+                <div class="tab-content mt-3">
+                    <div class="tab-pane fade show active" id="all-reservations">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>Reservation ID</th>
+                                    <th>Lab</th>
+                                    <th>Lab Slot/s</th>
+                                    <th>Start Date & Time <select class="form-select form-select-sm">
+                                        <option>Earliest First</option>
+                                        <option></option>
+                                        <option>Latest First</option>
+                                    </select></th>
+                                    <th>End Date & Time <select class="form-select form-select-sm">
+                                        <option></option>
+                                        <option>Latest First</option>
+                                        <option>Earliest First</option>
+                                        <option>Latest First</option>
+                                    </select></th>
+                                    <th>Requester’s Name <select class="form-select form-select-sm">
+                                        <option></option>
+                                        <option>A-Z</option>
+                                        <option>Z-A</option>
+                                    </select></th>
+                                    <th>Credited Individuals</th>
+                                    <th>Purpose</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2</td>
+                                    <td>GK602</td>
+                                    <td>A1, B2</td>
+                                    <td>February 14, 2025 2:30 PM</td>
+                                    <td>February 14, 2025 3:00 PM</td>
+                                    <td>Enzo Rafael Chan</td>
+                                    <td>Christian Bunyi, Enzo Rafael Chan</td>
+                                    <td>ruan mei appreciation</td>
+                                    <td><span class="badge bg-success">Approved</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="tab-pane fade show" id="approved-reservations">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>Reservation ID</th>
+                                    <th>Lab</th>
+                                    <th>Lab Slot/s</th>
+                                    <th>Start Date & Time <select class="form-select form-select-sm">
+                                        <option>Earliest First</option>
+                                        <option></option>
+                                        <option>Latest First</option>
+                                    </select></th>
+                                    <th>End Date & Time <select class="form-select form-select-sm">
+                                        <option></option>
+                                        <option>Latest First</option>
+                                        <option>Earliest First</option>
+                                        <option>Latest First</option>
+                                    </select></th>
+                                    <th>Requester’s Name <select class="form-select form-select-sm">
+                                        <option></option>
+                                        <option>A-Z</option>
+                                        <option>Z-A</option>
+                                    </select></th>
+                                    <th>Credited Individuals</th>
+                                    <th>Purpose</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2</td>
+                                    <td>GK602</td>
+                                    <td>A1, B2</td>
+                                    <td>February 14, 2025 2:30 PM</td>
+                                    <td>February 14, 2025 3:00 PM</td>
+                                    <td>Enzo Rafael Chan</td>
+                                    <td>Christian Bunyi, Enzo Rafael Chan</td>
+                                    <td>ruan mei appreciation</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm">Modify</button>
+                                        <button class="btn btn-danger btn-sm">Cancel</button>
+                                        <button class="btn btn-dark btn-sm">Reject</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="pending-reservations">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-warning">
+                                <tr>
+                                    <th>Reservation ID</th>
+                                    <th>Lab</th>
+                                    <th>Lab Slot/s</th>
+                                    <th>Start Date & Time <select class="form-select form-select-sm">
+                                        <option>Earliest First</option>
+                                        <option></option>
+                                        <option>Latest First</option>
+                                    </select></th>
+                                    <th>End Date & Time <select class="form-select form-select-sm">
+                                        <option></option>
+                                        <option>Latest First</option>
+                                        <option>Earliest First</option>
+                                        <option>Latest First</option>
+                                    </select></th>
+                                    <th>Requester’s Name <select class="form-select form-select-sm">
+                                        <option></option>
+                                        <option>A-Z</option>
+                                        <option>Z-A</option>
+                                    </select></th>
+                                    <th>Credited Individuals</th>
+                                    <th>Purpose</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2</td>
+                                    <td>GK602</td>
+                                    <td>A1, B2</td>
+                                    <td>February 14, 2025 2:30 PM</td>
+                                    <td>February 14, 2025 3:00 PM</td>
+                                    <td>Enzo Rafael Chan</td>
+                                    <td>Christian Bunyi, Enzo Rafael Chan</td>
+                                    <td>ruan mei appreciation</td>
+                                    <td>
+                                        <button class="btn btn-success btn-sm">Approve</button>
+                                        <button class="btn btn-warning btn-sm">Modify</button>
+                                        <button class="btn btn-danger btn-sm">Cancel</button>
+                                        <button class="btn btn-dark btn-sm">Reject</button>
+                                    </td>                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="past-reservations">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th>Reservation ID</th>
+                                    <th>Lab</th>
+                                    <th>Lab Slot/s</th>
+                                    <th>Start Date & Time <select class="form-select form-select-sm">
+                                        <option>Earliest First</option>
+                                        <option></option>
+                                        <option>Latest First</option>
+                                    </select></th>
+                                    <th>End Date & Time <select class="form-select form-select-sm">
+                                        <option></option>
+                                        <option>Latest First</option>
+                                        <option>Earliest First</option>
+                                        <option>Latest First</option>
+                                    </select></th>
+                                    <th>Requester’s Name <select class="form-select form-select-sm">
+                                        <option></option>
+                                        <option>A-Z</option>
+                                        <option>Z-A</option>
+                                    </select></th>
+                                    <th>Credited Individuals</th>
+                                    <th>Purpose</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2</td>
+                                    <td>GK602</td>
+                                    <td>A1, B2</td>
+                                    <td>February 14, 2025 2:30 PM</td>
+                                    <td>February 14, 2025 3:00 PM</td>
+                                    <td>Enzo Rafael Chan</td>
+                                    <td>Christian Bunyi, Enzo Rafael Chan</td>
+                                    <td>ruan mei appreciation</td>
+                                    <td><span class="badge bg-success">Approved</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>            
         </div>
 
         <script src="../js/scripts.js"></script>
