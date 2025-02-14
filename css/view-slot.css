@@ -1,7 +1,7 @@
 /* Custom Styles */
 
 body {
-    background-color: #CBEEF3; /* Soft Teal */
+    background-color: #E6A8D7; /* friendly pink */
     font-family: Arial, sans-serif;
 }
 
@@ -27,17 +27,17 @@ body {
     background-color: #F26A8D;
 }
 
-.list-group-item.bg-soft-teal {
-    background-color: #CBEEF3 !important;
+.list-group-item.bg-soft-pink {
+    background-color: #E6A8D7 !important;
     color: black !important;
 }
 
-.list-group-item.bg-soft-teal a {
+.list-group-item.bg-soft-pink a {
     color: black !important;
     text-decoration: none;
 }
 
-.list-group-item.bg-soft-teal a:hover {
+.list-group-item.bg-soft-pink a:hover {
     text-decoration: underline;
 }
 
