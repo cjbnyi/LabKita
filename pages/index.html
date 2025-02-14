@@ -81,18 +81,29 @@
 
                     <!-- Profile Icon (Only visible when logged in) -->
                     <li class="nav-item dropdown position-relative" id="profileItem">
-                        <a class="nav-link dropdown-toggle" href="view-profile.html" id="profileDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" data-bs-toggle="dropdown">
                             <i class="fas fa-user-circle fa-2x"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                            <li><a class="dropdown-item" href="view-profile.html">View Profile</a></li>
-                            <li><a class="dropdown-item">Logout</a></li>
+                            <li>
+                                <a href="view-profile.html" class="dropdown-item d-flex align-items-center text-decoration-none">
+                                    <img src="../assets/images/theherta.jpeg" alt="Profile Picture" class="rounded-circle" width="40" height="40">
+                                    <div class="ms-2">
+                                        <strong class="d-block" style="color: black;">John Doe</strong>
+                                        <span style="font-size: 0.85rem; color: grey;">12345678</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="privacy-settings.html">Settings</a></li>
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </nav>
-            
+
+
         <div class="content-area">
             <!-- Hero Section -->
             <section class="hero-section text-center text-white bg-primary py-5">
