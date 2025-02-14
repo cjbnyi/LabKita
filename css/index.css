@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+
+.pixelify-sans-font {
+    font-family: "Pixelify Sans", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.hero-section {
+    position: relative;
+    background: url('../assets/images/couple_lab.jpg') no-repeat bottom center;
+    background-size: cover;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+}
+
+h1 {
+    font-size: 65px;
+}
+
+p.subtitle {
+    font-size: 32px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 0, 0, 0.60); /* Translucent red overlay */
+    z-index: 1; 
+}
+
+.options {
+    background-color: rgba(230, 168, 215, 0.4);
+}
+
+.faq-section {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.1); /* Upward shadow */
+}
+
+.accordion-button {
+    font-weight: bold;
+}
+
+.accordion-button:not(.collapsed) {
+    background: #E6A8D7; /* Soft pink */
+    color: white;
+}
+
+.deep-red {
+    color: #880D1E;
+}
+
+.bright-red-pink {
+    color: #DD2D4A;
+}
+
+.soft-pink-red {
+    color: #F26A8D;
+}
+
+.light-pink {
+    color: #F49CBB;
+}
+
+.lighter-pink {
+    color: #FFD2C8;
+}
+
+.color-black {
+    color: black;
+}
+
+.color-white {
+    color: white;
+}
+
+.friendly-pink {
+    color: #E6A8D7;
+}
