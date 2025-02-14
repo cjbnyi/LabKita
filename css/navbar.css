@@ -25,28 +25,10 @@
     padding-bottom: 50px;
 }
 
-.reservation-header {
-    display: flex;
-    height: 200px;
-    background-color: pink;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.content-area-manage-reservations {
+    margin-top: 100px;
 }
 
-.reservation-option {
-    margin: 40px;
-}
-
-.reservation-options {
-    border-color: black;
-    border-style: groove;
-    padding: 20px;
-}
-
-table.calendar td, table.calendar th {
-    width: 100px;
-}
 
 .hero-card {
     padding: 30px 20px;
@@ -57,5 +39,3 @@ table.calendar td, table.calendar th {
     transform: scale(1.05);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
-
-

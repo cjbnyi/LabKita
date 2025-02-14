@@ -1,0 +1,22 @@
+.reservation-header {
+    display: flex;
+    height: 200px;
+    background-color: pink;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.reservation-option {
+    margin: 40px;
+}
+
+.reservation-options {
+    border-color: black;
+    border-style: groove;
+    padding: 20px;
+}
+
+table.calendar td, table.calendar th {
+    width: 100px;
+}
