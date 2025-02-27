@@ -1,5 +1,9 @@
 # TODO List
 
+## 🤔 Meta
+- [ ] Finish creating todos
+- [ ] Disseminate todos to the members
+
 ## 📌 Features
 - [ ] 
 

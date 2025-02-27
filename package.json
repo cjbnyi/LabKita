@@ -1,0 +1,32 @@
+{
+  "name": "ccapdev-mco",
+  "version": "1.0.0",
+  "description": "Mhm, some web application. Created for CCAPDEV (Web Application Development).",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cjbnyi/CCAPDEV-MCO.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/cjbnyi/CCAPDEV-MCO/issues"
+  },
+  "homepage": "https://github.com/cjbnyi/CCAPDEV-MCO#readme",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-handlebars": "^8.0.1",
+    "express-validator": "^7.2.1",
+    "lodash": "^4.17.21",
+    "mongodb": "^6.13.1",
+    "mongoose": "^8.11.0",
+    "morgan": "^1.10.0",
+    "validator": "^13.12.0"
+  }
+}
