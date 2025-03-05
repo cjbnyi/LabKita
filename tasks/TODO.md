@@ -2,7 +2,7 @@
 
 ## 🤔 Meta
 - [ ] Finish creating todos
-- [ ] Disseminate todos to among the group
+- [ ] Disseminate todos among the group
 
 ## 📌 Features
 - [ ] Establish the different routes (F)
