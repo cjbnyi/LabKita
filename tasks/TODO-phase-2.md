@@ -1,22 +1,22 @@
 # ✅ Project TODO List (CCAPDEV Phase 2)
 
 ## 🛠 GENERAL (Both)
-- [ ] **Set up project repository** on GitHub and initialize it with a README  
+- [x] **Set up project repository** on GitHub and initialize it with a README  
 - [ ] **Include project setup & run instructions** in `README.md`  
-- [ ] **Set up folder structure** (`models/`, `views/`, `routes/`, `controllers/`, etc.)  
-- [ ] **Install required dependencies** (Express, Handlebars, Mongoose, dotenv, etc.)  
-- [ ] **Configure environment variables** (`.env` for database URI, port, etc.)  
+- [x] **Set up folder structure** (`models/`, `views/`, `routes/`, `controllers/`, etc.)  
+- [x] **Install required dependencies** (Express, Handlebars, Mongoose, dotenv, etc.)  
+- [x] **Configure environment variables** (`.env` for database URI, port, etc.)  
 
 ---
 
 ## 🌐 BACKEND TASKS (Back-End Development & API)
 ### 🗃 Database & Models (MongoDB & Mongoose)
-- [ ] **Design & finalize database schema** (models for Users, Posts, etc.)  
-- [ ] **Implement models using Mongoose** and store them in the `models/` folder  
+- [x] **Design & finalize database schema** (models for Users, Posts, etc.)  
+- [x] **Implement models using Mongoose** and store them in the `models/` folder  
 - [ ] **Seed database with at least 5 sample entries** per data type  
 
 ### 🛠 Server & Routing
-- [ ] **Set up Express server** and listen on `localhost:3000`  
+- [x] **Set up Express server** and listen on `localhost:3000`  
 - [ ] **Implement routes** in the `routes/` folder (e.g., `routes/index.routes.js`, `routes/user.routes.js`)  
 - [ ] **Connect the server to MongoDB using Mongoose**  
 - [ ] **Implement controller logic for CRUD operations** in `controllers/`  
