@@ -5,7 +5,11 @@ import exphbs from 'express-handlebars';
 import path from 'path';
 
 // Import routes
-import sampleRoutes from './routes/sample.routes.js'; // Update with actual route file
+const adminRoutes = require('./routes/adminRoutes');
+const labRoutes = require('./routes/labRoutes');
+const reservationRoutes = require('./routes/reservationRoutes');
+const seatRoutes = require('./routes/seatRoutes');
+const studentRoutes = require('./routes/studentRoutes');
 
 // Create the Express application
 const app = express();
@@ -24,19 +28,21 @@ app.set('view engine', 'hbs');
 // Load static files
 app.use(express.static('public'));
 
-// Declare routes
-app.use('/', sampleRoutes);
+// Register routes
+app.use('/api/admins', adminRoutes);
+app.use('/api/labs', labRoutes);
+app.use('/api/reservations', reservationRoutes);
+app.use('/api/seats', seatRoutes);
+app.use('/api/students', studentRoutes);
 
 connectToMongo((err) => {
     if (err) {
         console.error("Error connecting to MongoDB:", err);
         process.exit(1);
     }
-
     console.log("Connected to MongoDB server");
     const db = getDb();
 
-    // Listen to the port
     const PORT = process.env.WEB_PORT || 3000;
     app.listen(PORT, () => {
         console.log(`App listening on port ${PORT}`);
