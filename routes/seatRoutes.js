@@ -3,7 +3,7 @@ import seatController from '../controllers/seatController.js';
 
 const router = express.Router();
 
-// Assigned to Enzo //
+// Assigned to ENZO //
 
 /* READ */
 router.get('/', seatController.getSeats);

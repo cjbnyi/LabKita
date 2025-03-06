@@ -1,6 +1,6 @@
-import Reservation from '../database/models/Reservation.js';
+import reservationModel from '../database/models/Reservation.js';
 
-// Assigned to Enzo //
+// Assigned to ENZO //
 
 /* READ */
 const getReservations = async (req, res) => {

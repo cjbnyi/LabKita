@@ -1,6 +1,6 @@
-import Lab from '../database/models/Lab.js';
+import labModel from '../database/models/Lab.js';
 
-// Assigned to Enzo //
+// Assigned to ENZO //
 
 /* READ */
 const getLabs = async (req, res) => {

@@ -1,4 +1,4 @@
-import Student from '../database/models/Student.js';
+import studentModel from '../database/models/Student.js';
 
 // Assigned to CJ //
 

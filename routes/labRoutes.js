@@ -3,7 +3,7 @@ import labController from '../controllers/labController.js';
 
 const router = express.Router();
 
-// Assigned to Enzo //
+// Assigned to ENZO //
 
 /* READ */
 router.get('/', labController.getLabs);

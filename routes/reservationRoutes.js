@@ -3,7 +3,7 @@ import reservationController from '../controllers/reservationController.js';
 
 const router = express.Router();
 
-// Assigned to Enzo //
+// Assigned to ENZO //
 
 /* READ */
 router.get('/', reservationController.getReservations);

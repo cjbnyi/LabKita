@@ -1,6 +1,6 @@
-import Seat from '../database/models/Seat.js';
+import seatModel from '../database/models/Seat.js';
 
-// Assigned to Enzo //
+// Assigned to ENZO //
 
 /* READ */
 const getSeats = async (req, res) => {

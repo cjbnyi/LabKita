@@ -1,4 +1,4 @@
-import Admin from '../database/models/Admin.js';
+import adminModel from '../database/models/Admin.js';
 
 // Assigned to CJ //
 
