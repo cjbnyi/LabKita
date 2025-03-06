@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
-// Assigned to Enzo //
+// Assigned to ENZO //
 
 // Reservation Schema
 const ReservationSchema = new Schema({
