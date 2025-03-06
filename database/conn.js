@@ -2,12 +2,13 @@ import { MongoClient } from 'mongodb';
 
 // MongoDB connection URI (modify this accordingly)
 const mongoURI = process.env.MONGODB_URI;
+if (!mongoURI) {
+    console.error("MONGODB_URI is not defined in .env");
+    process.exit(1);
+}
 
 // Create a MongoDB client instance
-const client = new MongoClient(mongoURI, {
-    useNewUrlParser: true, // Ensures compatibility with new MongoDB versions
-    useUnifiedTopology: true // Enables the new Server Discovery and Monitoring engine
-});
+const client = new MongoClient(mongoURI);
 
 let isConnected = false; // Track connection state
 

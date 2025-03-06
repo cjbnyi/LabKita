@@ -1,27 +1,35 @@
-const Reservation = require('../database/models/Reservation');
+import Reservation from '../database/models/Reservation.js';
 
-// Assigned to: 
+// Assigned to Enzo //
 
 /* READ */
-exports.getReservations = async (req, res) => {
+const getReservations = async (req, res) => {
     
 }
 
-exports.getReservationById = async (req, res) => {
+const getReservationById = async (req, res) => {
     
 }
 
 /* CREATE */
-exports.createReservation = async (req, res) => {
+const createReservation = async (req, res) => {
     
 }
 
 /* UPDATE */
-exports.updateReservation = async (req, res) => {
+const updateReservation = async (req, res) => {
     
 }
 
 /* DELETE */
-exports.deleteReservation = async (req, res) => {
+const deleteReservation = async (req, res) => {
     
 }
+
+export default {
+    getReservations,
+    getReservationById,
+    createReservation,
+    updateReservation,
+    deleteReservation
+};

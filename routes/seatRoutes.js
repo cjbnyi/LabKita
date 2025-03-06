@@ -1,7 +1,9 @@
-const router = require('express').Router();
-const seatController = require('../controllers/seatController');
+import express from 'express';
+import seatController from '../controllers/seatController.js';
 
-// Assigned to: 
+const router = express.Router();
+
+// Assigned to Enzo //
 
 /* READ */
 router.get('/', seatController.getSeats);
@@ -16,4 +18,4 @@ router.put('/:id', seatController.updateSeat);
 /* DELETE */
 router.delete('/:id', seatController.deleteSeat);
 
-module.exports = router;
+export default router;

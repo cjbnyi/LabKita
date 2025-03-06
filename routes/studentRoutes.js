@@ -1,7 +1,9 @@
-const router = require('express').Router();
-const studentController = require('../controllers/studentController');
+import express from 'express';
+import studentController from '../controllers/studentController.js';
 
-// Assigned to: 
+const router = express.Router();
+
+// Assigned to CJ //
 
 /* READ */
 router.get('/', studentController.getStudents);
@@ -16,4 +18,4 @@ router.put('/:id', studentController.updateStudent);
 /* DELETE */
 router.delete('/:id', studentController.deleteStudent);
 
-module.exports = router;
+export default router;

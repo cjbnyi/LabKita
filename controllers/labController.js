@@ -1,27 +1,35 @@
-const Lab = require('../database/models/Lab');
+import Lab from '../database/models/Lab.js';
 
-// Assigned to: 
+// Assigned to Enzo //
 
 /* READ */
-exports.getLabs = async (req, res) => {
+const getLabs = async (req, res) => {
     
 }
 
-exports.getLabById = async (req, res) => {
+const getLabById = async (req, res) => {
     
 }
 
 /* CREATE */
-exports.createLab = async (req, res) => {
+const createLab = async (req, res) => {
     
 }
 
 /* UPDATE */
-exports.updateLab = async (req, res) => {
+const updateLab = async (req, res) => {
     
 }
 
 /* DELETE */
-exports.deleteLab = async (req, res) => {
+const deleteLab = async (req, res) => {
     
 }
+
+export default {
+    getLabs,
+    getLabById,
+    createLab,
+    updateLab,
+    deleteLab
+};

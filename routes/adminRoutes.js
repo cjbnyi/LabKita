@@ -1,7 +1,9 @@
-const router = require('express').Router();
-const adminController = require('../controllers/adminController');
+import express from 'express';
+import adminController from '../controllers/adminController.js';
 
-// Assigned to: 
+const router = express.Router();
+
+// Assigned to CJ //
 
 /* READ */
 router.get('/', adminController.getAdmins);
@@ -16,4 +18,4 @@ router.put('/:id', adminController.updateAdmin);
 /* DELETE */
 router.delete('/:id', adminController.deleteAdmin);
 
-module.exports = router;
+export default router;

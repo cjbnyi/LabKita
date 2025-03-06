@@ -1,6 +1,9 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
 
+// Assigned to CJ //
+
+// Student Schema
 const StudentSchema = new Schema({
     universityID: { type: String, required: true, unique: true },
     firstName: { type: String, required: true },
@@ -20,4 +23,16 @@ const StudentSchema = new Schema({
     twoFACodeExpiresAt: { type: Date },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Student', StudentSchema);
+export default model('Student', StudentSchema);
+
+/* READ */
+
+
+/* CREATE */
+
+
+/* UPDATE */
+
+
+/* DELETE */
+

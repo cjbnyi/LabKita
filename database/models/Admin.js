@@ -1,5 +1,7 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+// Assigned to CJ //
 
 // Admin Schema
 const AdminSchema = new Schema({
@@ -14,4 +16,16 @@ const AdminSchema = new Schema({
     twoFACodeExpiresAt: { type: Date },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Admin', AdminSchema);
+export default model('Admin', AdminSchema);
+
+/* READ */
+
+
+/* CREATE */
+
+
+/* UPDATE */
+
+
+/* DELETE */
+

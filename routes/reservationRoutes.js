@@ -1,7 +1,9 @@
-const router = require('express').Router();
-const reservationController = require('../controllers/reservationController');
+import express from 'express';
+import reservationController from '../controllers/reservationController.js';
 
-// Assigned to: 
+const router = express.Router();
+
+// Assigned to Enzo //
 
 /* READ */
 router.get('/', reservationController.getReservations);
@@ -16,4 +18,4 @@ router.put('/:id', reservationController.updateReservation);
 /* DELETE */
 router.delete('/:id', reservationController.deleteReservation);
 
-module.exports = router;
+export default router;

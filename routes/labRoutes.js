@@ -1,7 +1,9 @@
-const router = require('express').Router();
-const labController = require('../controllers/labController');
+import express from 'express';
+import labController from '../controllers/labController.js';
 
-// Assigned to: 
+const router = express.Router();
+
+// Assigned to Enzo //
 
 /* READ */
 router.get('/', labController.getLabs);
@@ -16,4 +18,4 @@ router.put('/:id', labController.updateLab);
 /* DELETE */
 router.delete('/:id', labController.deleteLab);
 
-module.exports = router;
+export default router;

@@ -1,5 +1,7 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+// Assigned to Enzo //
 
 // Seat Schema
 const SeatSchema = new Schema({
@@ -9,4 +11,16 @@ const SeatSchema = new Schema({
     reservations: [{ type: Schema.Types.ObjectId, ref: 'Reservation' }],
 }, { timestamps: true });
 
-module.exports = mongoose.model('Seat', SeatSchema);
+export default model('Seat', SeatSchema);
+
+/* READ */
+
+
+/* CREATE */
+
+
+/* UPDATE */
+
+
+/* DELETE */
+

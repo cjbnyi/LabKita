@@ -1,6 +1,9 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
 
+// Assigned to Enzo //
+
+// Lab Schema
 const LabSchema = new Schema({
     building: { type: String, required: true },
     room: { type: String, required: true },
@@ -11,4 +14,16 @@ const LabSchema = new Schema({
     status: { type: String, enum: ['Open', 'Closed', 'Under Maintenance'], default: 'Open' },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Lab', LabSchema);
+export default model('Lab', LabSchema);
+
+/* READ */
+
+
+/* CREATE */
+
+
+/* UPDATE */
+
+
+/* DELETE */
+

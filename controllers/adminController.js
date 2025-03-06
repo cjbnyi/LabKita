@@ -1,27 +1,35 @@
-const Admin = require('../database/models/Admin');
+import Admin from '../database/models/Admin.js';
 
-// Assigned to: 
+// Assigned to CJ //
 
 /* READ */
-exports.getAdmins = async (req, res) => {
+const getAdmins = async (req, res) => {
     
 }
 
-exports.getAdminById = async (req, res) => {
+const getAdminById = async (req, res) => {
     
 }
 
 /* CREATE */
-exports.createAdmin = async (req, res) => {
+const createAdmin = async (req, res) => {
     
 }
 
 /* UPDATE */
-exports.updateAdmin = async (req, res) => {
+const updateAdmin = async (req, res) => {
     
 }
 
 /* DELETE */
-exports.deleteAdmin = async (req, res) => {
+const deleteAdmin = async (req, res) => {
     
 }
+
+export default {
+    getAdmins,
+    getAdminById,
+    createAdmin,
+    updateAdmin,
+    deleteAdmin
+};

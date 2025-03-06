@@ -1,27 +1,35 @@
-const Student = require('../database/models/Student');
+import Student from '../database/models/Student.js';
 
-// Assigned to: 
+// Assigned to CJ //
 
 /* READ */
-exports.getStudents = async (req, res) => {
+const getStudents = async (req, res) => {
     
 }
 
-exports.getStudentById = async (req, res) => {
+const getStudentById = async (req, res) => {
     
 }
 
 /* CREATE */
-exports.createStudent = async (req, res) => {
+const createStudent = async (req, res) => {
     
 }
 
 /* UPDATE */
-exports.updateStudent = async (req, res) => {
+const updateStudent = async (req, res) => {
     
 }
 
 /* DELETE */
-exports.deleteStudent = async (req, res) => {
+const deleteStudent = async (req, res) => {
     
 }
+
+export default {
+    getStudents,
+    getStudentById,
+    createStudent,
+    updateStudent,
+    deleteStudent
+};

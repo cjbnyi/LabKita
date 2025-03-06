@@ -1,27 +1,35 @@
-const Seat = require('../database/models/Seat');
+import Seat from '../database/models/Seat.js';
 
-// Assigned to: 
+// Assigned to Enzo //
 
 /* READ */
-exports.getSeats = async (req, res) => {
+const getSeats = async (req, res) => {
     
 }
 
-exports.getSeatById = async (req, res) => {
+const getSeatById = async (req, res) => {
     
 }
 
 /* CREATE */
-exports.createSeat = async (req, res) => {
+const createSeat = async (req, res) => {
     
 }
 
 /* UPDATE */
-exports.updateSeat = async (req, res) => {
+const updateSeat = async (req, res) => {
     
 }
 
 /* DELETE */
-exports.deleteSeat = async (req, res) => {
+const deleteSeat = async (req, res) => {
     
 }
+
+export default {
+    getSeats,
+    getSeatById,
+    createSeat,
+    updateSeat,
+    deleteSeat
+};

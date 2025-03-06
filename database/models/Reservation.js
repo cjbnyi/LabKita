@@ -1,5 +1,7 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
+
+// Assigned to Enzo //
 
 // Reservation Schema
 const ReservationSchema = new Schema({
@@ -14,4 +16,16 @@ const ReservationSchema = new Schema({
     isAnonymous: { type: Boolean, default: false },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Reservation', ReservationSchema);
+export default model('Reservation', ReservationSchema);
+
+/* READ */
+
+
+/* CREATE */
+
+
+/* UPDATE */
+
+
+/* DELETE */
+
