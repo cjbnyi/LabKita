@@ -23,16 +23,68 @@ const StudentSchema = new Schema({
     twoFACodeExpiresAt: { type: Date },
 }, { timestamps: true });
 
-export default model('Student', StudentSchema);
+const studentModel = model('Student', StudentSchema);
 
 /* READ */
+const getAll = async () => {
+    try {
+        return await studentModel.find()
+            .sort({ lastName: 1, firstName: 1 })
+            .lean();
+    } catch (error) {
+        console.error("Error fetching all Student documents:", error);
+        throw error;
+    }
+};
 
+const getById = async (id) => {
+    try {
+        return await studentModel.findById(id)
+            .lean();
+    } catch (error) {
+        console.error("Error fetching Student document by id:", error);
+        throw error;
+    }
+};
 
 /* CREATE */
-
+const create = async (studentData) => {
+    try {
+        const newStudent = new studentModel(studentData);
+        await newStudent.save();
+        return newStudent.toObject();
+    } catch (error) {
+        console.error("Error creating Student document:", error);
+        throw error;
+    }
+};
 
 /* UPDATE */
-
+const updateById = async (id, studentData) => {
+    try {
+        const student = await studentModel.findByIdAndUpdate(id, studentData, { new: true });
+        return student ? student.toObject() : null;
+    } catch (error) {
+        console.error("Error updating Student document by id:", error);
+        throw error;
+    }
+};
 
 /* DELETE */
+const deleteById = async (id) => {
+    try {
+        const student = await studentModel.findByIdAndDelete(id);
+        return student ? student.toObject() : null;
+    } catch (error) {
+        console.error("Error deleting Student document by id:", error);
+        throw error;
+    }
+};
 
+export default {
+    getAll,
+    getById,
+    create,
+    updateById,
+    deleteById
+};

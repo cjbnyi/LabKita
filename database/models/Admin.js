@@ -1,5 +1,4 @@
-import mongoose from 'mongoose';
-const { Schema, model } = mongoose;
+import { Schema, model } from 'mongoose';
 
 // Assigned to CJ //
 
@@ -16,16 +15,68 @@ const AdminSchema = new Schema({
     twoFACodeExpiresAt: { type: Date },
 }, { timestamps: true });
 
-export default model('Admin', AdminSchema);
+const adminModel = model('Admin', AdminSchema);
 
 /* READ */
+const getAll = async () => {
+    try {
+        return await adminModel.find()
+            .sort({ lastName: 1, firstName: 1 })
+            .lean();
+    } catch (error) {
+        console.error("Error fetching all Admin documents:", error);
+        throw error;
+    }
+};
 
+const getById = async (id) => {
+    try {
+        return await adminModel.findById(id)
+            .lean();
+    } catch (error) {
+        console.error("Error fetching Admin document by id:", error);
+        throw error;
+    }
+};
 
 /* CREATE */
-
+const create = async (adminData) => {
+    try {
+        const newAdmin = new adminModel(adminData);
+        await newAdmin.save();
+        return newAdmin.toObject();
+    } catch (error) {
+        console.error("Error creating Admin document:", error);
+        throw error;
+    }
+};
 
 /* UPDATE */
-
+const updateById = async (id, adminData) => {
+    try {
+        const admin = await adminModel.findByIdAndUpdate(id, adminData, { new: true });
+        return admin ? admin.toObject() : null;
+    } catch (error) {
+        console.error("Error updating Admin document by id:", error);
+        throw error;
+    }
+};
 
 /* DELETE */
+const deleteById = async (id) => {
+    try {
+        const admin = await adminModel.findByIdAndDelete(id);
+        return admin ? admin.toObject() : null;
+    } catch (error) {
+        console.error("Error deleting Admin document by id:", error);
+        throw error;
+    }
+};
 
+export default {
+    getAll,
+    getById,
+    create,
+    updateById,
+    deleteById
+};
