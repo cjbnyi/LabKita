@@ -1,21 +1,44 @@
 import express from 'express';
+import { validateMongoId, validateUserFields } from '../middleware/validationRules.js';
+import checkValidation from '../middleware/validationMiddleware.js';
 import adminController from '../controllers/adminController.js';
 
 const router = express.Router();
 
 // Assigned to CJ //
 
-/* READ */
-router.get('/', adminController.getAdmins);
-router.get('/:id', adminController.getAdminById);
+// GET
+router.get('/',
+    checkValidation,
+    adminController.getAdmins
+);
 
-/* CREATE */
-router.post('/', adminController.createAdmin);
+router.get('/:id',
+    validateMongoId,
+    checkValidation,
+    adminController.getAdminById
+);
 
-/* UPDATE */
-router.put('/:id', adminController.updateAdmin);
+// POST
+router.post('/',
+    ...validateUserFields(),
+    checkValidation,
+    adminController.createAdmin
+);
 
-/* DELETE */
-router.delete('/:id', adminController.deleteAdmin);
+// PUT
+router.put('/:id',
+    validateMongoId,
+    ...validateUserFields(),
+    checkValidation,
+    adminController.updateAdmin
+);
+
+// DELETE
+router.delete('/:id',
+    validateMongoId,
+    checkValidation,
+    adminController.deleteAdmin
+);
 
 export default router;
