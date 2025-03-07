@@ -10,6 +10,7 @@ const StudentSchema = new Schema({
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    profilePicture: { type: String, default: '../../public/img/default-profile.png' },
     college: { type: String },
     course: { type: String },
     bio: { type: String },
