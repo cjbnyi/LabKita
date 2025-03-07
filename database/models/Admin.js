@@ -1,13 +1,11 @@
 import { Schema, model } from 'mongoose';
 
-// Assigned to CJ //
-
-// Admin Schema
 const AdminSchema = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    role: { type: String, enum: ['admin'], default: 'admin' },
     profilePicture: { type: String, default: '../../public/img/default-profile.png' },
     status: { type: String, enum: ['Active', 'Inactive'], default: 'Active' },
     lastLoginAt: { type: Date },
@@ -20,8 +18,10 @@ const AdminSchema = new Schema({
 
 const adminModel = model('Admin', AdminSchema);
 
+/* =============================== */
 /* READ */
-const getAll = async () => {
+/* =============================== */
+const getAdmins = async () => {
     try {
         return await adminModel.find()
             .sort({ lastName: 1, firstName: 1 })
@@ -32,18 +32,19 @@ const getAll = async () => {
     }
 };
 
-const getById = async (id) => {
+const getAdminById = async (id) => {
     try {
-        return await adminModel.findById(id)
-            .lean();
+        return await adminModel.findById(id).lean();
     } catch (error) {
         console.error("Error fetching Admin document by id:", error);
         throw error;
     }
 };
 
+/* =============================== */
 /* CREATE */
-const create = async (adminData) => {
+/* =============================== */
+const createAdmin = async (adminData) => {
     try {
         const newAdmin = new adminModel(adminData);
         await newAdmin.save();
@@ -54,8 +55,10 @@ const create = async (adminData) => {
     }
 };
 
+/* =============================== */
 /* UPDATE */
-const updateById = async (id, adminData) => {
+/* =============================== */
+const updateAdmin = async (id, adminData) => {
     try {
         const admin = await adminModel.findByIdAndUpdate(id, adminData, { new: true });
         return admin ? admin.toObject() : null;
@@ -65,8 +68,10 @@ const updateById = async (id, adminData) => {
     }
 };
 
+/* =============================== */
 /* DELETE */
-const deleteById = async (id) => {
+/* =============================== */
+const deleteAdmin = async (id) => {
     try {
         const admin = await adminModel.findByIdAndDelete(id);
         return admin ? admin.toObject() : null;
@@ -77,9 +82,9 @@ const deleteById = async (id) => {
 };
 
 export default {
-    getAll,
-    getById,
-    create,
-    updateById,
-    deleteById
+    getAdmins,
+    getAdminById,
+    createAdmin,
+    updateAdmin,
+    deleteAdmin
 };
