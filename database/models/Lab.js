@@ -1,7 +1,5 @@
 import { Schema, model } from 'mongoose';
 
-// Assigned to ENZO //
-
 // Lab Schema
 const LabSchema = new Schema({
     building: { type: String, required: true },
@@ -15,8 +13,10 @@ const LabSchema = new Schema({
 
 const labModel = model('Lab', LabSchema);
 
+/* =============================== */
 /* READ */
-const getAll = async () => {
+/* =============================== */
+const getLabs = async () => {
     try {
         return await labModel.find()
             .sort({ building: 1, room: 1 })
@@ -27,7 +27,7 @@ const getAll = async () => {
     }
 };
 
-const getById = async (id) => {
+const getLabById = async (id) => {
     try {
         return await labModel.findById(id)
             .lean();
@@ -37,8 +37,10 @@ const getById = async (id) => {
     }
 };
 
+/* =============================== */
 /* CREATE */
-const create = async (labData) => {
+/* =============================== */
+const createLab = async (labData) => {
     try {
         const newLab = new labModel(labData);
         await newLab.save();
@@ -49,8 +51,10 @@ const create = async (labData) => {
     }
 };
 
+/* =============================== */
 /* UPDATE */
-const updateById = async (id, labData) => {
+/* =============================== */
+const updateLab = async (id, labData) => {
     try {
         const lab = await labModel.findByIdAndUpdate(id, labData, { new: true });
         return lab ? lab.toObject() : null;
@@ -60,8 +64,10 @@ const updateById = async (id, labData) => {
     }
 };
 
+/* =============================== */
 /* DELETE */
-const deleteById = async (id) => {
+/* =============================== */
+const deleteLab = async (id) => {
     try {
         const lab = await labModel.findByIdAndDelete(id);
         return lab ? lab.toObject() : null;
@@ -72,9 +78,9 @@ const deleteById = async (id) => {
 };
 
 export default {
-    getAll,
-    getById,
-    create,
-    updateById,
-    deleteById
+    getLabs,
+    getLabById,
+    createLab,
+    updateLab,
+    deleteLab
 };

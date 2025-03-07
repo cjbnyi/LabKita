@@ -1,11 +1,10 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
 import { getUserByEmail } from '../utils/userUtils.js';
 
-// Assigned to CJ //
-
+/* =============================== */
 /* LOGIN */
+/* =============================== */
 const login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -36,7 +35,9 @@ const login = async (req, res) => {
     }
 };
 
+/* =============================== */
 /* REGISTER */
+/* =============================== */
 const register = async (req, res) => {
     const { email, password, ...rest } = req.body;
 
@@ -63,7 +64,9 @@ const register = async (req, res) => {
     }
 };
 
+/* =============================== */
 /* LOGOUT */
+/* =============================== */
 const logout = async (req, res) => {
     try {
         const { email } = req.body;

@@ -1,44 +1,44 @@
 import express from 'express';
-import { validateMongoId, validateUserFields } from '../middleware/validationRules.js';
-import checkValidation from '../middleware/validationMiddleware.js';
+import { checkValidation, validateMongoId } from '../middleware/validationMiddleware.js';
 import studentController from '../controllers/studentController.js';
+import labController from '../controllers/labController.js';
+import seatController from '../controllers/seatController.js';
+import reservationController from '../controllers/reservationController.js';
 
 const router = express.Router();
 
-// Assigned to CJ //
+/* =============================== */
+/* STUDENT */
+/* =============================== */
+router.get('/students/:id', validateMongoId, checkValidation, studentController.getStudentById);
+router.put('/students/:id', validateMongoId, checkValidation, studentController.updateStudent);
+router.delete('/students/:id', validateMongoId, checkValidation, studentController.deleteStudent);
 
-// GET
-router.get('/',
-    checkValidation,
-    studentController.getStudents
-);
+/* =============================== */
+/* LAB */
+/* =============================== */
+router.get('/students/labs', checkValidation, labController.getLabs);
+router.get('/students/labs/:id', validateMongoId, checkValidation, labController.getLabById);
 
-router.get('/:id',
-    validateMongoId,
-    checkValidation,
-    studentController.getStudentById
-);
+/* =============================== */
+/* SEAT BY LAB */
+/* =============================== */
+router.get('/students/labs/:labId/seats', validateMongoId, checkValidation, seatController.getSeatsInLab);
+router.get('/students/labs/:labId/seats/:seatId', validateMongoId, checkValidation, seatController.getSeatInLabById);
 
-// POST
-router.post('/',
-    ...validateUserFields(),
-    checkValidation,
-    studentController.createStudent
-);
+/* =============================== */
+/* RESERVATION */
+/* =============================== */
+router.get('/students/reservations', checkValidation, reservationController.getStudentReservations);
+router.get('/students/reservations/:id', validateMongoId, checkValidation, reservationController.getStudentReservationById);
+router.post('/students/reservations', checkValidation, reservationController.createStudentReservation);
+router.put('/students/reservations/:id', validateMongoId, checkValidation, reservationController.updateStudentReservation);
+router.delete('/students/reservations/:id', validateMongoId, checkValidation, reservationController.cancelStudentReservation);
 
-// PUT
-router.put('/:id',
-    validateMongoId,
-    ...validateUserFields(),
-    checkValidation,
-    studentController.updateStudent
-);
-
-// DELETE
-router.delete('/:id',
-    validateMongoId,
-    checkValidation,
-    studentController.deleteStudent
-);
+/* =============================== */
+/* RESERVATION BY SEAT */
+/* =============================== */
+router.get('/students/labs/:labId/seats/:seatId/reservations', validateMongoId, checkValidation, reservationController.getReservationsForSeat);
+router.get('/students/labs/:labId/seats/:seatId/reservations/:reservationId', validateMongoId, checkValidation, reservationController.getReservationForSeatById);
 
 export default router;

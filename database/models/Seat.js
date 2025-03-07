@@ -1,9 +1,5 @@
-import mongoose from 'mongoose';
-const { Schema, model } = mongoose;
+import { Schema, model } from 'mongoose';
 
-// Assigned to ENZO //
-
-// Seat Schema
 const SeatSchema = new Schema({
     labID: { type: Schema.Types.ObjectId, ref: 'Lab', required: true },
     seatNumber: { type: Number, required: true },
@@ -13,66 +9,78 @@ const SeatSchema = new Schema({
 
 const seatModel = model('Seat', SeatSchema);
 
+/* =============================== */
 /* READ */
-const getAll = async () => {
+/* =============================== */
+const getSeatsInLab = async (labId) => {
     try {
-        return await seatModel.find()
-            .sort({ labID: 1, seatNumber: 1 })
+        return await seatModel.find({ labID: labId })
+            .sort({ seatNumber: 1 })
             .lean();
     } catch (error) {
-        console.error("Error fetching all Seat documents:", error);
+        console.error("Error fetching seats in lab:", error);
         throw error;
     }
 };
 
-const getById = async (id) => {
+const getSeatInLabById = async (labId, seatId) => {
     try {
-        return await seatModel.findById(id)
+        return await seatModel.findOne({ _id: seatId, labID: labId })
             .lean();
     } catch (error) {
-        console.error("Error fetching Seat document by id:", error);
+        console.error("Error fetching seat in lab by ID:", error);
         throw error;
     }
 };
 
+/* =============================== */
 /* CREATE */
-const create = async (seatData) => {
+/* =============================== */
+const createSeat = async (labId, seatData) => {
     try {
-        const newSeat = new seatModel(seatData);
+        const newSeat = new seatModel({ ...seatData, labID: labId });
         await newSeat.save();
         return newSeat.toObject();
     } catch (error) {
-        console.error("Error creating Seat document:", error);
+        console.error("Error creating seat:", error);
         throw error;
     }
 };
 
+/* =============================== */
 /* UPDATE */
-const updateById = async (id, seatData) => {
+/* =============================== */
+const updateSeat = async (labId, seatId, seatData) => {
     try {
-        const seat = await seatModel.findByIdAndUpdate(id, seatData, { new: true });
+        const seat = await seatModel.findOneAndUpdate(
+            { _id: seatId, labID: labId },
+            seatData,
+            { new: true }
+        );
         return seat ? seat.toObject() : null;
     } catch (error) {
-        console.error("Error updating Seat document by id:", error);
+        console.error("Error updating seat:", error);
         throw error;
     }
 };
 
+/* =============================== */
 /* DELETE */
-const deleteById = async (id) => {
+/* =============================== */
+const deleteSeat = async (labId, seatId) => {
     try {
-        const seat = await seatModel.findByIdAndDelete(id);
+        const seat = await seatModel.findOneAndDelete({ _id: seatId, labID: labId });
         return seat ? seat.toObject() : null;
     } catch (error) {
-        console.error("Error deleting Seat document by id:", error);
+        console.error("Error deleting seat:", error);
         throw error;
     }
 };
 
 export default {
-    getAll,
-    getById,
-    create,
-    updateById,
-    deleteById
+    getSeatsInLab,
+    getSeatInLabById,
+    createSeat,
+    updateSeat,
+    deleteSeat
 };

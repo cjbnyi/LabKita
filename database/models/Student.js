@@ -1,15 +1,12 @@
-import mongoose from 'mongoose';
-const { Schema, model } = mongoose;
+import { Schema, model } from 'mongoose';
 
-// Assigned to CJ //
-
-// Student Schema
 const StudentSchema = new Schema({
     universityID: { type: String, required: true, unique: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    role: { type: String, enum: ['student'], default: 'student' },
     profilePicture: { type: String, default: '../../public/img/default-profile.png' },
     college: { type: String },
     course: { type: String },
@@ -27,7 +24,7 @@ const StudentSchema = new Schema({
 const studentModel = model('Student', StudentSchema);
 
 /* READ */
-const getAll = async () => {
+const getStudents = async () => {
     try {
         return await studentModel.find()
             .sort({ lastName: 1, firstName: 1 })
@@ -38,7 +35,7 @@ const getAll = async () => {
     }
 };
 
-const getById = async (id) => {
+const getStudentById = async (id) => {
     try {
         return await studentModel.findById(id)
             .lean();
@@ -49,7 +46,7 @@ const getById = async (id) => {
 };
 
 /* CREATE */
-const create = async (studentData) => {
+const createStudent = async (studentData) => {
     try {
         const newStudent = new studentModel(studentData);
         await newStudent.save();
@@ -61,7 +58,7 @@ const create = async (studentData) => {
 };
 
 /* UPDATE */
-const updateById = async (id, studentData) => {
+const updateStudent = async (id, studentData) => {
     try {
         const student = await studentModel.findByIdAndUpdate(id, studentData, { new: true });
         return student ? student.toObject() : null;
@@ -72,7 +69,7 @@ const updateById = async (id, studentData) => {
 };
 
 /* DELETE */
-const deleteById = async (id) => {
+const deleteStudent = async (id) => {
     try {
         const student = await studentModel.findByIdAndDelete(id);
         return student ? student.toObject() : null;
@@ -83,9 +80,9 @@ const deleteById = async (id) => {
 };
 
 export default {
-    getAll,
-    getById,
-    create,
-    updateById,
-    deleteById
+    getStudents,
+    getStudentById,
+    createStudent,
+    updateStudent,
+    deleteStudent
 };

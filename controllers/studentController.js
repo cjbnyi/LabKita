@@ -1,8 +1,8 @@
 import studentModel from '../database/models/Student.js';
 
-// Assigned to CJ //
-
+/* =============================== */
 /* READ */
+/* =============================== */
 const getStudents = async (req, res) => {
     try {
         const students = await studentModel.getAll();
@@ -26,7 +26,9 @@ const getStudentById = async (req, res) => {
     }
 };
 
+/* =============================== */
 /* CREATE */
+/* =============================== */
 const createStudent = async (req, res) => {
     const studentData = req.body;
 
@@ -38,7 +40,9 @@ const createStudent = async (req, res) => {
     }
 };
 
+/* =============================== */
 /* UPDATE */
+/* =============================== */
 const updateStudent = async (req, res) => {
     const { id } = req.params;
     const studentData = req.body;
@@ -54,7 +58,9 @@ const updateStudent = async (req, res) => {
     }
 };
 
+/* =============================== */
 /* DELETE */
+/* =============================== */
 const deleteStudent = async (req, res) => {
     const { id } = req.params;
 
