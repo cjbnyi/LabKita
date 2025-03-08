@@ -12,153 +12,55 @@ const ReservationSchema = new Schema({
     isAnonymous: { type: Boolean, default: false },
 }, { timestamps: true });
 
-const reservationModel = model('Reservation', ReservationSchema);
-
-/* ====================================== */
-/* GENERAL RESERVATIONS */
-/* ====================================== */
+export const Reservation = model('Reservation', ReservationSchema);
 
 /* =============================== */
-/* READ */
+/* CRUD OPERATIONS */
 /* =============================== */
-const getAllReservations = async () => {
+export const getReservations = async (filter = {}) => {
     try {
-        return await reservationModel.find()
+        return await Reservation.find(filter)
             .sort({ startDateTime: 1 })
             .lean();
     } catch (error) {
-        console.error("Error fetching all Reservation documents:", error);
-        throw error;
+        console.error("Error fetching Reservation documents:", error);
+        throw new Error('Error fetching reservations');
     }
 };
 
-const getReservationById = async (id) => {
+export const createReservation = async (reservationData) => {
     try {
-        return await reservationModel.findById(id).lean();
-    } catch (error) {
-        console.error("Error fetching Reservation document by id:", error);
-        throw error;
-    }
-};
-
-/* =============================== */
-/* CREATE */
-/* =============================== */
-const createReservation = async (reservationData) => {
-    try {
-        const newReservation = new reservationModel(reservationData);
+        const newReservation = new Reservation(reservationData);
         await newReservation.save();
         return newReservation.toObject();
     } catch (error) {
         console.error("Error creating Reservation document:", error);
-        throw error;
+        throw new Error('Error creating reservation');
     }
 };
 
-/* =============================== */
-/* UPDATE */
-/* =============================== */
-const updateReservation = async (id, reservationData) => {
+export const updateReservation = async (id, reservationData) => {
     try {
-        const reservation = await reservationModel.findByIdAndUpdate(id, reservationData, { new: true });
-        return reservation ? reservation.toObject() : null;
+        const reservation = await Reservation.findByIdAndUpdate(id, reservationData, { new: true });
+        if (!reservation) {
+            throw new Error('Reservation not found');
+        }
+        return reservation.toObject();
     } catch (error) {
         console.error("Error updating Reservation document by id:", error);
-        throw error;
+        throw new Error('Error updating reservation');
     }
 };
 
-/* =============================== */
-/* DELETE */
-/* =============================== */
-const deleteReservation = async (id) => {
+export const deleteReservation = async (id) => {
     try {
-        const reservation = await reservationModel.findByIdAndDelete(id);
-        return reservation ? reservation.toObject() : null;
+        const reservation = await Reservation.findByIdAndDelete(id);
+        if (!reservation) {
+            throw new Error('Reservation not found');
+        }
+        return reservation.toObject();
     } catch (error) {
         console.error("Error deleting Reservation document by id:", error);
-        throw error;
+        throw new Error('Error deleting reservation');
     }
-};
-
-/* ====================================== */
-/* RESERVATIONS BY SEAT */
-/* ====================================== */
-
-/* =============================== */
-/* READ */
-/* =============================== */
-const getReservationsForSeat = async (seatId) => {
-    try {
-        return await reservationModel.find({ seatID: seatId }).sort({ startDateTime: 1 }).lean();
-    } catch (error) {
-        console.error("Error fetching Reservations for seat:", error);
-        throw error;
-    }
-};
-
-const getReservationForSeatById = async (seatId, reservationId) => {
-    try {
-        return await reservationModel.findOne({ _id: reservationId, seatID: seatId }).lean();
-    } catch (error) {
-        console.error("Error fetching Reservation for seat by ID:", error);
-        throw error;
-    }
-};
-
-/* =============================== */
-/* CREATE */
-/* =============================== */
-const createReservationForSeat = async (seatId, reservationData) => {
-    try {
-        const newReservation = new reservationModel({ ...reservationData, seatID: seatId });
-        await newReservation.save();
-        return newReservation.toObject();
-    } catch (error) {
-        console.error("Error creating Reservation for seat:", error);
-        throw error;
-    }
-};
-
-/* =============================== */
-/* UPDATE */
-/* =============================== */
-const updateReservationForSeat = async (seatId, reservationId, reservationData) => {
-    try {
-        const reservation = await reservationModel.findOneAndUpdate(
-            { _id: reservationId, seatID: seatId },
-            reservationData,
-            { new: true }
-        );
-        return reservation ? reservation.toObject() : null;
-    } catch (error) {
-        console.error("Error updating Reservation for seat:", error);
-        throw error;
-    }
-};
-
-/* =============================== */
-/* DELETE */
-/* =============================== */
-const deleteReservationFromSeat = async (seatId, reservationId) => {
-    try {
-        const reservation = await reservationModel.findOneAndDelete({ _id: reservationId, seatID: seatId });
-        return reservation ? reservation.toObject() : null;
-    } catch (error) {
-        console.error("Error deleting Reservation from seat:", error);
-        throw error;
-    }
-};
-
-export default {
-    getAllReservations,
-    getReservationById,
-    createReservation,
-    updateReservation,
-    deleteReservation,
-    getReservationsForSeat,
-    getReservationForSeatById,
-    createReservationForSeat,
-    updateReservationForSeat,
-    deleteReservationFromSeat
 };

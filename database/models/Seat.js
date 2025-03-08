@@ -7,80 +7,55 @@ const SeatSchema = new Schema({
     reservations: [{ type: Schema.Types.ObjectId, ref: 'Reservation' }],
 }, { timestamps: true });
 
-const seatModel = model('Seat', SeatSchema);
+export const Seat = model('Seat', SeatSchema);
 
 /* =============================== */
-/* READ */
+/* CRUD OPERATIONS */
 /* =============================== */
-const getSeatsInLab = async (labId) => {
+export const getSeats = async (filter = {}) => {
     try {
-        return await seatModel.find({ labID: labId })
+        return await Seat.find(filter)
             .sort({ seatNumber: 1 })
             .lean();
     } catch (error) {
-        console.error("Error fetching seats in lab:", error);
-        throw error;
+        console.error("Error fetching Seat documents:", error);
+        throw new Error('Error fetching seats');
     }
 };
 
-const getSeatInLabById = async (labId, seatId) => {
+export const createSeat = async (seatData) => {
     try {
-        return await seatModel.findOne({ _id: seatId, labID: labId })
-            .lean();
-    } catch (error) {
-        console.error("Error fetching seat in lab by ID:", error);
-        throw error;
-    }
-};
-
-/* =============================== */
-/* CREATE */
-/* =============================== */
-const createSeat = async (labId, seatData) => {
-    try {
-        const newSeat = new seatModel({ ...seatData, labID: labId });
+        const newSeat = new Seat(seatData);
         await newSeat.save();
         return newSeat.toObject();
     } catch (error) {
         console.error("Error creating seat:", error);
-        throw error;
+        throw new Error('Error creating seat');
     }
 };
 
-/* =============================== */
-/* UPDATE */
-/* =============================== */
-const updateSeat = async (labId, seatId, seatData) => {
+export const updateSeat = async (id, seatData) => {
     try {
-        const seat = await seatModel.findOneAndUpdate(
-            { _id: seatId, labID: labId },
-            seatData,
-            { new: true }
-        );
-        return seat ? seat.toObject() : null;
+        const seat = await Seat.findByIdAndUpdate(id, seatData);
+        if (!seat) {
+            throw new Error('Seat not found');
+        }
+        return seat.toObject();
     } catch (error) {
         console.error("Error updating seat:", error);
-        throw error;
+        throw new Error('Error updating seat');
     }
 };
 
-/* =============================== */
-/* DELETE */
-/* =============================== */
-const deleteSeat = async (labId, seatId) => {
+export const deleteSeat = async (id) => {
     try {
-        const seat = await seatModel.findOneAndDelete({ _id: seatId, labID: labId });
-        return seat ? seat.toObject() : null;
+        const seat = await Seat.findByIdAndDelete(id);
+        if (!seat) {
+            throw new Error('Seat not found');
+        }
+        return seat.toObject();
     } catch (error) {
         console.error("Error deleting seat:", error);
-        throw error;
+        throw new Error('Error deleting seat');
     }
-};
-
-export default {
-    getSeatsInLab,
-    getSeatInLabById,
-    createSeat,
-    updateSeat,
-    deleteSeat
 };

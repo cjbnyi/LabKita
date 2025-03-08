@@ -21,68 +21,55 @@ const StudentSchema = new Schema({
     twoFACodeExpiresAt: { type: Date },
 }, { timestamps: true });
 
-const studentModel = model('Student', StudentSchema);
+export const Student = model('Student', StudentSchema);
 
-/* READ */
-const getStudents = async () => {
+/* =============================== */
+/* CRUD OPERATIONS */
+/* =============================== */
+export const getStudents = async (filter = {}) => {
     try {
-        return await studentModel.find()
+        return await Student.find(filter)
             .sort({ lastName: 1, firstName: 1 })
             .lean();
     } catch (error) {
-        console.error("Error fetching all Student documents:", error);
-        throw error;
+        console.error("Error fetching Student documents:", error);
+        throw new Error('Error fetching students');
     }
 };
 
-const getStudentById = async (id) => {
+export const createStudent = async (studentData) => {
     try {
-        return await studentModel.findById(id)
-            .lean();
-    } catch (error) {
-        console.error("Error fetching Student document by id:", error);
-        throw error;
-    }
-};
-
-/* CREATE */
-const createStudent = async (studentData) => {
-    try {
-        const newStudent = new studentModel(studentData);
+        const newStudent = new Student(studentData);
         await newStudent.save();
         return newStudent.toObject();
     } catch (error) {
         console.error("Error creating Student document:", error);
-        throw error;
+        throw new Error('Error creating student');
     }
 };
 
-/* UPDATE */
-const updateStudent = async (id, studentData) => {
+export const updateStudent = async (id, studentData) => {
     try {
-        const student = await studentModel.findByIdAndUpdate(id, studentData, { new: true });
-        return student ? student.toObject() : null;
+        const student = await Student.findByIdAndUpdate(id, studentData, { new: true });
+        if (!student) {
+            throw new Error('Student not found');
+        }
+        return student.toObject();
     } catch (error) {
         console.error("Error updating Student document by id:", error);
-        throw error;
+        throw new Error('Error updating student');
     }
 };
 
-/* DELETE */
-const deleteStudent = async (id) => {
+export const deleteStudent = async (id) => {
     try {
-        const student = await studentModel.findByIdAndDelete(id);
-        return student ? student.toObject() : null;
+        const student = await Student.findByIdAndDelete(id);
+        if (!student) {
+            throw new Error('Student not found');
+        }
+        return student.toObject();
     } catch (error) {
         console.error("Error deleting Student document by id:", error);
-        throw error;
+        throw new Error('Error deleting student');
     }
-};
-
-export default {
-    getStudents,
-    getStudentById,
-    createStudent,
-    updateStudent,
-    deleteStudent
 };
