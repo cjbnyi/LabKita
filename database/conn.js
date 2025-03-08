@@ -1,52 +1,43 @@
-import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
 
-// MongoDB connection URI (modify this accordingly)
-const mongoURI = process.env.MONGODB_URI;
-if (!mongoURI) {
-    console.error("MONGODB_URI is not defined in .env");
+const mongoDbURI = process.env.MONGODB_URI;
+if (!mongoDbURI) {
+    console.error("MONGO_URI is not defined in .env");
     process.exit(1);
 }
 
-// Create a MongoDB client instance
-const client = new MongoClient(mongoURI);
-
-let isConnected = false; // Track connection state
-
 /**
- * Connects to MongoDB and executes the provided callback.
- * @param {Function} callback - Function to execute after connection.
+ * Connects to MongoDB using Mongoose.
  */
-export async function connectToMongo(callback) {
+export async function connectToMongo() {
+    if (mongoose.connection.readyState === 1) {
+        console.log("Already connected to MongoDB.");
+        return;
+    }
+    
     try {
-        await client.connect();
-        isConnected = true;
+        await mongoose.connect(mongoDbURI);
         console.log("Successfully connected to MongoDB.");
-        callback(); // Execute the callback function
     } catch (error) {
         console.error("MongoDB connection error:", error);
-        callback(error); // Pass the error to the callback
+        process.exit(1);
     }
 }
 
 /**
- * Returns a database instance from the connected MongoDB client.
- * @param {string} dbName - Name of the database (default: "showcase").
- * @returns {object} The MongoDB database instance.
+ * Returns the Mongoose connection instance.
  */
-export function getDb(dbName = process.env.DB_NAME) {
-    if (!isConnected) {
-        console.warn("Warning: Database requested before connection was established.");
-    }
-    return client.db(dbName);
+export function getDb() {
+    return mongoose.connection;
 }
 
 /**
  * Handles cleanup and graceful shutdown of the MongoDB connection.
  */
 async function signalHandler() {
-    if (isConnected) {
+    if (mongoose.connect.readyState === 1) {
         console.log("Closing MongoDB connection...");
-        await client.close();
+        await mongoose.connection.close();
         console.log("MongoDB connection closed.");
     }
     process.exit(0);
