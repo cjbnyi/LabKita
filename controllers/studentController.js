@@ -1,28 +1,14 @@
-import studentModel from '../database/models/Student.js';
+import { Student } from '../database/models/models.js';
 
 /* =============================== */
 /* READ */
 /* =============================== */
 const getStudents = async (req, res) => {
     try {
-        const students = await studentModel.getAll();
+        const students = await Student.getAll(req.query);
         res.status(200).json(students);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching students' });
-    }
-};
-
-const getStudentById = async (req, res) => {
-    const { id } = req.params;
-
-    try {
-        const student = await studentModel.getById(id);
-        if (!student) {
-            return res.status(404).json({ error: 'Student not found' });
-        }
-        res.status(200).json(student);
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching student by id' });
+        res.status(500).json({ error: 'Error fetching students', details: error.message });
     }
 };
 
@@ -33,10 +19,10 @@ const createStudent = async (req, res) => {
     const studentData = req.body;
 
     try {
-        const newStudent = await studentModel.create(studentData);
+        const newStudent = await Student.create(studentData);
         res.status(201).json(newStudent);
     } catch (error) {
-        res.status(500).json({ error: 'Error creating student' });
+        res.status(500).json({ error: 'Error creating student', details: error.message });
     }
 };
 
@@ -48,13 +34,13 @@ const updateStudent = async (req, res) => {
     const studentData = req.body;
 
     try {
-        const updatedStudent = await studentModel.updateById(id, studentData);
+        const updatedStudent = await Student.updateById(id, studentData);
         if (!updatedStudent) {
             return res.status(404).json({ error: 'Student not found' });
         }
         res.status(200).json(updatedStudent);
     } catch (error) {
-        res.status(500).json({ error: 'Error updating student' });
+        res.status(500).json({ error: 'Error updating student', details: error.message });
     }
 };
 
@@ -65,19 +51,18 @@ const deleteStudent = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const deletedStudent = await studentModel.deleteById(id);
+        const deletedStudent = await Student.deleteById(id);
         if (!deletedStudent) {
             return res.status(404).json({ error: 'Student not found' });
         }
         res.status(200).json({ message: 'Student deleted successfully' });
     } catch (error) {
-        res.status(500).json({ error: 'Error deleting student' });
+        res.status(500).json({ error: 'Error deleting student', details: error.message });
     }
 };
 
 export default {
     getStudents,
-    getStudentById,
     createStudent,
     updateStudent,
     deleteStudent

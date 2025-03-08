@@ -6,14 +6,16 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 // Import database functions
-import { connectToMongo, getDb } from './database/conn.js';
+import { connectToMongo } from './database/conn.js';
+import { seedDatabase } from './database/seed.js';
 
 // Import routes
-import adminRoutes from './routes/adminRoutes.js';
-import labRoutes from './routes/labRoutes.js';
-import reservationRoutes from './routes/reservationRoutes.js';
-import seatRoutes from './routes/seatRoutes.js';
-import studentRoutes from './routes/studentRoutes.js';
+import {
+    adminRoutes,
+    authRoutes,
+    publicRoutes,
+    studentRoutes
+} from './routes/routes.js';
 
 // Obtain __filename and __dirname in ES6 standard
 const __filename = fileURLToPath(import.meta.url);
@@ -43,22 +45,22 @@ app.use(express.static('public'));
 
 // Register routes
 app.use('/api/admins', adminRoutes);
-app.use('/api/labs', labRoutes);
-app.use('/api/reservations', reservationRoutes);
-app.use('/api/seats', seatRoutes);
+app.use('/api/admins', authRoutes);
+app.use('/api/public', publicRoutes);
 app.use('/api/students', studentRoutes);
 
-// Start the server after connecting to MongoDB
-connectToMongo((err) => {
-    if (err) {
-        console.error("Error connecting to MongoDB:", err);
-        process.exit(1);
-    }
-    console.log("Connected to MongoDB server.");
-    const db = getDb();
+// Connect to MongoDB and seed the database before starting the server
+try {
+    await connectToMongo();
+    await seedDatabase();
 
     const PORT = process.env.WEB_PORT || 3000;
     app.listen(PORT, () => {
         console.log(`Server running on http://localhost:${PORT}`);
     });
-});
+} catch (error) {
+    console.error("Error initializing server:", error);
+    process.exit(1);
+}
+
+
