@@ -1,30 +1,15 @@
-import seatModel from '../database/models/Seat.js';
+import { Seat } from '../database/models/models.js';
 
 /* =============================== */
 /* READ */
 /* =============================== */
-const getSeatsInLab = async (req, res) => {
-    const { labId } = req.params;
-
+const getSeats = async (req, res) => {
     try {
-        const seats = await seatModel.getSeatsInLab(labId);
+        const filter = req.query || {};
+        const seats = await Seat.getSeats(filter);
         res.status(200).json(seats);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching seats in lab' });
-    }
-};
-
-const getSeatInLabById = async (req, res) => {
-    const { labId, seatId } = req.params;
-
-    try {
-        const seat = await seatModel.getSeatInLabById(labId, seatId);
-        if (!seat) {
-            return res.status(404).json({ error: 'Seat not found in the specified lab' });
-        }
-        res.status(200).json(seat);
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching seat in lab by ID' });
+        res.status(500).json({ error: 'Error fetching seats', details: error.message });
     }
 };
 
@@ -32,14 +17,11 @@ const getSeatInLabById = async (req, res) => {
 /* CREATE */
 /* =============================== */
 const createSeat = async (req, res) => {
-    const { labId } = req.params;
-    const seatData = req.body;
-
     try {
-        const newSeat = await seatModel.createSeat(labId, seatData);
+        const newSeat = await Seat.createSeat(req.body);
         res.status(201).json(newSeat);
     } catch (error) {
-        res.status(500).json({ error: 'Error creating seat' });
+        res.status(500).json({ error: 'Error creating seat', details: error.message });
     }
 };
 
@@ -47,17 +29,15 @@ const createSeat = async (req, res) => {
 /* UPDATE */
 /* =============================== */
 const updateSeat = async (req, res) => {
-    const { labId, seatId } = req.params;
-    const seatData = req.body;
-
+    const { seatId } = req.params;
     try {
-        const updatedSeat = await seatModel.updateSeat(labId, seatId, seatData);
+        const updatedSeat = await Seat.updateSeat(seatId, req.body);
         if (!updatedSeat) {
-            return res.status(404).json({ error: 'Seat not found in the specified lab' });
+            return res.status(404).json({ error: 'Seat not found' });
         }
         res.status(200).json(updatedSeat);
     } catch (error) {
-        res.status(500).json({ error: 'Error updating seat' });
+        res.status(500).json({ error: 'Error updating seat', details: error.message });
     }
 };
 
@@ -65,22 +45,20 @@ const updateSeat = async (req, res) => {
 /* DELETE */
 /* =============================== */
 const deleteSeat = async (req, res) => {
-    const { labId, seatId } = req.params;
-
+    const { seatId } = req.params;
     try {
-        const deletedSeat = await seatModel.deleteSeat(labId, seatId);
+        const deletedSeat = await Seat.deleteSeat(seatId);
         if (!deletedSeat) {
-            return res.status(404).json({ error: 'Seat not found in the specified lab' });
+            return res.status(404).json({ error: 'Seat not found' });
         }
         res.status(200).json({ message: 'Seat deleted successfully' });
     } catch (error) {
-        res.status(500).json({ error: 'Error deleting seat' });
+        res.status(500).json({ error: 'Error deleting seat', details: error.message });
     }
 };
 
 export default {
-    getSeatsInLab,
-    getSeatInLabById,
+    getSeats,
     createSeat,
     updateSeat,
     deleteSeat

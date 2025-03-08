@@ -1,13 +1,15 @@
 # CJ Personal TODO List
 
 ## 📌 Features
-- [ ] Finalize API testing automation (B)
+- [ ] Finalize API testing automation
+- [ ] Finalize DB connection code
 
 ## 🐛 Bug Fixes
 - [ ] 
 
 ## 🛠️ Refactoring
-- [ ] 
+- [ ] Restructure Models to generalize get functions
+- [ ] Modify controller functions invoked in routes
 
 ## 📝 Documentation
 - [ ] Document LLM usage (F&B)

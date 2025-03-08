@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
-import AdminModel from '../models/Admin.js';
-import StudentModel from '../models/Student.js';
+import { Admin, Student } from '../database/models/models.js';
 
-const userModels = [AdminModel, StudentModel];
+const userModels = [Admin, Student];
 
 export const getUserByEmail = async (email) => {
     for (const Model of userModels) {

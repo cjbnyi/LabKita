@@ -1,6 +1,5 @@
 import { Schema, model } from 'mongoose';
 
-// Lab Schema
 const LabSchema = new Schema({
     building: { type: String, required: true },
     room: { type: String, required: true },
@@ -11,76 +10,55 @@ const LabSchema = new Schema({
     status: { type: String, enum: ['Open', 'Closed', 'Under Maintenance'], default: 'Open' },
 }, { timestamps: true });
 
-const labModel = model('Lab', LabSchema);
+export const Lab = model('Lab', LabSchema);
 
 /* =============================== */
-/* READ */
+/* CRUD OPERATIONS */
 /* =============================== */
-const getLabs = async () => {
+export const getLabs = async (filter = {}) => {
     try {
-        return await labModel.find()
+        return await Lab.find(filter)
             .sort({ building: 1, room: 1 })
             .lean();
     } catch (error) {
-        console.error("Error fetching all Lab documents:", error);
-        throw error;
+        console.error("Error fetching Lab documents:", error);
+        throw new Error('Error fetching labs');
     }
 };
 
-const getLabById = async (id) => {
+export const createLab = async (labData) => {
     try {
-        return await labModel.findById(id)
-            .lean();
-    } catch (error) {
-        console.error("Error fetching Lab document by id:", error);
-        throw error;
-    }
-};
-
-/* =============================== */
-/* CREATE */
-/* =============================== */
-const createLab = async (labData) => {
-    try {
-        const newLab = new labModel(labData);
+        const newLab = new Lab(labData);
         await newLab.save();
         return newLab.toObject();
     } catch (error) {
         console.error("Error creating Lab document:", error);
-        throw error;
+        throw new Error('Error creating lab');
     }
 };
 
-/* =============================== */
-/* UPDATE */
-/* =============================== */
-const updateLab = async (id, labData) => {
+export const updateLab = async (id, labData) => {
     try {
-        const lab = await labModel.findByIdAndUpdate(id, labData, { new: true });
-        return lab ? lab.toObject() : null;
+        const lab = await Lab.findByIdAndUpdate(id, labData, { new: true });
+        if (!lab) {
+            throw new Error('Lab not found');
+        }
+        return lab.toObject();
     } catch (error) {
         console.error("Error updating Lab document by id:", error);
-        throw error;
+        throw new Error('Error updating lab');
     }
 };
 
-/* =============================== */
-/* DELETE */
-/* =============================== */
-const deleteLab = async (id) => {
+export const deleteLab = async (id) => {
     try {
-        const lab = await labModel.findByIdAndDelete(id);
-        return lab ? lab.toObject() : null;
+        const lab = await Lab.findByIdAndDelete(id);
+        if (!lab) {
+            throw new Error('Lab not found');
+        }
+        return lab.toObject();
     } catch (error) {
         console.error("Error deleting Lab document by id:", error);
-        throw error;
+        throw new Error('Error deleting lab');
     }
-};
-
-export default {
-    getLabs,
-    getLabById,
-    createLab,
-    updateLab,
-    deleteLab
 };

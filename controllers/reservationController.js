@@ -1,32 +1,15 @@
-import reservationModel from '../database/models/Reservation.js';
-
-/* ====================================== */
-/* GENERAL RESERVATIONS */
-/* ====================================== */
+import { Reservation } from '../database/models/models.js';
 
 /* =============================== */
 /* READ */
 /* =============================== */
-const getAllReservations = async (req, res) => {
+const getReservations = async (req, res) => {
     try {
-        const reservations = await reservationModel.getAllReservations();
+        const filter = req.query || {};  // Extract query parameters as filter
+        const reservations = await Reservation.getAllReservations(filter);
         res.status(200).json(reservations);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching reservations' });
-    }
-};
-
-const getReservationById = async (req, res) => {
-    const { id } = req.params;
-
-    try {
-        const reservation = await reservationModel.getReservationById(id);
-        if (!reservation) {
-            return res.status(404).json({ error: 'Reservation not found' });
-        }
-        res.status(200).json(reservation);
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching reservation by ID' });
+        res.status(500).json({ error: 'Error fetching reservations', details: error.message });
     }
 };
 
@@ -34,13 +17,11 @@ const getReservationById = async (req, res) => {
 /* CREATE */
 /* =============================== */
 const createReservation = async (req, res) => {
-    const reservationData = req.body;
-
     try {
-        const newReservation = await reservationModel.createReservation(reservationData);
+        const newReservation = await Reservation.createReservation(req.body);
         res.status(201).json(newReservation);
     } catch (error) {
-        res.status(500).json({ error: 'Error creating reservation' });
+        res.status(500).json({ error: 'Error creating reservation', details: error.message });
     }
 };
 
@@ -49,16 +30,14 @@ const createReservation = async (req, res) => {
 /* =============================== */
 const updateReservation = async (req, res) => {
     const { id } = req.params;
-    const reservationData = req.body;
-
     try {
-        const updatedReservation = await reservationModel.updateReservation(id, reservationData);
+        const updatedReservation = await Reservation.updateReservation(id, req.body);
         if (!updatedReservation) {
             return res.status(404).json({ error: 'Reservation not found' });
         }
         res.status(200).json(updatedReservation);
     } catch (error) {
-        res.status(500).json({ error: 'Error updating reservation' });
+        res.status(500).json({ error: 'Error updating reservation', details: error.message });
     }
 };
 
@@ -67,109 +46,20 @@ const updateReservation = async (req, res) => {
 /* =============================== */
 const deleteReservation = async (req, res) => {
     const { id } = req.params;
-
     try {
-        const deletedReservation = await reservationModel.deleteReservation(id);
+        const deletedReservation = await Reservation.deleteReservation(id);
         if (!deletedReservation) {
             return res.status(404).json({ error: 'Reservation not found' });
         }
         res.status(200).json({ message: 'Reservation deleted successfully' });
     } catch (error) {
-        res.status(500).json({ error: 'Error deleting reservation' });
-    }
-};
-
-/* ====================================== */
-/* RESERVATIONS BY SEAT */
-/* ====================================== */
-
-/* =============================== */
-/* READ */
-/* =============================== */
-const getReservationsForSeat = async (req, res) => {
-    const { labId, seatId } = req.params;
-
-    try {
-        const reservations = await reservationModel.getReservationsForSeat(seatId);
-        res.status(200).json(reservations);
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching reservations for seat' });
-    }
-};
-
-const getReservationForSeatById = async (req, res) => {
-    const { labId, seatId, reservationId } = req.params;
-
-    try {
-        const reservation = await reservationModel.getReservationForSeatById(seatId, reservationId);
-        if (!reservation) {
-            return res.status(404).json({ error: 'Reservation not found' });
-        }
-        res.status(200).json(reservation);
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching reservation for seat by ID' });
-    }
-};
-
-/* =============================== */
-/* CREATE */
-/* =============================== */
-const createReservationForSeat = async (req, res) => {
-    const { labId, seatId } = req.params;
-    const reservationData = req.body;
-
-    try {
-        const newReservation = await reservationModel.createReservationForSeat(seatId, reservationData);
-        res.status(201).json(newReservation);
-    } catch (error) {
-        res.status(500).json({ error: 'Error creating reservation for seat' });
-    }
-};
-
-/* =============================== */
-/* UPDATE */
-/* =============================== */
-const updateReservationForSeat = async (req, res) => {
-    const { labId, seatId, reservationId } = req.params;
-    const reservationData = req.body;
-
-    try {
-        const updatedReservation = await reservationModel.updateReservationForSeat(seatId, reservationId, reservationData);
-        if (!updatedReservation) {
-            return res.status(404).json({ error: 'Reservation not found' });
-        }
-        res.status(200).json(updatedReservation);
-    } catch (error) {
-        res.status(500).json({ error: 'Error updating reservation for seat' });
-    }
-};
-
-/* =============================== */
-/* DELETE */
-/* =============================== */
-const deleteReservationFromSeat = async (req, res) => {
-    const { labId, seatId, reservationId } = req.params;
-
-    try {
-        const deletedReservation = await reservationModel.deleteReservationFromSeat(seatId, reservationId);
-        if (!deletedReservation) {
-            return res.status(404).json({ error: 'Reservation not found' });
-        }
-        res.status(200).json({ message: 'Reservation deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Error deleting reservation from seat' });
+        res.status(500).json({ error: 'Error deleting reservation', details: error.message });
     }
 };
 
 export default {
-    getAllReservations,
-    getReservationById,
+    getReservations,
     createReservation,
     updateReservation,
-    deleteReservation,
-    getReservationsForSeat,
-    getReservationForSeatById,
-    createReservationForSeat,
-    updateReservationForSeat,
-    deleteReservationFromSeat
+    deleteReservation
 };
