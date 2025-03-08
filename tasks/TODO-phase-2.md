@@ -13,15 +13,15 @@
 ### 🗃 Database & Models (MongoDB & Mongoose)
 - [x] **Design & finalize database schema** (models for Users, Posts, etc.)  
 - [x] **Implement models using Mongoose** and store them in the `models/` folder  
-- [ ] **Seed database with at least 5 sample entries** per data type  
+- [x] **Seed database with at least 5 sample entries** per data type  
 
 ### 🛠 Server & Routing
 - [x] **Set up Express server** and listen on `localhost:3000`  
-- [ ] **Implement routes** in the `routes/` folder (e.g., `routes/index.routes.js`, `routes/user.routes.js`)  
-- [ ] **Connect the server to MongoDB using Mongoose**  
-- [ ] **Implement controller logic for CRUD operations** in `controllers/`  
+- [x] **Implement routes** in the `routes/` folder (e.g., `routes/index.routes.js`, `routes/user.routes.js`)  
+- [x] **Connect the server to MongoDB using Mongoose**  
+- [x] **Implement controller logic for CRUD operations** in `controllers/`  
 - [ ] **Ensure that all forms use the appropriate HTTP methods** (e.g., POST for logins, GET for searches)  
-- [ ] **Implement redirects for incorrect URLs (404 page)**  
+- [x] **Implement redirects for incorrect URLs (404 page)**  
 - [ ] **Ensure that pages and features load data dynamically from MongoDB**  
 
 ---
