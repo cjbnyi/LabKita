@@ -1,12 +1,17 @@
-import { Reservation } from '../database/models/models.js';
+import {
+    getReservations,
+    createReservation,
+    updateReservation,
+    deleteReservation
+} from '../database/models/Reservation.js';
 
 /* =============================== */
 /* READ */
 /* =============================== */
-const getReservations = async (req, res) => {
+const handleGetReservations = async (req, res) => {
     try {
-        const filter = req.query || {};  // Extract query parameters as filter
-        const reservations = await Reservation.getAllReservations(filter);
+        const filter = req.query || {};
+        const reservations = await getReservations(filter);
         res.status(200).json(reservations);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching reservations', details: error.message });
@@ -16,9 +21,9 @@ const getReservations = async (req, res) => {
 /* =============================== */
 /* CREATE */
 /* =============================== */
-const createReservation = async (req, res) => {
+const handleCreateReservation = async (req, res) => {
     try {
-        const newReservation = await Reservation.createReservation(req.body);
+        const newReservation = await createReservation(req.body);
         res.status(201).json(newReservation);
     } catch (error) {
         res.status(500).json({ error: 'Error creating reservation', details: error.message });
@@ -28,10 +33,10 @@ const createReservation = async (req, res) => {
 /* =============================== */
 /* UPDATE */
 /* =============================== */
-const updateReservation = async (req, res) => {
+const handleUpdateReservation = async (req, res) => {
     const { id } = req.params;
     try {
-        const updatedReservation = await Reservation.updateReservation(id, req.body);
+        const updatedReservation = await updateReservation(id, req.body);
         if (!updatedReservation) {
             return res.status(404).json({ error: 'Reservation not found' });
         }
@@ -44,10 +49,10 @@ const updateReservation = async (req, res) => {
 /* =============================== */
 /* DELETE */
 /* =============================== */
-const deleteReservation = async (req, res) => {
+const handleDeleteReservation = async (req, res) => {
     const { id } = req.params;
     try {
-        const deletedReservation = await Reservation.deleteReservation(id);
+        const deletedReservation = await deleteReservation(id);
         if (!deletedReservation) {
             return res.status(404).json({ error: 'Reservation not found' });
         }
@@ -58,8 +63,8 @@ const deleteReservation = async (req, res) => {
 };
 
 export default {
-    getReservations,
-    createReservation,
-    updateReservation,
-    deleteReservation
+    handleGetReservations,
+    handleCreateReservation,
+    handleUpdateReservation,
+    handleDeleteReservation
 };

@@ -1,12 +1,17 @@
-import { Admin } from '../database/models/models.js';
+import {
+    getAdmins,
+    createAdmin,
+    updateAdmin,
+    deleteAdmin
+} from '../database/models/Admin.js';
 
 /* =============================== */
 /* READ */
 /* =============================== */
-const getAdmins = async (req, res) => {
+const handleGetAdmins = async (req, res) => {
     try {
         const filter = req.query || {};
-        const admins = await Admin.getStudents(filter);
+        const admins = await getAdmins(filter);
         res.status(200).json(admins);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching admins', details: error.message });
@@ -16,9 +21,9 @@ const getAdmins = async (req, res) => {
 /* =============================== */
 /* CREATE */
 /* =============================== */
-const createAdmin = async (req, res) => {
+const handleCreateAdmin = async (req, res) => {
     try {
-        const newAdmin = await Admin.createStudent(req.body);
+        const newAdmin = await createAdmin(req.body);
         res.status(201).json(newAdmin);
     } catch (error) {
         res.status(500).json({ error: 'Error creating admin', details: error.message });
@@ -28,10 +33,10 @@ const createAdmin = async (req, res) => {
 /* =============================== */
 /* UPDATE */
 /* =============================== */
-const updateAdmin = async (req, res) => {
+const handleUpdateAdmin = async (req, res) => {
     const { id } = req.params;
     try {
-        const updatedAdmin = await Admin.updateStudent(id, req.body);
+        const updatedAdmin = await updateAdmin(id, req.body);
         if (!updatedAdmin) {
             return res.status(404).json({ error: 'Admin not found' });
         }
@@ -44,10 +49,10 @@ const updateAdmin = async (req, res) => {
 /* =============================== */
 /* DELETE */
 /* =============================== */
-const deleteAdmin = async (req, res) => {
+const handleDeleteAdmin = async (req, res) => {
     const { id } = req.params;
     try {
-        const deletedAdmin = await Admin.deleteStudent(id);
+        const deletedAdmin = await deleteAdmin(id);
         if (!deletedAdmin) {
             return res.status(404).json({ error: 'Admin not found' });
         }
@@ -58,8 +63,8 @@ const deleteAdmin = async (req, res) => {
 };
 
 export default {
-    getAdmins,
-    createAdmin,
-    updateAdmin,
-    deleteAdmin
+    handleGetAdmins,
+    handleCreateAdmin,
+    handleUpdateAdmin,
+    handleDeleteAdmin
 };

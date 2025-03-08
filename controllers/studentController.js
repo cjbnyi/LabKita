@@ -1,11 +1,16 @@
-import { Student } from '../database/models/models.js';
+import {
+    getStudents,
+    createStudent,
+    updateStudent,
+    deleteStudent
+} from '../database/models/Student.js';
 
 /* =============================== */
 /* READ */
 /* =============================== */
-const getStudents = async (req, res) => {
+const handleGetStudents = async (req, res) => {
     try {
-        const students = await Student.getAll(req.query);
+        const students = await getStudents(req.query);
         res.status(200).json(students);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching students', details: error.message });
@@ -15,11 +20,9 @@ const getStudents = async (req, res) => {
 /* =============================== */
 /* CREATE */
 /* =============================== */
-const createStudent = async (req, res) => {
-    const studentData = req.body;
-
+const handleCreateStudent = async (req, res) => {
     try {
-        const newStudent = await Student.create(studentData);
+        const newStudent = await createStudent(req.body);
         res.status(201).json(newStudent);
     } catch (error) {
         res.status(500).json({ error: 'Error creating student', details: error.message });
@@ -29,12 +32,11 @@ const createStudent = async (req, res) => {
 /* =============================== */
 /* UPDATE */
 /* =============================== */
-const updateStudent = async (req, res) => {
+const handleUpdateStudent = async (req, res) => {
     const { id } = req.params;
-    const studentData = req.body;
 
     try {
-        const updatedStudent = await Student.updateById(id, studentData);
+        const updatedStudent = await updateStudent(id, req.body);
         if (!updatedStudent) {
             return res.status(404).json({ error: 'Student not found' });
         }
@@ -47,11 +49,11 @@ const updateStudent = async (req, res) => {
 /* =============================== */
 /* DELETE */
 /* =============================== */
-const deleteStudent = async (req, res) => {
+const handleDeleteStudent = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const deletedStudent = await Student.deleteById(id);
+        const deletedStudent = await deleteStudent(id);
         if (!deletedStudent) {
             return res.status(404).json({ error: 'Student not found' });
         }
@@ -62,8 +64,8 @@ const deleteStudent = async (req, res) => {
 };
 
 export default {
-    getStudents,
-    createStudent,
-    updateStudent,
-    deleteStudent
+    handleGetStudents,
+    handleCreateStudent,
+    handleUpdateStudent,
+    handleDeleteStudent
 };

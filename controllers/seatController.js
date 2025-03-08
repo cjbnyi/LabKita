@@ -1,12 +1,17 @@
-import { Seat } from '../database/models/models.js';
+import {
+    getSeats,
+    createSeat,
+    updateSeat,
+    deleteSeat
+} from '../database/models/Seat.js';
 
 /* =============================== */
 /* READ */
 /* =============================== */
-const getSeats = async (req, res) => {
+const handleGetSeats = async (req, res) => {
     try {
         const filter = req.query || {};
-        const seats = await Seat.getSeats(filter);
+        const seats = await getSeats(filter);
         res.status(200).json(seats);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching seats', details: error.message });
@@ -16,9 +21,9 @@ const getSeats = async (req, res) => {
 /* =============================== */
 /* CREATE */
 /* =============================== */
-const createSeat = async (req, res) => {
+const handleCreateSeat = async (req, res) => {
     try {
-        const newSeat = await Seat.createSeat(req.body);
+        const newSeat = await createSeat(req.body);
         res.status(201).json(newSeat);
     } catch (error) {
         res.status(500).json({ error: 'Error creating seat', details: error.message });
@@ -28,10 +33,10 @@ const createSeat = async (req, res) => {
 /* =============================== */
 /* UPDATE */
 /* =============================== */
-const updateSeat = async (req, res) => {
+const handleUpdateSeat = async (req, res) => {
     const { seatId } = req.params;
     try {
-        const updatedSeat = await Seat.updateSeat(seatId, req.body);
+        const updatedSeat = await updateSeat(seatId, req.body);
         if (!updatedSeat) {
             return res.status(404).json({ error: 'Seat not found' });
         }
@@ -44,10 +49,10 @@ const updateSeat = async (req, res) => {
 /* =============================== */
 /* DELETE */
 /* =============================== */
-const deleteSeat = async (req, res) => {
+const handleDeleteSeat = async (req, res) => {
     const { seatId } = req.params;
     try {
-        const deletedSeat = await Seat.deleteSeat(seatId);
+        const deletedSeat = await deleteSeat(seatId);
         if (!deletedSeat) {
             return res.status(404).json({ error: 'Seat not found' });
         }
@@ -58,8 +63,8 @@ const deleteSeat = async (req, res) => {
 };
 
 export default {
-    getSeats,
-    createSeat,
-    updateSeat,
-    deleteSeat
+    handleGetSeats,
+    handleCreateSeat,
+    handleUpdateSeat,
+    handleDeleteSeat
 };
