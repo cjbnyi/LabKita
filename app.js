@@ -52,6 +52,17 @@ app.use('/api/auth', authRoutes);
 app.use('/api/public', publicRoutes);
 app.use('/api/students', studentRoutes);
 
+// 404 error handling
+app.use((req, res) => {
+    res.status(404).json({ error: 'Route not found' });
+});
+
+// Global error handling
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Internal server error' });
+});
+
 // CLI flags
 const shouldSeed = process.argv.includes('--seed');
 
