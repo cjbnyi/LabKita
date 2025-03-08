@@ -9,6 +9,7 @@ node_modules/   # Dependencies (massive folder)
 npm-debug.log   # NPM debug logs
 yarn.lock       # Yarn lock file
 pnpm-lock.yaml  # PNPM lock file
+access.log      # Request logging
 
 # === Build & Output Directories ===
 dist/           # General build output (JS bundlers)
