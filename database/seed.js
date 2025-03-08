@@ -146,7 +146,7 @@ const seedReservations = async (students, labs, seats) => {
 };
 
 export const seedDatabase = async () => {
-    console.log('Seeding data...');
+    console.log('Seeding database...');
     
     const admins = await seedAdmins();
     console.log(`Seeded ${admins.length} admins`);
