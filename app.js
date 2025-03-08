@@ -27,8 +27,8 @@ const __dirname = dirname(__filename);
 const app = express();
 
 // Log requests to a file
-const accessLogStream = fs.createWriteStream(path.join(process.cwd(), 'access.log'), { flags: 'a' });
-app.use(morgan('combined', { stream: accessLogStream }));
+// const accessLogStream = fs.createWriteStream(path.join(process.cwd(), 'access.log'), { flags: 'a' });
+// app.use(morgan('combined', { stream: accessLogStream }));
 
 // Middleware
 app.use(express.json());
