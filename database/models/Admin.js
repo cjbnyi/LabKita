@@ -16,55 +16,50 @@ const AdminSchema = new Schema({
     twoFACodeExpiresAt: { type: Date },
 }, { timestamps: true });
 
-export const Admin = model('Admin', AdminSchema);
+export default class Admin {
+    static AdminModel = model('Admin', AdminSchema);
 
-/* =============================== */
-/* CRUD OPERATIONS */
-/* =============================== */
-export const getAdmins = async (filter = {}) => {
-    try {
-        return await Admin.find(filter)
-            .sort({ lastName: 1, firstName: 1 })
-            .lean();
-    } catch (error) {
-        console.error("Error fetching Admin documents:", error);
-        throw new Error('Error fetching admins');
-    }
-};
-
-export const createAdmin = async (adminData) => {
-    try {
-        const newAdmin = new Admin(adminData);
-        await newAdmin.save();
-        return newAdmin.toObject();
-    } catch (error) {
-        console.error("Error creating Admin document:", error);
-        throw new Error('Error creating admin');
-    }
-};
-
-export const updateAdmin = async (id, adminData) => {
-    try {
-        const admin = await Admin.findByIdAndUpdate(id, adminData, { new: true });
-        if (!admin) {
-            throw new Error('Admin not found');
+    static async getAdmins(filter = {}) {
+        try {
+            return await this.AdminModel.find(filter)
+                .sort({ lastName: 1, firstName: 1 })
+                .lean();
+        } catch (error) {
+            console.error("Error fetching Admin documents:", error);
+            throw new Error('Error fetching admins');
         }
-        return admin.toObject();
-    } catch (error) {
-        console.error("Error updating Admin document by id:", error);
-        throw new Error('Error updating admin');
     }
-};
 
-export const deleteAdmin = async (id) => {
-    try {
-        const admin = await Admin.findByIdAndDelete(id);
-        if (!admin) {
-            throw new Error('Admin not found');
+    static async createAdmin(adminData) {
+        try {
+            const newAdmin = new this.AdminModel(adminData);
+            await newAdmin.save();
+            return newAdmin.toObject();
+        } catch (error) {
+            console.error("Error creating Admin document:", error);
+            throw new Error('Error creating admin');
         }
-        return admin.toObject();
-    } catch (error) {
-        console.error("Error deleting Admin document by id:", error);
-        throw new Error('Error deleting admin');
     }
-};
+
+    static async updateAdmin(id, adminData) {
+        try {
+            const admin = await this.AdminModel.findByIdAndUpdate(id, adminData, { new: true });
+            if (!admin) throw new Error('Admin not found');
+            return admin.toObject();
+        } catch (error) {
+            console.error("Error updating Admin document by id:", error);
+            throw new Error('Error updating admin');
+        }
+    }
+
+    static async deleteAdmin(id) {
+        try {
+            const admin = await this.AdminModel.findByIdAndDelete(id);
+            if (!admin) throw new Error('Admin not found');
+            return admin.toObject();
+        } catch (error) {
+            console.error("Error deleting Admin document by id:", error);
+            throw new Error('Error deleting admin');
+        }
+    }
+}
