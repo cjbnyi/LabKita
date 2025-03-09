@@ -17,7 +17,7 @@ const router = express.Router();
 /* =============================== */
 /* STUDENT */
 /* =============================== */
-router.get('/:id', validateMongoId, checkValidation, studentController.getStudents);
+router.get('/', validateMongoId, checkValidation, studentController.getStudents);
 router.put('/:id', validateMongoId, checkValidation, studentController.updateStudent);
 router.delete('/:id', validateMongoId, checkValidation, studentController.deleteStudent);
 

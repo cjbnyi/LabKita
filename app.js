@@ -54,7 +54,7 @@ app.use('/api/students', studentRoutes);
 
 // 404 error handling
 app.use((req, res) => {
-    res.status(404).json({ error: 'Route not found' });
+    res.status(404).json({ error: 'HUI WALA \'YUNG ROUTE NA \'YAN!' });
 });
 
 // Global error handling
