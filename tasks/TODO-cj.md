@@ -1,6 +1,7 @@
 # CJ Personal TODO List
 
 ## 📌 Features
+- [ ] Create entity ID queries in models
 - [ ] Finalize API testing automation
 
 ## 🐛 Bug Fixes
