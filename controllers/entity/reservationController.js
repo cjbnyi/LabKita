@@ -1,4 +1,4 @@
-import { Reservation } from '../database/models/models.js';
+import { Reservation } from '../../database/models/models.js';
 
 /* =============================== */
 /* READ */

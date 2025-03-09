@@ -1,4 +1,4 @@
-import { Admin } from '../database/models/models.js';
+import { Admin } from '../../database/models/models.js';
 
 /* =============================== */
 /* READ */
