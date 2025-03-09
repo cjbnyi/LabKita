@@ -17,7 +17,7 @@ const AdminSchema = new Schema({
 }, { timestamps: true });
 
 export default class Admin {
-    static AdminModel = model('Admin', AdminSchema);
+    static model = model('Admin', AdminSchema);
 
     static async getAdmins(filter = {}) {
         try {

@@ -8,7 +8,7 @@ const SeatSchema = new Schema({
 }, { timestamps: true });
 
 export default class Seat {
-    static SeatModel = model('Seat', SeatSchema);
+    static model = model('Seat', SeatSchema);
 
     static async getSeats(filter = {}) {
         try {

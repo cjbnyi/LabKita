@@ -22,7 +22,7 @@ const StudentSchema = new Schema({
 }, { timestamps: true });
 
 export default class Student {
-    static StudentModel = model('Student', StudentSchema);
+    static model = model('Student', StudentSchema);
 
     static async getStudents(filter = {}) {
         try {
