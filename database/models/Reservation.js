@@ -17,7 +17,7 @@ export default class Reservation {
 
     static async getReservations(filter = {}) {
         try {
-            return await this.ReservationModel.find(filter)
+            return await this.model.find(filter)
                 .sort({ startDateTime: 1 })
                 .lean();
         } catch (error) {
@@ -28,7 +28,7 @@ export default class Reservation {
 
     static async createReservation(reservationData) {
         try {
-            const newReservation = new this.ReservationModel(reservationData);
+            const newReservation = new this.model(reservationData);
             await newReservation.save();
             return newReservation.toObject();
         } catch (error) {
@@ -39,7 +39,7 @@ export default class Reservation {
 
     static async updateReservation(id, reservationData) {
         try {
-            const reservation = await this.ReservationModel.findByIdAndUpdate(id, reservationData, { new: true });
+            const reservation = await this.model.findByIdAndUpdate(id, reservationData, { new: true });
             if (!reservation) throw new Error('Reservation not found');
             return reservation.toObject();
         } catch (error) {
@@ -50,7 +50,7 @@ export default class Reservation {
 
     static async deleteReservation(id) {
         try {
-            const reservation = await this.ReservationModel.findByIdAndDelete(id);
+            const reservation = await this.model.findByIdAndDelete(id);
             if (!reservation) throw new Error('Reservation not found');
             return reservation.toObject();
         } catch (error) {

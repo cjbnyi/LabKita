@@ -1,4 +1,4 @@
-import { Lab } from '../database/models/models.js';
+import { Lab } from '../../database/models/models.js';
 
 /* =============================== */
 /* READ */

@@ -26,7 +26,7 @@ export default class Student {
 
     static async getStudents(filter = {}) {
         try {
-            return await this.StudentModel.find(filter)
+            return await this.model.find(filter)
                 .sort({ lastName: 1, firstName: 1 })
                 .lean();
         } catch (error) {
@@ -37,7 +37,7 @@ export default class Student {
 
     static async createStudent(studentData) {
         try {
-            const newStudent = new this.StudentModel(studentData);
+            const newStudent = new this.model(studentData);
             await newStudent.save();
             return newStudent.toObject();
         } catch (error) {
@@ -48,7 +48,7 @@ export default class Student {
 
     static async updateStudent(id, studentData) {
         try {
-            const student = await this.StudentModel.findByIdAndUpdate(id, studentData, { new: true });
+            const student = await this.model.findByIdAndUpdate(id, studentData, { new: true });
             if (!student) throw new Error('Student not found');
             return student.toObject();
         } catch (error) {
@@ -59,7 +59,7 @@ export default class Student {
 
     static async deleteStudent(id) {
         try {
-            const student = await this.StudentModel.findByIdAndDelete(id);
+            const student = await this.model.findByIdAndDelete(id);
             if (!student) throw new Error('Student not found');
             return student.toObject();
         } catch (error) {

@@ -1,15 +1,29 @@
-import adminController from './adminController.js';
-import authController from './authController.js';
-import labController from './labController.js';
-import reservationController from './reservationController.js';
-import seatController from './seatController.js';
-import studentController from './studentController.js';
+// entity controllers
+import adminController from './entity/adminController.js';
+import labController from './entity/labController.js';
+import reservationController from './entity/reservationController.js';
+import seatController from './entity/seatController.js';
+import studentController from './entity/studentController.js';
+
+// non-entity controllers
+import adminPanelController from './non-entity/adminPanelController.js';
+import authController from './non-entity/authController.js';
+import manageReservationController from './non-entity/manageReservationController.js';
+import searchUsersController from './non-entity/searchUsersController.js';
+import viewLabsController from './non-entity/viewLabsController.js';
 
 export {
+    // entity controllers
     adminController,
-    authController,
     labController,
+    reservationController,
     seatController,
     studentController,
-    reservationController
+
+    // non-entity controllers
+    adminPanelController,
+    authController,
+    manageReservationController,
+    searchUsersController,
+    viewLabsController
 };

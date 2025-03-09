@@ -1,4 +1,4 @@
-import { Seat } from '../database/models/models.js';
+import { Seat } from '../../database/models/models.js';
 
 /* =============================== */
 /* READ */

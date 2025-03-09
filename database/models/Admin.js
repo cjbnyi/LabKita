@@ -21,7 +21,7 @@ export default class Admin {
 
     static async getAdmins(filter = {}) {
         try {
-            return await this.AdminModel.find(filter)
+            return await this.model.find(filter)
                 .sort({ lastName: 1, firstName: 1 })
                 .lean();
         } catch (error) {
@@ -32,7 +32,7 @@ export default class Admin {
 
     static async createAdmin(adminData) {
         try {
-            const newAdmin = new this.AdminModel(adminData);
+            const newAdmin = new this.model(adminData);
             await newAdmin.save();
             return newAdmin.toObject();
         } catch (error) {
@@ -43,7 +43,7 @@ export default class Admin {
 
     static async updateAdmin(id, adminData) {
         try {
-            const admin = await this.AdminModel.findByIdAndUpdate(id, adminData, { new: true });
+            const admin = await this.model.findByIdAndUpdate(id, adminData, { new: true });
             if (!admin) throw new Error('Admin not found');
             return admin.toObject();
         } catch (error) {
@@ -54,7 +54,7 @@ export default class Admin {
 
     static async deleteAdmin(id) {
         try {
-            const admin = await this.AdminModel.findByIdAndDelete(id);
+            const admin = await this.model.findByIdAndDelete(id);
             if (!admin) throw new Error('Admin not found');
             return admin.toObject();
         } catch (error) {

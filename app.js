@@ -13,10 +13,14 @@ import { seedDatabase } from './database/seed.js';
 
 // Import routes
 import {
-    adminRoutes,
+    adminPanelRoutes,
     authRoutes,
-    publicRoutes,
-    studentRoutes
+    entityRoutes,
+    homepageRoutes,
+    manageReservationsRoutes,
+    profileRoutes,
+    searchUsersRoutes,
+    viewLabsRoutes
 } from './routes/routes.js';
 
 // Obtain __filename and __dirname in ES6 standard
@@ -47,10 +51,14 @@ app.set('view engine', 'hbs');
 app.use(express.static('public'));
 
 // Register routes
-app.use('/api/admins', adminRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/public', publicRoutes);
-app.use('/api/students', studentRoutes);
+app.use('/api', adminPanelRoutes);
+app.use('/api', authRoutes);
+app.use('/api', entityRoutes);
+app.use('', homepageRoutes);
+app.use('/api', manageReservationsRoutes);
+app.use('/api', profileRoutes);
+app.use('/api', searchUsersRoutes);
+app.use('/api', viewLabsRoutes);
 
 // 404 error handling
 app.use((req, res) => {

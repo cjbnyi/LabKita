@@ -1,4 +1,4 @@
-import { Student } from '../database/models/models.js';
+import { Student } from '../../database/models/models.js';
 
 /* =============================== */
 /* READ */
