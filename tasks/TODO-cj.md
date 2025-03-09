@@ -1,6 +1,8 @@
 # CJ Personal TODO List
 
 ## 📌 Features
+- [ ] Inform frontend on handlebars requirement
+- [ ] Inform frontend on error templates
 - [ ] Create entity ID queries in models
 - [ ] Finalize API testing automation
 
