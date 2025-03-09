@@ -13,7 +13,7 @@ const seedAdmins = async () => {
         const adminEmails = Array.from({ length: NUM_ADMINS }, (_, i) => `admin${i + 1}@example.com`);
 
         return await Promise.all(adminEmails.map(async (email, index) => {
-            return await Admin.findOneAndUpdate(
+            return await Admin.model.findOneAndUpdate(
                 { email },
                 {
                     firstName: `Admin${index + 1}`,
@@ -38,7 +38,7 @@ const seedStudents = async () => {
 
         return await Promise.all(
             studentEmails.map(async (email, index) => {
-                return await Student.findOneAndUpdate(
+                return await Student.model.findOneAndUpdate(
                     { email },
                     {
                         universityID: `S100${index + 1}`,
@@ -64,7 +64,7 @@ const seedLabs = async () => {
     try {
         return await Promise.all(
             Array.from({ length: NUM_LABS }, (_, index) => 
-                Lab.findOneAndUpdate(
+                Lab.model.findOneAndUpdate(
                     { building: `Building ${index + 1}`, room: `Room ${index + 1}` },
                     {
                         building: `Building ${index + 1}`,
@@ -89,12 +89,12 @@ const seedSeats = async (labs) => {
         const allSeats = await Promise.all(
             labs.flatMap(lab =>
                 Array.from({ length: NUM_SEATS_PER_LAB }, async (_, i) => {
-                    const seat = await Seat.findOneAndUpdate(
+                    const seat = await Seat.model.findOneAndUpdate(
                         { labID: lab._id, seatNumber: i + 1 },
                         { labID: lab._id, seatNumber: i + 1, status: 'Available' },
                         { upsert: true, new: true, returnDocument: 'after' }
                     );
-                    await Lab.findByIdAndUpdate(lab._id, { $addToSet: { seatIds: seat._id } });
+                    await Lab.model.findByIdAndUpdate(lab._id, { $addToSet: { seatIds: seat._id } });
                     return seat;
                 })
             )
@@ -117,7 +117,7 @@ const seedReservations = async (students, labs, seats) => {
                 const randomSeat = availableSeats[i];
                 const randomStudent = students[i % students.length];
 
-                const reservation = await Reservation.findOneAndUpdate(
+                const reservation = await Reservation.model.findOneAndUpdate(
                     { requestingStudentID: randomStudent._id, labID: lab._id, seatID: randomSeat._id },
                     {
                         labID: lab._id,
@@ -132,8 +132,8 @@ const seedReservations = async (students, labs, seats) => {
                     { upsert: true, new: true }
                 );
 
-                await Student.findByIdAndUpdate(randomStudent._id, { $addToSet: { reservationList: reservation._id } });
-                await Seat.findByIdAndUpdate(randomSeat._id, { $addToSet: { reservations: reservation._id } });
+                await Student.model.findByIdAndUpdate(randomStudent._id, { $addToSet: { reservationList: reservation._id } });
+                await Seat.model.findByIdAndUpdate(randomSeat._id, { $addToSet: { reservations: reservation._id } });
 
                 reservations.push(reservation);
             }
