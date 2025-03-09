@@ -13,7 +13,7 @@ const ReservationSchema = new Schema({
 }, { timestamps: true });
 
 export default class Reservation {
-    static ReservationModel = model('Reservation', ReservationSchema);
+    static model = model('Reservation', ReservationSchema);
 
     static async getReservations(filter = {}) {
         try {

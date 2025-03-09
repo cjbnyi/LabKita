@@ -11,7 +11,7 @@ const LabSchema = new Schema({
 }, { timestamps: true });
 
 export default class Lab {
-    static LabModel = model('Lab', LabSchema);
+    static model = model('Lab', LabSchema);
 
     static async getLabs(filter = {}) {
         try {

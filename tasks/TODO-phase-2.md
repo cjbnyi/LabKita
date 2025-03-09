@@ -17,7 +17,7 @@
 
 ### 🛠 Server & Routing
 - [x] **Set up Express server** and listen on `localhost:3000`  
-- [x] **Implement routes** in the `routes/` folder (e.g., `routes/index.routes.js`, `routes/user.routes.js`)  
+- [ ] **Implement routes** in the `routes/` folder (e.g., `routes/index.routes.js`, `routes/user.routes.js`)  
 - [x] **Connect the server to MongoDB using Mongoose**  
 - [x] **Implement controller logic for CRUD operations** in `controllers/`  
 - [ ] **Ensure that all forms use the appropriate HTTP methods** (e.g., POST for logins, GET for searches)  
