@@ -1,11 +1,19 @@
-import adminRoutes from './adminRoutes.js';
+import adminPanelRoutes from './adminPanelRoutes.js';
 import authRoutes from './authRoutes.js';
-import publicRoutes from './publicRoutes.js';
-import studentRoutes from './studentRoutes.js';
+import entityRoutes from './entityRoutes.js';
+import homepageRoutes from './homepageRoutes.js';
+import manageReservationsRoutes from './manageReservationsRoutes.js';
+import profileRoutes from './profileRoutes.js';
+import searchUsersRoutes from './searchUsersRoutes.js';
+import viewLabsRoutes from './viewLabsRoutes.js';
 
 export {
-    adminRoutes,
+    adminPanelRoutes,
     authRoutes,
-    publicRoutes,
-    studentRoutes
+    entityRoutes,
+    homepageRoutes,
+    manageReservationsRoutes,
+    profileRoutes,
+    searchUsersRoutes,
+    viewLabsRoutes
 };
