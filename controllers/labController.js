@@ -1,17 +1,12 @@
-import {
-    getLabs,
-    createLab,
-    updateLab,
-    deleteLab
-} from '../database/models/Lab.js';
+import { Lab } from '../database/models/models.js';
 
 /* =============================== */
 /* READ */
 /* =============================== */
-const handleGetLabs = async (req, res) => {
+const getLabs = async (req, res) => {
     try {
         const filter = req.query || {};
-        const labs = await getLabs(filter);
+        const labs = await Lab.getLabs(filter);
         res.status(200).json(labs);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching labs', details: error.message });
@@ -21,9 +16,9 @@ const handleGetLabs = async (req, res) => {
 /* =============================== */
 /* CREATE */
 /* =============================== */
-const handleCreateLab = async (req, res) => {
+const createLab = async (req, res) => {
     try {
-        const newLab = await createLab(req.body);
+        const newLab = await Lab.createLab(req.body);
         res.status(201).json(newLab);
     } catch (error) {
         res.status(500).json({ error: 'Error creating lab', details: error.message });
@@ -33,10 +28,10 @@ const handleCreateLab = async (req, res) => {
 /* =============================== */
 /* UPDATE */
 /* =============================== */
-const handleUpdateLab = async (req, res) => {
+const updateLab = async (req, res) => {
     const { id } = req.params;
     try {
-        const updatedLab = await updateLab(id, req.body);
+        const updatedLab = await Lab.updateLab(id, req.body);
         if (!updatedLab) {
             return res.status(404).json({ error: 'Lab not found' });
         }
@@ -49,10 +44,10 @@ const handleUpdateLab = async (req, res) => {
 /* =============================== */
 /* DELETE */
 /* =============================== */
-const handleDeleteLab = async (req, res) => {
+const deleteLab = async (req, res) => {
     const { id } = req.params;
     try {
-        const deletedLab = await deleteLab(id);
+        const deletedLab = await Lab.deleteLab(id);
         if (!deletedLab) {
             return res.status(404).json({ error: 'Lab not found' });
         }
@@ -63,8 +58,8 @@ const handleDeleteLab = async (req, res) => {
 };
 
 export default {
-    handleGetLabs,
-    handleCreateLab,
-    handleUpdateLab,
-    handleDeleteLab
+    getLabs,
+    createLab,
+    updateLab,
+    deleteLab
 };

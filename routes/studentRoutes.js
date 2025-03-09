@@ -17,31 +17,31 @@ const router = express.Router();
 /* =============================== */
 /* STUDENT */
 /* =============================== */
-router.get('/:id', validateMongoId, checkValidation, studentController.handleGetStudents);
-router.put('/:id', validateMongoId, checkValidation, studentController.handleUpdateStudent);
-router.delete('/:id', validateMongoId, checkValidation, studentController.handleDeleteStudent);
+router.get('/:id', validateMongoId, checkValidation, studentController.getStudents);
+router.put('/:id', validateMongoId, checkValidation, studentController.updateStudent);
+router.delete('/:id', validateMongoId, checkValidation, studentController.deleteStudent);
 
 /* =============================== */
 /* LAB */
 /* =============================== */
-router.get('/labs', checkValidation, labController.handleGetLabs);
+router.get('/labs', checkValidation, labController.getLabs);
 
 /* =============================== */
 /* SEAT BY LAB */
 /* =============================== */
-router.get('/labs/:labId/seats', validateMongoId, checkValidation, seatController.handleGetSeats);
+router.get('/labs/:labId/seats', validateMongoId, checkValidation, seatController.getSeats);
 
 /* =============================== */
 /* RESERVATION */
 /* =============================== */
-router.get('/reservations', checkValidation, reservationController.handleGetReservations);
-router.post('/reservations', checkValidation, reservationController.handleCreateReservation);
-router.put('/reservations/:id', validateMongoId, checkValidation, reservationController.handleUpdateReservation);
-router.delete('/reservations/:id', validateMongoId, checkValidation, reservationController.handleDeleteReservation);
+router.get('/reservations', checkValidation, reservationController.getReservations);
+router.post('/reservations', checkValidation, reservationController.createReservation);
+router.put('/reservations/:id', validateMongoId, checkValidation, reservationController.updateReservation);
+router.delete('/reservations/:id', validateMongoId, checkValidation, reservationController.deleteReservation);
 
 /* =============================== */
 /* RESERVATION BY SEAT */
 /* =============================== */
-router.get('/labs/:labId/seats/:seatId/reservations', validateMongoId, checkValidation, reservationController.handleGetReservations);
+router.get('/labs/:labId/seats/:seatId/reservations', validateMongoId, checkValidation, reservationController.getReservations);
 
 export default router;
