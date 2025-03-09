@@ -1,16 +1,11 @@
-import {
-    getStudents,
-    createStudent,
-    updateStudent,
-    deleteStudent
-} from '../database/models/Student.js';
+import { Student } from '../database/models/models.js';
 
 /* =============================== */
 /* READ */
 /* =============================== */
-const handleGetStudents = async (req, res) => {
+const getStudents = async (req, res) => {
     try {
-        const students = await getStudents(req.query);
+        const students = await Student.getStudents(req.query);
         res.status(200).json(students);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching students', details: error.message });
@@ -20,9 +15,9 @@ const handleGetStudents = async (req, res) => {
 /* =============================== */
 /* CREATE */
 /* =============================== */
-const handleCreateStudent = async (req, res) => {
+const createStudent = async (req, res) => {
     try {
-        const newStudent = await createStudent(req.body);
+        const newStudent = await Student.createStudent(req.body);
         res.status(201).json(newStudent);
     } catch (error) {
         res.status(500).json({ error: 'Error creating student', details: error.message });
@@ -32,11 +27,11 @@ const handleCreateStudent = async (req, res) => {
 /* =============================== */
 /* UPDATE */
 /* =============================== */
-const handleUpdateStudent = async (req, res) => {
+const updateStudent = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const updatedStudent = await updateStudent(id, req.body);
+        const updatedStudent = await Student.updateStudent(id, req.body);
         if (!updatedStudent) {
             return res.status(404).json({ error: 'Student not found' });
         }
@@ -49,11 +44,11 @@ const handleUpdateStudent = async (req, res) => {
 /* =============================== */
 /* DELETE */
 /* =============================== */
-const handleDeleteStudent = async (req, res) => {
+const deleteStudent = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const deletedStudent = await deleteStudent(id);
+        const deletedStudent = await Student.deleteStudent(id);
         if (!deletedStudent) {
             return res.status(404).json({ error: 'Student not found' });
         }
@@ -64,8 +59,8 @@ const handleDeleteStudent = async (req, res) => {
 };
 
 export default {
-    handleGetStudents,
-    handleCreateStudent,
-    handleUpdateStudent,
-    handleDeleteStudent
+    getStudents,
+    createStudent,
+    updateStudent,
+    deleteStudent
 };

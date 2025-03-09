@@ -1,17 +1,12 @@
-import {
-    getAdmins,
-    createAdmin,
-    updateAdmin,
-    deleteAdmin
-} from '../database/models/Admin.js';
+import { Admin } from '../database/models/models.js';
 
 /* =============================== */
 /* READ */
 /* =============================== */
-const handleGetAdmins = async (req, res) => {
+const getAdmins = async (req, res) => {
     try {
         const filter = req.query || {};
-        const admins = await getAdmins(filter);
+        const admins = await Admin.getAdmins(filter);
         res.status(200).json(admins);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching admins', details: error.message });
@@ -21,9 +16,9 @@ const handleGetAdmins = async (req, res) => {
 /* =============================== */
 /* CREATE */
 /* =============================== */
-const handleCreateAdmin = async (req, res) => {
+const createAdmin = async (req, res) => {
     try {
-        const newAdmin = await createAdmin(req.body);
+        const newAdmin = await Admin.createAdmin(req.body);
         res.status(201).json(newAdmin);
     } catch (error) {
         res.status(500).json({ error: 'Error creating admin', details: error.message });
@@ -33,10 +28,10 @@ const handleCreateAdmin = async (req, res) => {
 /* =============================== */
 /* UPDATE */
 /* =============================== */
-const handleUpdateAdmin = async (req, res) => {
+const updateAdmin = async (req, res) => {
     const { id } = req.params;
     try {
-        const updatedAdmin = await updateAdmin(id, req.body);
+        const updatedAdmin = await Admin.updateAdmin(id, req.body);
         if (!updatedAdmin) {
             return res.status(404).json({ error: 'Admin not found' });
         }
@@ -49,10 +44,10 @@ const handleUpdateAdmin = async (req, res) => {
 /* =============================== */
 /* DELETE */
 /* =============================== */
-const handleDeleteAdmin = async (req, res) => {
+const deleteAdmin = async (req, res) => {
     const { id } = req.params;
     try {
-        const deletedAdmin = await deleteAdmin(id);
+        const deletedAdmin = await Admin.deleteAdmin(id);
         if (!deletedAdmin) {
             return res.status(404).json({ error: 'Admin not found' });
         }
@@ -63,8 +58,8 @@ const handleDeleteAdmin = async (req, res) => {
 };
 
 export default {
-    handleGetAdmins,
-    handleCreateAdmin,
-    handleUpdateAdmin,
-    handleDeleteAdmin
+    getAdmins,
+    createAdmin,
+    updateAdmin,
+    deleteAdmin
 };
