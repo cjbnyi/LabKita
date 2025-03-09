@@ -12,7 +12,7 @@ export default class Seat {
 
     static async getSeats(filter = {}) {
         try {
-            return await this.SeatModel.find(filter).sort({ seatNumber: 1 }).lean();
+            return await this.model.find(filter).sort({ seatNumber: 1 }).lean();
         } catch (error) {
             console.error("Error fetching Seat documents:", error);
             throw new Error('Error fetching seats');
@@ -21,7 +21,7 @@ export default class Seat {
 
     static async createSeat(seatData) {
         try {
-            const newSeat = new this.SeatModel(seatData);
+            const newSeat = new this.model(seatData);
             await newSeat.save();
             return newSeat.toObject();
         } catch (error) {
@@ -32,7 +32,7 @@ export default class Seat {
 
     static async updateSeat(id, seatData) {
         try {
-            const seat = await this.SeatModel.findByIdAndUpdate(id, seatData, { new: true });
+            const seat = await this.model.findByIdAndUpdate(id, seatData, { new: true });
             if (!seat) throw new Error('Seat not found');
             return seat.toObject();
         } catch (error) {
@@ -43,7 +43,7 @@ export default class Seat {
 
     static async deleteSeat(id) {
         try {
-            const seat = await this.SeatModel.findByIdAndDelete(id);
+            const seat = await this.model.findByIdAndDelete(id);
             if (!seat) throw new Error('Seat not found');
             return seat.toObject();
         } catch (error) {

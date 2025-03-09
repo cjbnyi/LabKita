@@ -15,7 +15,7 @@ export default class Lab {
 
     static async getLabs(filter = {}) {
         try {
-            return await this.LabModel.find(filter)
+            return await this.model.find(filter)
                 .sort({ building: 1, room: 1 })
                 .lean();
         } catch (error) {
@@ -26,7 +26,7 @@ export default class Lab {
 
     static async createLab(labData) {
         try {
-            const newLab = new this.LabModel(labData);
+            const newLab = new this.model(labData);
             await newLab.save();
             return newLab.toObject();
         } catch (error) {
@@ -37,7 +37,7 @@ export default class Lab {
 
     static async updateLab(id, labData) {
         try {
-            const lab = await this.LabModel.findByIdAndUpdate(id, labData, { new: true });
+            const lab = await this.model.findByIdAndUpdate(id, labData, { new: true });
             if (!lab) throw new Error('Lab not found');
             return lab.toObject();
         } catch (error) {
@@ -48,7 +48,7 @@ export default class Lab {
 
     static async deleteLab(id) {
         try {
-            const lab = await this.LabModel.findByIdAndDelete(id);
+            const lab = await this.model.findByIdAndDelete(id);
             if (!lab) throw new Error('Lab not found');
             return lab.toObject();
         } catch (error) {
