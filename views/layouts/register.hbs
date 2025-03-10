@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="/public/css/register.css">
+    </head>
+    <body>
+        {{> navbar}}
+
+        <div class="arrow-container">
+            <a href="/"> <!-- Replace "index.html" with the link you want the arrow to navigate to -->
+                <img src="/public/img/arrow.png" class="arrow">
+            </a>
+        </div>
+
+        <div id="bg">
+            <h2>Sign Up</h2>
+            <p style="color:#F49CBB; align-items: center;">Sign in using your DLSU email</p>
+            <form>
+                <div class="email">
+                    <label for="email">DLSU Email</label>
+                    <input type="email" id="email" required>
+                </div> <br>
+                <div class="pw">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div><br>
+                <div class="pw">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" required>
+                </div><br><br>
+
+                <a href="/login" class="button">Sign Up</a>
+            </form><br>
+            <p class="login">Have an account? <a href="/login" style="color:#F49CBB;">Login</a></p>
+        </div>
+
+        <img class="computer-picture" src="/public/img/computer.png" alt="Profile Picture"/>
+
+        {{> footer}}
+    </body>
+</html>
