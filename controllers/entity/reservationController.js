@@ -29,9 +29,9 @@ const createReservation = async (req, res) => {
 /* UPDATE */
 /* =============================== */
 const updateReservation = async (req, res) => {
-    const { id } = req.params;
+    const { reservationId } = req.params;
     try {
-        const updatedReservation = await Reservation.updateReservation(id, req.body);
+        const updatedReservation = await Reservation.updateReservation(reservationId, req.body);
         if (!updatedReservation) {
             return res.status(404).json({ error: 'Reservation not found' });
         }
@@ -45,9 +45,9 @@ const updateReservation = async (req, res) => {
 /* DELETE */
 /* =============================== */
 const deleteReservation = async (req, res) => {
-    const { id } = req.params;
+    const { reservationId } = req.params;
     try {
-        const deletedReservation = await Reservation.deleteReservation(id);
+        const deletedReservation = await Reservation.deleteReservation(reservationId);
         if (!deletedReservation) {
             return res.status(404).json({ error: 'Reservation not found' });
         }

@@ -29,9 +29,9 @@ const createAdmin = async (req, res) => {
 /* UPDATE */
 /* =============================== */
 const updateAdmin = async (req, res) => {
-    const { id } = req.params;
+    const { adminId } = req.params;
     try {
-        const updatedAdmin = await Admin.updateAdmin(id, req.body);
+        const updatedAdmin = await Admin.updateAdmin(adminId, req.body);
         if (!updatedAdmin) {
             return res.status(404).json({ error: 'Admin not found' });
         }
@@ -45,9 +45,9 @@ const updateAdmin = async (req, res) => {
 /* DELETE */
 /* =============================== */
 const deleteAdmin = async (req, res) => {
-    const { id } = req.params;
+    const { adminId } = req.params;
     try {
-        const deletedAdmin = await Admin.deleteAdmin(id);
+        const deletedAdmin = await Admin.deleteAdmin(adminId);
         if (!deletedAdmin) {
             return res.status(404).json({ error: 'Admin not found' });
         }
