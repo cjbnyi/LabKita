@@ -41,18 +41,18 @@ router.put('/labs/:labId', validateMongoId, checkValidation, labController.updat
 router.delete('/labs/:labId', validateMongoId, checkValidation, labController.deleteLab);
 
 /* =============================== */
-/* SEAT */
+/* SEAT */ /* (currently only for viewing)
 /* =============================== */
-router.get('/seats', checkValidation, seatController.getSeats);
+router.get('/seats', checkValidation, seatController.createSeat);
 router.post('/seats', checkValidation, seatController.createSeat);
 router.put('/seats/:seatId', validateMongoId, checkValidation, seatController.updateSeat);
 router.delete('/seats/:seatId', validateMongoId, checkValidation, seatController.deleteSeat);
 
 /* =============================== */
-/* RESERVATION */
+/* RESERVATION */ 
 /* =============================== */
 router.get('/reservations', checkValidation, reservationController.getReservations);
-router.post('/reservations', checkValidation, reservationController.createReservation);
+router.post('/reservations', checkValidation, reservationController.getReservations);
 router.put('/reservations/:reservationId', validateMongoId, checkValidation, reservationController.updateReservation);
 router.delete('/reservations/:reservationId', validateMongoId, checkValidation, reservationController.deleteReservation);
 
