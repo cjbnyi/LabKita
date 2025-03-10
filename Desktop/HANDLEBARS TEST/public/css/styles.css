@@ -1,0 +1,66 @@
+:root {
+    
+}
+
+.hidden {
+    display: none;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    position: absolute;
+    z-index: 1050;
+    max-width: 100vw;
+    left: auto;
+    right: 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.content-area {
+    margin-top: 75px;
+    padding-bottom: 50px;
+}
+
+.content-area-manage-reservations, .content-area-admin, .content-area-view-labs, .shift-content-area {
+    margin-top: 100px;
+}
+
+.reservation-header {
+    display: flex;
+    height: 200px;
+    background-color: pink;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.reservation-option {
+    margin: 40px;
+}
+
+.reservation-options {
+    border-color: black;
+    border-style: groove;
+    padding: 20px;
+}
+
+table.calendar td, table.calendar th {
+    width: 100px;
+}
+
+.hero-card {
+    padding: 30px 20px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hero-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
