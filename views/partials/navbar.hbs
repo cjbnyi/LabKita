@@ -1,0 +1,110 @@
+<nav class="navbar navbar-expand-sm px-4">
+    <div class="container-fluid d-flex align-items-center">
+        <!-- Leftmost: Logo -->
+        <a class="navbar-brand d-flex align-items-center me-3" href="/">
+            <img src="/public/img/up.png" alt="LabKita Logo" style="width: 120px; height: 67.5px;">
+        </a>
+
+        <!-- Left-Aligned Navigation -->
+        <ul class="navbar-nav d-flex align-items-center">
+            <li class="nav-item text-center me-3">
+                <a class="nav-link text-light" href="/">
+                    <div class="d-flex flex-column">
+                        <i class="fas fa-home mb-1"></i>
+                        <span class="fs-6">Home</span>
+                    </div>
+                </a>
+            </li>
+            <li class="nav-item text-center me-3">
+                <a class="nav-link text-light" href="about.html">
+                    <div class="d-flex flex-column">
+                        <i class="fas fa-info-circle mb-1"></i>
+                        <span class="fs-6">About Us</span>
+                    </div>
+                </a>
+            </li>
+            <li class="nav-item text-center me-3">
+                <a class="nav-link text-light" href="view-labs.html">
+                    <div class="d-flex flex-column">
+                        <i class="fas fa-laptop mb-1"></i>
+                        <span class="fs-6">View Labs</span>
+                    </div>
+                </a>
+            </li>
+
+            {{#if isLoggedIn}}
+                <li class="nav-item text-center me-3">
+                    <a class="nav-link text-light" href="manage-reservations.html">
+                        <div class="d-flex flex-column">
+                            <i class="fas fa-calendar-check mb-1"></i>
+                            <span class="fs-6">Manage Reservations</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item text-center">
+                    <a class="nav-link text-light" href="admin.html">
+                        <div class="d-flex flex-column">
+                            <i class="fas fa-cogs mb-1"></i>
+                            <span class="fs-6">Admin Panel</span>
+                        </div>
+                    </a>
+                </li>
+            {{else}}
+                <li class="nav-item text-center me-3">
+                    <a class="nav-link text-light" href="reserve-slot.html">
+                        <div class="d-flex flex-column">
+                            <i class="fas fa-calendar-plus mb-1"></i>
+                            <span class="fs-6">Reserve Slot</span>
+                        </div>
+                    </a>
+                </li>
+            {{/if}}
+        </ul>
+
+        <!-- Right: Authentication and User Controls -->
+        <ul class="navbar-nav ms-auto align-items-center">
+            {{#if isLoggedIn}}
+                <!-- Search Bar -->
+                <form class="d-flex me-3" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search users..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+
+                <!-- Notification Bell -->
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Notifications">
+                        <i class="fas fa-bell"></i>
+                    </a>
+                </li>
+
+                <!-- Profile Dropdown -->
+                <li class="nav-item dropdown position-relative">
+                    <a class="nav-link dropdown-toggle text-light" href="#" id="profileDropdown" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle fa-2x"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                        <li>
+                            <a href="view-profile.html" class="dropdown-item d-flex align-items-center text-decoration-none">
+                                <img src="/public/img/camellya.jpeg" alt="Profile Picture" class="rounded-circle" width="40" height="40">
+                                <div class="ms-2">
+                                    <strong class="d-block" style="color: black;">{{user.name}}</strong>
+                                    <span style="font-size: 0.85rem; color: grey;">{{user.id}}</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="privacy-settings.html">Settings</a></li>
+                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    </ul>
+                </li>
+            {{else}}
+                <!-- Login Button -->
+                <li class="nav-item">
+                    <a class="nav-link" href="login.html">
+                        <button type="button" class="btn btn-outline-light me-1">Login</button>
+                    </a>
+                </li>
+            {{/if}}
+        </ul>
+    </div>
+</nav>

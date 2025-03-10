@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
 
+.content-area {
+    margin-bottom: 0;
+}
+
 .pixelify-sans-font {
     font-family: "Pixelify Sans", serif;
     font-optical-sizing: auto;
@@ -8,13 +12,179 @@
 }
 
 .hero-section {
-    position: relative;
-    background: url('../assets/images/couple_lab.jpg') no-repeat bottom center;
+    background-image: url('/public/img/main.jpg');
     background-size: cover;
-    z-index: 1;
+    background-position: center;
+    position: relative;
+    color: white;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.logo-img {
+    height: auto;
+    max-height: 500px;
+    max-width: 85vw;
+}
+
+@media (max-width: 768px) {
+    .logo-img {
+        max-height: 150px;
+        max-width: 65vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-img {
+        max-height: 100px;
+        max-width: 30vw;
+    }
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.btn {
+    font-size: 18px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.btn-red {
+    background: rgba(139, 0, 0, 0.6);
+    color: white;
+}
+
+.btn-red:hover {
+    background: rgba(200, 0, 0, 0.8);
+}
+
+.btn-white {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.btn-white:hover {
+    background: rgba(255, 255, 255, 0.8);
+    color: black;
+}
+
+html {
+    scroll-padding-top: 80px;
+    scroll-behavior: smooth;
+}
+
+.content-section {
+    padding: 70px 20px;
+    text-align: center;
+    background: #f8f9fa;
+    min-height: 40vh;
+}
+
+.section-title {
+    font-size: 50px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.col {
+    flex: 1;
+    min-width: 400px;
+    text-align: center;
+}
+
+.section-note {
+    font-size: 18px;
+    color: gray;
+    margin-bottom: 8px;
+}
+
+.section-heading {
+    font-size: 28px;
+    font-weight: bold;
+    color: #880D1E;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.section-heading:hover {
+    color: red;
+    text-decoration: underline;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 150px;
+    row-gap: 25px;
+    justify-content: center;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 60px;
+}
+
+.grid-item {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    max-width: 450px;
+    text-align: left;
+}
+
+.grid-item img {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    background-color: #880D1E;
+    display: flex;
+    border-radius: 10px;
+}
+
+.grid-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid-text h3 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.grid-text p {
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 .container {
@@ -30,35 +200,54 @@ p.subtitle {
     font-size: 32px;
 }
 
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 0, 0, 0.60); /* Translucent red overlay */
-    z-index: 1; 
-}
-
-.options {
-    background-color: rgba(230, 168, 215, 0.4);
-}
-
 .faq-section {
-    background: white;
-    border-radius: 12px;
-    padding: 40px;
-    box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.1); /* Upward shadow */
+    background-color: #DD2D4A;
+    color: #fff;
+    padding: 100px 20px;
+    min-height: 60vh;
 }
 
-.accordion-button {
+.faq-title {
+    color: #fff;
+    font-size: 50px;
     font-weight: bold;
 }
 
-.accordion-button:not(.collapsed) {
-    background: #E6A8D7; /* Soft pink */
-    color: white;
+.accordion-item {
+    background-color: #c02842;
+    border: none;
 }
+
+.accordion-button {
+    background-color: #c02842;
+    color: #fff;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #a12236;
+    color: #fff;
+}
+
+.accordion-button:hover {
+    background-color: #b1243d;
+}
+
+.accordion-body {
+    background-color: #c02842;
+    color: #fff;
+}
+
+footer {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.navbar {
+    background-color: #880D1E !important;
+}
+
 
 .deep-red {
     color: #880D1E;
