@@ -39,6 +39,3 @@ dump/           # MongoDB database dumps
 
 # === OS-Specific ===
 *.swp           # Vim swap files
-
-# Note:
-# This .gitignore template was generated with ChatGPT.
