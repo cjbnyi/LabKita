@@ -29,9 +29,9 @@ const createLab = async (req, res) => {
 /* UPDATE */
 /* =============================== */
 const updateLab = async (req, res) => {
-    const { id } = req.params;
+    const { labId } = req.params;
     try {
-        const updatedLab = await Lab.updateLab(id, req.body);
+        const updatedLab = await Lab.updateLab(labId, req.body);
         if (!updatedLab) {
             return res.status(404).json({ error: 'Lab not found' });
         }
@@ -45,9 +45,9 @@ const updateLab = async (req, res) => {
 /* DELETE */
 /* =============================== */
 const deleteLab = async (req, res) => {
-    const { id } = req.params;
+    const { labId } = req.params;
     try {
-        const deletedLab = await Lab.deleteLab(id);
+        const deletedLab = await Lab.deleteLab(labId);
         if (!deletedLab) {
             return res.status(404).json({ error: 'Lab not found' });
         }

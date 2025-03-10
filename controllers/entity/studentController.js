@@ -28,10 +28,10 @@ const createStudent = async (req, res) => {
 /* UPDATE */
 /* =============================== */
 const updateStudent = async (req, res) => {
-    const { id } = req.params;
+    const { studentId } = req.params;
 
     try {
-        const updatedStudent = await Student.updateStudent(id, req.body);
+        const updatedStudent = await Student.updateStudent(studentId, req.body);
         if (!updatedStudent) {
             return res.status(404).json({ error: 'Student not found' });
         }
@@ -45,10 +45,10 @@ const updateStudent = async (req, res) => {
 /* DELETE */
 /* =============================== */
 const deleteStudent = async (req, res) => {
-    const { id } = req.params;
+    const { studentId } = req.params;
 
     try {
-        const deletedStudent = await Student.deleteStudent(id);
+        const deletedStudent = await Student.deleteStudent(studentId);
         if (!deletedStudent) {
             return res.status(404).json({ error: 'Student not found' });
         }
