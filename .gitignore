@@ -25,3 +25,6 @@ dump/
 # === VS Code & JetBrains IDEs ===
 .vscode/
 .idea/
+
+# === Personal reference files ===
+tasks/TODO-cj.md
