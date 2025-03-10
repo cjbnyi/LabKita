@@ -5,7 +5,7 @@ import express from 'express';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.status(200).json({ message: "Welcome to the homepage!" });
+    res.status(200).render('index', { title: 'LabKita!' });
 });
 
 export default router;

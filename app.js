@@ -1,5 +1,8 @@
+import 'dotenv/config';
 import express from 'express';
-import exphbs from 'express-handlebars';
+import { create } from 'express-handlebars';
+import fs from 'fs';
+import morgan from 'morgan';
 import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -24,60 +27,74 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Create Express app
+// Create an Express application
 const app = express();
 
-// Configure Handlebars as the view engine
-app.engine("hbs", exphbs.engine({
-    extname: "hbs",
-    defaultLayout: "main",
+// Request logging (writes to access.log)
+const accessLogStream = fs.createWriteStream(path.join(process.cwd(), 'access.log'), { flags: 'a' });
+app.use(morgan('combined', { stream: accessLogStream }));
+
+// JSON parsing middleware
+app.use(express.json());
+
+// Initialize Handlebars as the view engine
+const hbs = create({
+    extname: 'hbs',
+    defaultLayout: 'main',
     layoutsDir: path.join(__dirname, 'views/layouts'),
-    partialsDir: path.join(__dirname, 'views/partials')
-}));
-app.set("view engine", "hbs");
-app.set("views", path.join(__dirname, "views")); // Ensure views directory is recognized
+    partialsDir: path.join(__dirname, 'views/partials'),
+});
+
+app.engine('hbs', hbs.engine);
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'));
 
 // Serve static files properly
 app.use("/public", express.static(path.join(__dirname, 'public')));
 
-// Middleware to log static file requests
-app.use((req, res, next) => {
-    console.log(`Request URL: ${req.url}`);
-    next();
-});
-
-// Root route to render index.hbs
-app.get('/', (req, res) => {
-    res.render('index', { title: 'LabKita!' });
-});
-
 // Register routes
+app.use('', homepageRoutes);
 app.use('/api', adminPanelRoutes);
 app.use('/api', authRoutes);
 app.use('/api', entityRoutes);
-app.use('', homepageRoutes);
 app.use('/api', manageReservationsRoutes);
 app.use('/api', profileRoutes);
 app.use('/api', searchUsersRoutes);
 app.use('/api', viewLabsRoutes);
-// Middleware to log static file requests
-app.use((req, res, next) => {
-    console.log(`Request URL: ${req.url}`);
-    next();
-});
 
-// Root route to render index.hbs
-app.get('/', (req, res) => {
-    res.render('index', { title: 'LabKita!' });
-});
-
-// 404 error handling
+// 404 error handler
 app.use((req, res) => {
-    res.status(404).send('Page not found');
+    res.status(404).send('Page not found :(');
 });
+
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Internal server error' });
+});
+
+// CLI flags
+const shouldSeed = process.argv.includes('--seed');
+
+// Database initialization & server start
+const startServer = async () => {
+    try {
+        await connectToMongo();
+
+        if (shouldSeed) {
+            console.log('Starting database seeding...');
+            await seedDatabase();
+        }
+
+        const PORT = process.env.WEB_PORT || 3000;
+        app.listen(PORT, () => {
+            console.log(`Server running on http://localhost:${PORT}`);
+        });
+    } catch (error) {
+        console.error("Error initializing server:", error);
+        process.exit(1);
+    }
+};
 
 // Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+startServer();
