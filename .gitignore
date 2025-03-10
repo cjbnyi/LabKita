@@ -1,44 +1,27 @@
 # === General Files ===
-.DS_Store       # macOS system file
-Thumbs.db       # Windows system file
-*.log           # Log files
-*.env           # Environment variables
+.DS_Store
+Thumbs.db
+*.log
+*.env
 
 # === Node.js (for backend & frontend) ===
-node_modules/   # Dependencies (massive folder)
-npm-debug.log   # NPM debug logs
-yarn.lock       # Yarn lock file
-pnpm-lock.yaml  # PNPM lock file
+node_modules/
+npm-debug.log
+yarn.lock
+pnpm-lock.yaml
 
 # === Build & Output Directories ===
-dist/           # General build output (JS bundlers)
-build/          # React, Vite, Next.js, etc.
-public/build/   # Static asset builds
-out/            # Next.js output
-.cache/         # Various caching mechanisms
-.next/          # Next.js build folder
-
-# === Meteor ===
-.meteor/local/  # Local development cache
-.meteor/meteorite/ # Meteorite packages
-.meteor/packages/ # Meteor package cache
+dist/
+build/
+public/build/
+out/
+.cache/
+.next/
 
 # === MongoDB ===
-*.mongodb       # MongoDB export files
-dump/           # MongoDB database dumps
-
-# === React-Specific Files ===
-/coverage/      # Jest coverage reports
-/.eslintcache   # ESLint cache
-/.parcel-cache  # Parcel cache
-/.turbo/        # TurboRepo cache
+*.mongodb
+dump/
 
 # === VS Code & JetBrains IDEs ===
-.vscode/        # VS Code settings
-.idea/          # JetBrains IDE settings
-
-# === OS-Specific ===
-*.swp           # Vim swap files
-
-# Note:
-# This .gitignore template was generated with ChatGPT.
+.vscode/
+.idea/
