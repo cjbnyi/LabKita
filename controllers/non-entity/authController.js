@@ -38,6 +38,9 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        // TODO: remove
+        console.log("Email received:", email);
+
         // Find the user
         const result = await getUserByEmail(email);
         if (!result) {

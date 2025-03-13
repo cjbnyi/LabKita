@@ -35,6 +35,7 @@ const accessLogStream = fs.createWriteStream(path.join(process.cwd(), 'access.lo
 app.use(morgan('combined', { stream: accessLogStream }));
 
 // JSON parsing middleware
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Initialize Handlebars as the view engine
