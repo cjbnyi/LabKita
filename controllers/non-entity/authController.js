@@ -58,8 +58,10 @@ const login = async (req, res) => {
         const userObj = user.toObject();
         delete userObj.password;
         
-        res.status(200).json({ token, user: userObj });
+        const userType = Model.modelName === 'Student' ? 'student' : 'admin';
+        res.status(200).json({ message: 'Login successful', userType });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Error logging in' });
     }
 };
