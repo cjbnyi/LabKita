@@ -10,4 +10,4 @@ Mhm, some web application. Created for CCAPDEV (Web Application Development).
 
 2. The Web App also has not implemented the log-out feature. However, in the foreseeable future, features such as Managing Reservations and Edit Profile will be locked if logged out.
 
-That's all.
+That's all (for now).
