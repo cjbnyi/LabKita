@@ -1,235 +1,71 @@
-<body>
-    <div class="content-area-view-labs">
-        <div class="container mt-4">
-            <!-- Lab Overview Table -->
-            <h2 class="mb-3">Lab Overview</h2>
-            <table class="table table-bordered table-hover">
-                <thead class="table-primary">
-                    <tr>
-                        <th>Lab ID</th>
-                        <th>Location</th>
-                        <th>Capacity</th>
-                        <th>Days Open</th>
-                        <th>Opening Time</th>
-                        <th>Closing Time</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>AG601</td>
-                        <td>Building AG, Room 601</td>
-                        <td>30</td>
-                        <td>Mon-Fri</td>
-                        <td>09:00 AM</td>
-                        <td>05:00 PM</td>
-                        <td><span class="badge bg-success">Available</span></td>
-                    </tr>
-                    <tr>
-                        <td>GK602</td>
-                        <td>Building GK, Room 602</td>
-                        <td>30</td>
-                        <td>Mon-Fri</td>
-                        <td>09:00 AM</td>
-                        <td>05:00 PM</td>
-                        <td><span class="badge bg-warning">Under Maintenance</span></td>
-                    </tr>
-                    <tr>
-                        <td>LS603</td>
-                        <td>Building LS, Room 603</td>
-                        <td>30</td>
-                        <td>Mon-Fri</td>
-                        <td>09:00 AM</td>
-                        <td>05:00 PM</td>
-                        <td><span class="badge bg-danger">Closed</span></td>
-                    </tr>
-                    <tr>
-                        <td>SJ604</td>
-                        <td>Building SJ, Room 604</td>
-                        <td>30</td>
-                        <td>Mon-Fri</td>
-                        <td>09:00 AM</td>
-                        <td>05:00 PM</td>
-                        <td><span class="badge bg-success">Available</span></td>
-                    </tr>
-                    <tr>
-                        <td>VL605</td>
-                        <td>Building VL, Room 605</td>
-                        <td>30</td>
-                        <td>Mon-Fri</td>
-                        <td>09:00 AM</td>
-                        <td>05:00 PM</td>
-                        <td><span class="badge bg-success">Available</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        
-            <div class="text-center mt-4">
-                <a href="/api/view-labs/form" class="btn btn-primary btn-lg">
-                    📅 View Available Lab Slots
-                </a>
-            </div>
+<div class="content-area-view-labs">
+    <div class="container mt-4">
+        <!-- Lab Overview Table -->
+        <h2 class="mb-3">Lab Overview</h2>
+        <table class="table table-bordered table-hover">
+            <thead class="table-primary">
+                <tr>
+                    <th>Building</th>
+                    <th>Room</th>
+                    <th>Capacity</th>
+                    <th>Days Open</th>
+                    <th>Opening Time</th>
+                    <th>Closing Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each labs}}
+                <tr>
+                    <td>{{building}}</td>
+                    <td>{{room}}</td>
+                    <td>{{seatIds.length}}</td>
+                    <td>{{joinArray daysOpen ", "}}</td>
+                    <td>{{openingTime}}</td>
+                    <td>{{closingTime}}</td>
+                    <td>
+                        {{#if (eq status "Open")}}
+                            <span class="badge bg-success">Available</span>
+                        {{else if (eq status "Under Maintenance")}}
+                            <span class="badge bg-warning">Under Maintenance</span>
+                        {{else}}
+                            <span class="badge bg-danger">Closed</span>
+                        {{/if}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
 
-            <!-- Tabbed Pane for Lab Reservations -->
-            <h2 class="mt-5">Existing Lab Reservations</h2>
-            <ul class="nav nav-tabs" id="labTabs">
-                <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#AG601">AG601</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#GK602">GK602</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#VL603">VL603</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#SJ604">SJ604</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#VL605">VL605</a>
-                </li>
-            </ul>
-        
-            <div class="tab-content mt-3">
-                <!-- AG601 Reservations -->
-                <div class="tab-pane fade show active" id="AG601">
-                    <table class="table table-bordered table-hover">
-                        <thead class="table-secondary">
-                            <tr>
-                                <th>Reservation ID</th>
-                                <th>Lab Slot/s</th>
-                                <th>Start Date & Time</th>
-                                <th>End Date & Time</th>
-                                <th>Requester’s Name</th>
-                                <th>Credited Individuals</th>
-                                <th>Purpose</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>101</td>
-                                <td>A1, B2</td>
-                                <td>Feb 20, 2025 10:00 AM</td>
-                                <td>Feb 20, 2025 11:00 AM</td>
-                                <td>John Doe</td>
-                                <td>Jane Smith, Alex Brown</td>
-                                <td>Research Discussion</td>
-                                <td><span class="badge bg-success">Reserved</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-        
-                <!-- GK602 Reservations -->
-                <div class="tab-pane fade" id="GK602">
-                    <table class="table table-bordered table-hover">
-                        <thead class="table-secondary">
-                            <tr>
-                                <th>Reservation ID</th>
-                                <th>Lab Slot/s</th>
-                                <th>Start Date & Time</th>
-                                <th>End Date & Time</th>
-                                <th>Requester’s Name</th>
-                                <th>Credited Individuals</th>
-                                <th>Purpose</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>102</td>
-                                <td>B1, C3</td>
-                                <td>Feb 21, 2025 2:00 PM</td>
-                                <td>Feb 21, 2025 3:00 PM</td>
-                                <td>Alice Green</td>
-                                <td>Bob White, Eve Black</td>
-                                <td>Team Meeting</td>
-                                <td><span class="badge bg-warning">Canceled</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-        
-                <!-- VL603 Reservations -->
-                <div class="tab-pane fade" id="VL603">
-                    <table class="table table-bordered table-hover">
-                        <thead class="table-secondary">
-                            <tr>
-                                <th>Reservation ID</th>
-                                <th>Lab Slot/s</th>
-                                <th>Start Date & Time</th>
-                                <th>End Date & Time</th>
-                                <th>Requester’s Name</th>
-                                <th>Credited Individuals</th>
-                                <th>Purpose</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>103</td>
-                                <td>D1, E2</td>
-                                <td>Feb 22, 2025 9:00 AM</td>
-                                <td>Feb 22, 2025 10:00 AM</td>
-                                <td>Michael Scott</td>
-                                <td>Pam Beesly, Jim Halpert</td>
-                                <td>Project Presentation</td>
-                                <td><span class="badge bg-primary">Completed</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-        
-                <!-- SJ604 Reservations -->
-                <div class="tab-pane fade" id="SJ604">
-                    <table class="table table-bordered table-hover">
-                        <thead class="table-secondary">
-                            <tr>
-                                <th>Reservation ID</th>
-                                <th>Lab Slot/s</th>
-                                <th>Start Date & Time</th>
-                                <th>End Date & Time</th>
-                                <th>Requester’s Name</th>
-                                <th>Credited Individuals</th>
-                                <th>Purpose</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>104</td>
-                                <td>A1, C3</td>
-                                <td>Feb 23, 2025 4:00 PM</td>
-                                <td>Feb 23, 2025 5:00 PM</td>
-                                <td>Dwight Schrute</td>
-                                <td>Angela Martin, Kevin Malone</td>
-                                <td>Farm Management Seminar</td>
-                                <td><span class="badge bg-danger">Canceled</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-        
-                <!-- VL605 Reservations -->
-                <div class="tab-pane fade" id="VL605">
-                    <table class="table table-bordered table-hover">
-                        <thead class="table-secondary">
-                            <tr>
-                                <th>Reservation ID</th>
-                                <th>Lab Slot/s</th>
-                                <th>Start Date & Time</th>
-                                <th>End Date & Time</th>
-                                <th>Requester’s Name</th>
-                                <th>Credited Individuals</th>
-                                <th>Purpose</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>            
-    </div>
-</body>
+        <div class="text-center mt-4">
+            <a href="/api/view-labs/form" class="btn btn-primary btn-lg">
+                📅 View Available Lab Slots
+            </a>
+        </div>
+
+        <div class="mb-3 mt-4">
+            <label for="buildingSelect" class="form-label">Select Building</label>
+            <select id="buildingSelect" class="form-select">
+                <option value="" selected disabled>Choose a building</option>
+                {{#each buildings}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="roomSelect" class="form-label">Select Room</label>
+            <select id="roomSelect" class="form-select" disabled>
+                <option value="" selected disabled>Choose a room</option>
+            </select>
+        </div>
+
+        <button id="viewReservationsBtn" class="btn btn-primary" disabled>View Reservations</button>
+
+        <div id="reservationsContainer" class="mt-4"></div>
+    </div>            
+</div>
+<script>
+    window.labsData = {{{ json labs }}};
+</script>
+<script src="/public/js/viewLabsScripts.js"></script>
