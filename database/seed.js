@@ -121,7 +121,7 @@ const seedReservations = async (students, labs, seats) => {
                     { requestingStudentID: randomStudent._id, labID: lab._id, seatID: randomSeat._id },
                     {
                         labID: lab._id,
-                        seatID: randomSeat._id,
+                        seatIDs: [randomSeat._id],
                         startDateTime: new Date(),
                         endDateTime: new Date(Date.now() + (2 + i) * 60 * 60 * 1000),
                         requestingStudentID: randomStudent._id,

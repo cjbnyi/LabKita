@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 
 const ReservationSchema = new Schema({
     labID: { type: Schema.Types.ObjectId, ref: 'Lab', required: true },
-    seatID: { type: Schema.Types.ObjectId, ref: 'Seat', required: true },
+    seatIDs: [{ type: Schema.Types.ObjectId, ref: 'Seat', required: true }],
     startDateTime: { type: Date, required: true },
     endDateTime: { type: Date, required: true },
     requestingStudentID: { type: Schema.Types.ObjectId, ref: 'Student', required: true },
@@ -18,6 +18,10 @@ export default class Reservation {
     static async getReservations(filter = {}) {
         try {
             return await this.model.find(filter)
+                .populate("labID")
+                .populate("seatIDs")
+                .populate("requestingStudentID")
+                .populate("creditedStudentIDs")
                 .sort({ startDateTime: 1 })
                 .lean();
         } catch (error) {

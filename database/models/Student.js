@@ -27,6 +27,7 @@ export default class Student {
     static async getStudents(filter = {}) {
         try {
             return await this.model.find(filter)
+                .populate("reservationList")
                 .sort({ lastName: 1, firstName: 1 })
                 .lean();
         } catch (error) {
