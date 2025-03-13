@@ -16,7 +16,7 @@ router.get('/view-labs', async (req, res) => {
 });
 
 router.get('/view-labs/form', (req, res) => {
-    res.render('view-slot', { title: "View Labs" });
+    res.render('view-seats', { title: "View Labs" });
 });
 router.post('/view-labs/form', seatController.getSeats);
 router.get('/view-labs/available-seats', viewLabsController.getAvailableSeatsPage);
