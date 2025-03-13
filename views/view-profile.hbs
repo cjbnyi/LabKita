@@ -1,0 +1,140 @@
+
+    {{!-- <style>
+        .content-area {
+            padding-top: 5px;
+        }
+    </style> --}}
+
+<body>
+    <div class="content-area">
+        <div class="container mt-5">
+            <div class="card shadow-sm p-4">
+                <div class="row align-items-center">
+                    <!-- Profile Picture -->
+                    <div class="col-md-2 text-center">
+                        <img src="/public/img/camellya.jpeg" class="rounded-circle mb-3" alt="Profile Picture" width="150" height="150">
+                    </div>
+
+                    <!-- Profile Information -->
+                    <div class="col-md-5">
+                        <h3 class="mb-1">Enzo Rafael Chan</h3>
+                        <p class="text-muted mb-1"><strong>Role:</strong> Student | <strong>University ID:</strong> 12369420</p>
+                        <p class="text-muted mb-1"><strong>Email:</strong> enzo_rafael_chan@dlsu.edu.ph</p>
+                        <p class="text-muted mb-3"><strong>Department:</strong> College of Computer Science</p>
+                    </div>
+
+                    <div class="profile-actions">
+                        <a href="/api/profile/me/update" class="btn btn-primary">Edit Profile</a>
+                    </div>
+                </div>
+
+                <!-- Bio Section -->
+                <div class="mt-4">
+                    <h5>Bio</h5>
+                    <p class="text-muted">Passionate about technology and innovation. Enjoys coding, coffee, and all things open-source. Always learning!</p>
+                </div>
+            </div>
+
+            <!-- Tabs for Reservations -->
+            <div class="mt-4">
+                <ul class="nav nav-tabs" id="reservationTabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#upcoming">Upcoming Reservations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#past">Past Reservations</a>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content mt-3">
+                    <!-- Upcoming Reservations -->
+                    <div class="tab-pane fade show active" id="upcoming">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-primary">
+                            <tr>
+                                <th>Reservation ID</th>
+                                <th>Lab Name</th>
+                                <th>Lab Slot/s</th>
+                                <th>Start Date & Time</th>
+                                <th>End Date & Time</th>
+                                <th>Requester’s Name</th>
+                                <th>Reservers’ Names</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>2</td>
+                                <td>GK602</td>
+                                <td>A1, B2</td>
+                                <td>February 14, 2025 2:30 PM</td>
+                                <td>February 14, 2025 3:00 PM</td>
+                                <td><a href="view-profile.html">Enzo Rafael Chan</a></td>
+                                <td><a href="other%20profileses/view-cj-profile.html">Christian Bunyi</a>, <a href="view-profile.html">Enzo Rafael Chan</a></td>
+                                <td>ruan mei appreciation</td>
+                                <td><span class="badge bg-success">Approved</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>LS603</td>
+                                <td>A1, B2, C3</td>
+                                <td>February 14, 2025 4:00 PM</td>
+                                <td>February 14, 2025 5:00 PM</td>
+                                <td><a href="other%20profileses/view-ral-profile.html">Widenmar Embuscado</a></td>
+                                <td><a href="other%20profileses/view-cj-profile.html">Christian Bunyi</a>, <a href="view-profile.html">Enzo Rafael Chan</a>, <a href="other%20profileses/view-ral-profile.html">Widenmar Embuscado</a></td>
+                                <td>(the) herta appreciation</td>
+                                <td><span class="badge bg-warning text-dark">Pending</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Past Reservations -->
+                    <div class="tab-pane fade" id="past">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-secondary">
+                            <tr>
+                                <th>Reservation ID</th>
+                                <th>Lab Name</th>
+                                <th>Lab Slot/s</th>
+                                <th>Start Date & Time</th>
+                                <th>End Date & Time</th>
+                                <th>Requester’s Name</th>
+                                <th>Reservers’ Names</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>4</td>
+                                <td>SJ604</td>
+                                <td>A1, B2, C3, D4</td>
+                                <td>February 15, 2025 11:00 AM</td>
+                                <td>February 15, 2025 12:00 PM</td>
+                                <td><a href="other%20profileses/view-rovin-profile.html">Rovin Montaño</a></td>
+                                <td><a href="other%20profileses/view-cj-profile.html">Christian Bunyi</a>, <a href="view-profile.html">Enzo Rafael Chan</a>, <a href="other%20profileses/view-ral-profile.html">Widenmar Embuscado</a>, <a href="other%20profileses/view-rovin-profile.html">Rovin Montaño</a></td>
+                                <td>feixiao appreciation</td>
+                                <td><span class="badge bg-secondary">Canceled</span></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>VL605</td>
+                                <td>E1, E2, E3, E4</td>
+                                <td>February 15, 2025 12:00 PM</td>
+                                <td>February 15, 2025 1:00 PM</td>
+                                <td><a href="other%20profileses/view-cj-profile.html">Christian Bunyi</a></td>
+                                <td><a href="other%20profileses/view-cj-profile.html">Christian Bunyi</a>, <a href="view-profile.html">Enzo Rafael Chan</a>, <a href="other%20profileses/view-ral-profile.html">Widenmar Embuscado</a>, <a href="other%20profileses/view-rovin-profile.html">Rovin Montaño</a></td>
+                                <td>venti appreciation</td>
+                                <td><span class="badge bg-danger">Rejected</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import 'dotenv/config'; // Ensure dotenv is imported at the top
 import express from 'express';
 import { create } from 'express-handlebars';
 import fs from 'fs';

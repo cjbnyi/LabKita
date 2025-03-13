@@ -1,0 +1,101 @@
+
+<body class="bg-soft-pink view-slot-container">
+    <div class="container mt-5">
+        <h2 class="text-center text-deep-red">Computer Lab Seat Availability</h2>
+
+        <div class="mb-3">
+            <label for="lab-select" class="form-label">Choose a Lab:</label>
+            <select id="lab-select" class="form-select">
+                <option value="" selected disabled>Select a lab</option>
+                <option value="AG1702">AG1702</option>
+                <option value="VL204">VL204</option>
+                <option value="GK102">GK102</option>
+                <option value="LS101">LS101</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="date-select" class="form-label">Choose a Date:</label>
+            <select id="date-select" class="form-select">
+                <option value="" selected disabled>Select a date</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="start-time-select" class="form-label">Choose a Start Time:</label>
+            <select id="start-time-select" class="form-select">
+                <option value="" selected disabled>Select a start time</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="end-time-select" class="form-label">Choose an End Time:</label>
+            <select id="end-time-select" class="form-select" disabled>
+                <option value="" selected disabled>Select an end time</option>
+            </select>
+        </div>
+
+        <div id="reserved-seats-section" style="display: none;">
+            <h3 class="text-bright-red">Reserved Seats</h3>
+            <ul class="reserved-list list-group">
+                <li class="list-group-item text-black bg-soft-pink">A1 - <a href="other%20profiles/view-cj-profile.html" class="text-black">Christian Joseph Bunyi</a></li>
+                <li class="list-group-item text-black bg-soft-pink">A2 - <a href="view-profile.hbs" class="text-black">Enzo Rafael Chan</a></li>
+                <li class="list-group-item text-black bg-soft-pink">A3 - <a href="other%20profiles/view-ral-profile.html" class="text-black">Widenmar Embuscado</a></li>
+                <li class="list-group-item text-black bg-soft-pink">A4 - <a href="other%20profiles/view-rovin-profile.html" class="text-black">Rovin Montaño</a></li>
+            </ul>
+
+            <p class="available-seats text-deep-red mt-3">Available Seats: 26</p>
+            <a href="manage-reservations.html" class="btn btn-bright-red">Reserve a Seat</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const dateSelect = document.getElementById("date-select");
+            const startTimeSelect = document.getElementById("start-time-select");
+            const endTimeSelect = document.getElementById("end-time-select");
+            const reservedSeatsSection = document.getElementById("reserved-seats-section");
+
+            let today = new Date();
+            for (let i = 0; i <= 7; i++) {
+                let futureDate = new Date();
+                futureDate.setDate(today.getDate() + i);
+                let dateString = futureDate.toISOString().split('T')[0];
+                let option = new Option(dateString, dateString);
+                dateSelect.appendChild(option);
+            }
+
+            let times = ["09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
+                "12:00 PM", "12:30 PM", "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM",
+                "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM", "05:00 PM"];
+
+            times.forEach(time => {
+                let option = new Option(time, time);
+                startTimeSelect.appendChild(option);
+            });
+
+            startTimeSelect.addEventListener("change", function() {
+                endTimeSelect.innerHTML = '<option value="" selected disabled>Select an end time</option>';
+                endTimeSelect.disabled = false;
+                let startIndex = times.indexOf(startTimeSelect.value);
+
+                times.slice(startIndex + 1).forEach(time => {
+                    let option = new Option(time, time);
+                    endTimeSelect.appendChild(option);
+                });
+            });
+
+            function checkSelections() {
+                if (dateSelect.value && startTimeSelect.value && endTimeSelect.value) {
+                    reservedSeatsSection.style.display = "block";
+                } else {
+                    reservedSeatsSection.style.display = "none";
+                }
+            }
+
+            dateSelect.addEventListener("change", checkSelections);
+            startTimeSelect.addEventListener("change", checkSelections);
+            endTimeSelect.addEventListener("change", checkSelections);
+        });
+    </script>
+</body>

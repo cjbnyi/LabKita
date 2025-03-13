@@ -16,7 +16,7 @@
                 </a>
             </li>
             <li class="nav-item text-center me-3">
-                <a class="nav-link text-light" href="about.html">
+                <a class="nav-link text-light" href="about">
                     <div class="d-flex flex-column">
                         <i class="fas fa-info-circle mb-1"></i>
                         <span class="fs-6">About Us</span>
@@ -24,7 +24,7 @@
                 </a>
             </li>
             <li class="nav-item text-center me-3">
-                <a class="nav-link text-light" href="view-labs.html">
+                <a class="nav-link text-light" href="/api/view-labs">
                     <div class="d-flex flex-column">
                         <i class="fas fa-laptop mb-1"></i>
                         <span class="fs-6">View Labs</span>
@@ -34,7 +34,7 @@
 
             {{#if isLoggedIn}}
                 <li class="nav-item text-center me-3">
-                    <a class="nav-link text-light" href="manage-reservations.html">
+                    <a class="nav-link text-light" href="/api/manage-reservations">
                         <div class="d-flex flex-column">
                             <i class="fas fa-calendar-check mb-1"></i>
                             <span class="fs-6">Manage Reservations</span>
@@ -42,7 +42,7 @@
                     </a>
                 </li>
                 <li class="nav-item text-center">
-                    <a class="nav-link text-light" href="admin.html">
+                    <a class="nav-link text-light" href="/admins">
                         <div class="d-flex flex-column">
                             <i class="fas fa-cogs mb-1"></i>
                             <span class="fs-6">Admin Panel</span>
@@ -51,7 +51,7 @@
                 </li>
             {{else}}
                 <li class="nav-item text-center me-3">
-                    <a class="nav-link text-light" href="reserve-slot.html">
+                    <a class="nav-link text-light" href="/api/manage-reservations/create">
                         <div class="d-flex flex-column">
                             <i class="fas fa-calendar-plus mb-1"></i>
                             <span class="fs-6">Reserve Slot</span>
@@ -84,7 +84,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                         <li>
-                            <a href="view-profile.html" class="dropdown-item d-flex align-items-center text-decoration-none">
+                            <a href="view-profile" class="dropdown-item d-flex align-items-center text-decoration-none">
                                 <img src="/public/img/camellya.jpeg" alt="Profile Picture" class="rounded-circle" width="40" height="40">
                                 <div class="ms-2">
                                     <strong class="d-block" style="color: black;">{{user.name}}</strong>
@@ -100,7 +100,7 @@
             {{else}}
                 <!-- Login Button -->
                 <li class="nav-item">
-                    <a class="nav-link" href="login.html">
+                    <a class="nav-link" href="/api/auth/login">
                         <button type="button" class="btn btn-outline-light me-1">Login</button>
                     </a>
                 </li>

@@ -1,0 +1,83 @@
+
+<body>
+
+    <div class="content-area">
+        <div class="container mt-5">
+            <div class="card shadow-sm p-4">
+                <h3 class="mb-4 text-center">Edit Profile</h3>
+
+                <form id="editProfileForm" enctype="multipart/form-data">
+                    <!-- Profile Picture -->
+                    <div class="mb-3 text-center">
+                        <label class="form-label fw-bold text-start d-block">Profile Picture</label>
+                        <div class="d-flex flex-column align-items-center">
+                            <label for="profilePicInput" class="d-block">
+                                <img id="profilePic" src="{{profile.profile_pic}}" alt="Profile Picture" class="rounded-circle mb-2" width="100" height="100" style="cursor: pointer;">
+                            </label>
+                            <input type="file" id="profilePicInput" name="profile_pic" class="form-control w-50">
+                        </div>
+                    </div>
+
+                    <!-- First Name & Last Name -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-start d-block">First Name</label>
+                            <input type="text" id="firstName" name="first_name" class="form-control" value="{{profile.first_name}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-start d-block">Last Name</label>
+                            <input type="text" id="lastName" name="last_name" class="form-control" value="{{profile.last_name}}">
+                        </div>
+                    </div>
+
+                    <!-- Department -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-start d-block">College Department</label>
+                        <input type="text" id="department" name="department" class="form-control" value="{{profile.department}}">
+                    </div>
+
+                    <!-- Bio -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-start d-block">Bio</label>
+                        <textarea id="bio" name="bio" class="form-control" rows="3">{{profile.bio}}</textarea>
+                    </div>
+
+                    <hr>
+
+                    <!-- Save/Cancel Buttons -->
+                    <button type="submit" id="saveProfile" class="btn btn-success">Save Changes</button>
+                    <a href="/api/profile/me" class="btn btn-secondary">Cancel</a>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.getElementById("profilePicInput").addEventListener("change", function(event) { 
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById("profilePic").src = e.target.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
+
+    document.getElementById('editProfileForm').addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent default form submission
+
+        let formData = new FormData(event.target); // Create form data
+        let response = await fetch('/api/profile/update', {
+            method: 'POST',
+            body: formData // Send form data including image file
+        });
+
+        if (response.ok) {
+            let result = await response.json();
+            alert('Profile updated successfully!');
+            document.getElementById("profilePic").src = result.profile.profile_pic; // Update image preview
+        } else {
+            alert('Error updating profile.');
+        }
+    });
+    </script>
+</body>
