@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function populateTimeSlots(startTime, endTime) {
-        console.log("Populating time slots with:", startTime, "-", endTime); // ✅ Debug log
+        console.log("Populating time slots with:", startTime, "-", endTime); 
     
         startTimeSelect.innerHTML = '<option value="" selected disabled>Select a start time</option>';
         endTimeSelect.innerHTML = '<option value="" selected disabled>Select an end time</option>';
@@ -72,13 +72,13 @@ document.addEventListener("DOMContentLoaded", function () {
         let currentHour = startHour;
         let currentMinutes = startMinutes;
         
-        let hasOptions = false; // ✅ Track if we add any valid times
+        let hasOptions = false;
     
         while (currentHour < endHour || (currentHour === endHour && currentMinutes < endMinutes)) {
             let timeString = `${String(currentHour).padStart(2, "0")}:${String(currentMinutes).padStart(2, "0")}`;
             let option = new Option(timeString, timeString);
             startTimeSelect.appendChild(option);
-            hasOptions = true; // ✅ At least one option exists
+            hasOptions = true; 
     
             currentMinutes += 30;
             if (currentMinutes >= 60) {
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     
         if (hasOptions) {
-            startTimeSelect.disabled = false; // ✅ Enable start time only if options exist
+            startTimeSelect.disabled = false; 
         } else {
             console.warn("No valid start times available!");
             let noStartOptions = new Option("No valid start times available!", "");
@@ -295,7 +295,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         li.className = "list-group-item";
                         li.textContent = slot.timeRange;
                         if (!slot.available) {
-                            li.style.backgroundColor = "red"; // Mark unavailable slots
+                            li.style.backgroundColor = "red"; 
                             li.style.color = "white";
                         }
                         seatTimeList.appendChild(li);

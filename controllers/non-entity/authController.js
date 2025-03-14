@@ -51,7 +51,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        console.log("🔍 Received Login Request:", email);
+        console.log("Received Login Request:", email);
 
         // Find user
         const user = await getUserByEmail(email);
@@ -68,7 +68,7 @@ const login = async (req, res) => {
         // Return success response
         return res.status(200).json({ message: "Login successful!", userType: user.role });
     } catch (error) {
-        console.error("🔥 Login Error:", error);
+        console.error("Login Error:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 };

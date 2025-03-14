@@ -2,24 +2,25 @@
     <div class="content-area">
         <div class="container mt-5">
             <div class="card shadow-sm p-4">
-                <div class="row align-items-center">
-                    <!-- Profile Picture -->
-                    <div class="col-md-2 text-center">
-                        <img src="{{#if profile.profilePictureUrl}}{{profile.profilePictureUrl}}{{else}}/public/img/default-profile.png{{/if}}" 
-                            class="rounded-circle mb-3" 
-                            alt="Profile Picture" 
-                            width="150" 
-                            height="150">
-                    </div>
+                <div class="row align-items-center d-flex">
+    <!-- Profile Picture -->
+    <div class="col-md-3 text-center">
+        <img src="{{#if profile.profilePictureUrl}}{{profile.profilePictureUrl}}{{else}}/public/img/default-profile.png{{/if}}" 
+            class="rounded-circle profile-img" 
+            alt="Profile Picture" 
+            width="150" 
+            height="150">
+    </div>
 
-                    <!-- Profile Information -->
-                    <div class="col-md-5">
-                        <h3 class="mb-1">{{profile.firstName}} {{profile.lastName}}</h3>
-                        <p class="text-muted mb-1"><strong>Role:</strong> Student | <strong>University ID:</strong> {{profile.universityId}}</p>
-                        <p class="text-muted mb-1"><strong>Email:</strong> {{profile.email}}</p>
-                        <p class="text-muted mb-3"><strong>Department:</strong> {{profile.department}}</p>
-                    </div>
-                </div>
+    <!-- Student Information -->
+    <div class="col-md-7 d-flex flex-column justify-content-center">
+        <h3 class="mb-1">{{profile.firstName}} {{profile.lastName}}</h3>
+        <p class="text-muted mb-1"><strong>Role:</strong> Student | <strong>University ID:</strong> {{profile.universityId}}</p>
+        <p class="text-muted mb-1"><strong>Email:</strong> {{profile.email}}</p>
+        <p class="text-muted mb-3"><strong>Department:</strong> {{profile.department}}</p>
+    </div>
+</div>
+
 
                 <!-- Bio Section -->
                 <div class="mt-4">
