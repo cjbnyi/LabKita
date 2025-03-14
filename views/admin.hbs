@@ -89,9 +89,9 @@
             <ul class="nav nav-tabs" id="adminReservationTabs">
                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#all-reservations">All Reservations</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#upcoming-reservations">Upcoming Reservations</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#manage-labs">Manage Labs</a></li>
+                {{!-- <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#manage-labs">Manage Labs</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#manage-seats">Manage Seats</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#view-labs-seats">View Labs & Seats</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#view-labs-seats">View Labs & Seats</a></li> --}}
                
                 
             </ul>
@@ -109,24 +109,24 @@
                                 <th>Lab Slot/s</th>
                                 <th>
                                     Start Date & Time
-                                    <select class="form-select form-select-sm" id="start-time-filter" onchange="applySorting('start_datetime', this.value)">
+                                    {{!-- <select class="form-select form-select-sm" id="start-time-filter" onchange="applySorting('start_datetime', this.value)">
                                         <option value="earliest">Earliest First</option>
                                         <option value="latest">Latest First</option>
-                                    </select>
+                                    </select> --}}
                                 </th>
                                 <th>
                                     End Date & Time
-                                    <select class="form-select form-select-sm" id="end-time-filter" onchange="applySorting('end_datetime', this.value)">
+                                    {{!-- <select class="form-select form-select-sm" id="end-time-filter" onchange="applySorting('end_datetime', this.value)">
                                         <option value="earliest">Earliest First</option>
                                         <option value="latest">Latest First</option>
-                                    </select>
+                                    </select> --}}
                                 </th>
                                 <th>
                                     Requester’s Name
-                                    <select class="form-select form-select-sm" id="requester-filter" onchange="applySorting('requester_name', this.value)">
+                                    {{!-- <select class="form-select form-select-sm" id="requester-filter" onchange="applySorting('requester_name', this.value)">
                                         <option value="A-Z">A-Z</option>
                                         <option value="Z-A">Z-A</option>
-                                    </select>
+                                    </select> --}}
                                 </th>
 
                                 <th>Reservers</th>
@@ -148,13 +148,15 @@
                                 <td>{{this.purpose}}</td>
                                 <td><span class="badge {{#if (eq this.status 'Reserved')}}bg-success{{else}}bg-danger{{/if}}">{{this.status}}</span></td>
                                 <td>
-                                    
-                                
-                                <a href="/edit-reservations/{{this.id}}">
+                                    <a href="/api/manage-reservations/edit/{{this.id}}">
                                         <button class="btn btn-warning btn-sm">Edit</button>
                                     </a>
-                                <button class="btn btn-danger btn-sm delete-btn">Delete</button>
-                            </td>
+                                    <button class="btn btn-danger btn-sm cancel-btn" onclick="cancelReservation('{{this.id}}')">Cancel</button>
+                                </td>
+                            </tr>
+                            {{else}}
+                            <tr>
+                                <td colspan="10" class="text-center">No upcoming reservations found.</td>
                             </tr>
                             {{/each}}
                         </tbody>
@@ -180,7 +182,7 @@
                         </thead>
                         <tbody>
                             {{#each upcomingReservations}}
-                            <tr>
+                            <tr data-id="{{this.id}}">
                                 <td>{{this.id}}</td>
                                 <td>{{this.lab_name}}</td>
                                 <td>{{this.slots}}</td>
@@ -191,11 +193,15 @@
                                 <td>{{this.purpose}}</td>
                                 <td><span class="badge bg-success">Reserved</span></td>
                                 <td>
-                                    <a href="/edit-reservations/{{this.id}}">
+                                    <a href="/api/manage-reservations/edit/{{this.id}}">
                                         <button class="btn btn-warning btn-sm">Edit</button>
                                     </a>
-                                    <button class="btn btn-danger btn-sm" onclick="cancelReservation('{{this.id}}')">Cancel</button>
+                                    <button class="btn btn-danger btn-sm cancel-btn" onclick="cancelReservation('{{this.id}}')">Cancel</button>
                                 </td>
+                            </tr>
+                            {{else}}
+                            <tr>
+                                <td colspan="10" class="text-center">No upcoming reservations found.</td>
                             </tr>
                             {{/each}}
                         </tbody>
@@ -203,7 +209,7 @@
                 </div>
 
                 <!-- Tab Content for Managing Labs -->
-<div class="tab-content mt-3">
+{{!-- <div class="tab-content mt-3">
     <div class="tab-pane fade" id="manage-labs">
     <div class="container mt-4">
         <h3>Manage Labs</h3>
@@ -395,7 +401,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> --}}
 </div>
 </div>
 </div>
