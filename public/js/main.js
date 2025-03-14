@@ -1,4 +1,5 @@
 // Executed once the document finishes loading
-$(document).ready(() => {
-    
-})
+document.addEventListener("DOMContentLoaded", () => {
+    // TODO
+});
+

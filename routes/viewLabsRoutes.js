@@ -15,10 +15,15 @@ router.get('/view-labs', async (req, res) => {
     res.render('view-labs', { title: "View Labs", labs, buildings });
 });
 
-router.get('/view-labs/form', (req, res) => {
-    res.render('view-seats', { title: "View Labs" });
+router.get('/view-labs/form', async (req, res) => {
+    const response = await fetch('http://localhost:3000/api/labs');
+    const labs = await response.json();
+
+    res.render('view-seats', { title: "View Labs", labs });
 });
+
 router.post('/view-labs/form', seatController.getSeats);
+
 router.get('/view-labs/available-seats', viewLabsController.getAvailableSeatsPage);
 
 export default router;
