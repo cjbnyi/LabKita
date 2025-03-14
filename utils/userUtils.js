@@ -1,26 +1,26 @@
 import mongoose from 'mongoose';
 import { Admin, Student } from '../database/models/models.js';
 
-console.log("✅ Admin Model:", Admin);
-console.log("✅ Student Model:", Student);
+export async function getUserByEmail(email) {
+    try {
+        console.log("🔍 Searching for user with email:", email);
 
-const userModels = { admins: Admin, students: Student };
-
-
-export const getUserByEmail = async (email) => {
-    console.log("🔍 Looking up user with email:", email);
-
-    for (const [collectionName, Model] of Object.entries(userModels)) {
-        console.log(`🔎 Checking ${collectionName} model:`, Model);
-
-        if (Model && typeof Model.findOne === "function") {
-            const user = await Model.findOne({ email });
-            if (user) return { user, collectionName };
-        } else {
-            console.error(`🚨 ERROR: ${collectionName} model is invalid or not defined!`);
+        let user = await Admin.model.findOne({ email }).lean();
+        if (user) {
+            console.log("✅ Admin found:", user);
+            return user;  // ✅ Return immediately if an admin is found
         }
-    }
 
-    console.log("❌ No matching user found.");
-    return null;
-};
+        user = await Student.model.findOne({ email }).lean();
+        if (user) {
+            console.log("✅ Student found:", user);
+            return user;  // ✅ Return student if found
+        }
+
+        console.log("❌ No user found with this email:", email);
+        return null;
+    } catch (error) {
+        console.error("🔥 Error in getUserByEmail:", error);
+        return null;
+    }
+}
