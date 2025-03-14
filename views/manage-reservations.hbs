@@ -1,5 +1,7 @@
-<div class="content-area-manage-reservations">
-    <div class="container mt-5">
+<body class="d-flex flex-column min-vh-100">
+
+<section id="get-started" class="content-section flex-grow-1 d-flex flex-column justify-content-center">
+    <div class="container mt-3">
         <!-- Tabs -->
         <ul class="nav nav-tabs" id="reservationTabs">
             <li class="nav-item">
@@ -61,17 +63,17 @@
             <div class="tab-pane fade" id="past">
                 <table class="table table-bordered table-hover">
                     <thead class="table-secondary">
-                        <tr>
-                            <th>Reservation ID</th>
-                            <th>Lab Name</th>
-                            <th>Lab Slot/s</th>
-                            <th>Start Date & Time</th>
-                            <th>End Date & Time</th>
-                            <th>Requester’s Name</th>
-                            <th>Reservers’ Names</th>
-                            <th>Purpose</th>
-                            <th>Status</th>
-                        </tr>
+                    <tr>
+                        <th>Reservation ID</th>
+                        <th>Lab Name</th>
+                        <th>Lab Slot/s</th>
+                        <th>Start Date & Time</th>
+                        <th>End Date & Time</th>
+                        <th>Requester’s Name</th>
+                        <th>Reservers’ Names</th>
+                        <th>Purpose</th>
+                        <th>Status</th>
+                    </tr>
                     </thead>
                     <tbody id="pastReservationsBody">
                         {{#each pastReservations}}
