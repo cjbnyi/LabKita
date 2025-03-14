@@ -27,7 +27,7 @@ import {
 } from './routes/routes.js';
 
 // Run jobs
-updateExpiredReservations()
+updateExpiredReservations();
 
 // Obtain __filename and __dirname in ES6 standard
 const __filename = fileURLToPath(import.meta.url);

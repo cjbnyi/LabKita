@@ -32,7 +32,23 @@ const updateExpiredReservations = async () => {
 };
 
 // Run every 5 minutes (adjust as needed)
-cron.schedule("*/5 * * * *", updateExpiredReservations);
+let isRunning = false;
+
+cron.schedule("*/5 * * * *", async () => {
+    if (isRunning) {
+        console.log("Skipped: Previous job is still running.");
+        return;
+    }
+    
+    isRunning = true;
+    console.log("Running updateExpiredReservations...");
+    console.time("updateExpiredReservations");
+
+    await updateExpiredReservations(); // Ensure this is async and doesn't block
+
+    console.timeEnd("updateExpiredReservations");
+    isRunning = false;
+});
 
 export {
     updateExpiredReservations
