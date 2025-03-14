@@ -16,6 +16,7 @@ export default class Lab {
     static async getLabs(filter = {}) {
         try {
             return await this.model.find(filter)
+                .populate("seatIds")
                 .sort({ building: 1, room: 1 })
                 .lean();
         } catch (error) {

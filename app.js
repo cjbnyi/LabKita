@@ -44,6 +44,11 @@ const hbs = create({
     defaultLayout: 'main',
     layoutsDir: path.join(__dirname, 'views/layouts'),
     partialsDir: path.join(__dirname, 'views/partials'),
+    helpers: {
+        eq: (a, b) => a === b, // Checks if two values are equal
+        joinArray: (arr, separator = ', ') => Array.isArray(arr) ? arr.join(separator) : '', // Joins an array into a string
+        json: context => JSON.stringify(context)
+    }
 });
 
 app.engine('hbs', hbs.engine);

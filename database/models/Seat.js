@@ -12,7 +12,10 @@ export default class Seat {
 
     static async getSeats(filter = {}) {
         try {
-            return await this.model.find(filter).sort({ seatNumber: 1 }).lean();
+            return await this.model.find(filter)
+                .populate("labID")
+                .sort({ seatNumber: 1 })
+                .lean();
         } catch (error) {
             console.error("Error fetching Seat documents:", error);
             throw new Error('Error fetching seats');
