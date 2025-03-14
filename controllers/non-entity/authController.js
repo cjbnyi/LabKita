@@ -38,30 +38,41 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Find the user
-        const result = await getUserByEmail(email);
-        if (!result) {
+        console.log("🔍 Email received:", email);
+
+        // Find user
+        const user = await getUserByEmail(email);
+        if (!user) {
+            console.error("❌ No user found with this email:", email);
             return res.status(404).json({ error: 'User not found' });
         }
-        const { user } = result;
+
+        // Ensure password exists
+        if (!user.password) {
+            console.error("🚨 User exists but password field is missing:", user);
+            return res.status(401).json({ error: "Invalid email or password" });
+        }
 
         // Check password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
+            console.error("❌ Incorrect password for:", email);
             return res.status(400).json({ error: 'Invalid credentials' });
         }
 
         // Generate token
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        
-        // Remove password before sending user data
-        const userObj = user.toObject();
-        delete userObj.password;
-        
-        const userType = Model.modelName === 'Student' ? 'student' : 'admin';
-        res.status(200).json({ message: 'Login successful', userType });
+
+        // Remove password before sending response
+        delete user.password;
+
+        // Determine user type
+        const userType = user.role === 'student' ? 'student' : 'admin';
+
+        console.log("✅ Login successful for:", email);
+        res.status(200).redirect('/');
     } catch (error) {
-        console.error(error);
+        console.error("🔥 Error logging in:", error);
         res.status(500).json({ error: 'Error logging in' });
     }
 };

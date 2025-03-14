@@ -1,3 +1,5 @@
+
+
 <script>
     function applySorting(column, order) {
         let tbody = document.querySelector("#reservation-table tbody");
@@ -35,33 +37,27 @@
         mainCheckbox.checked = Array.from(checkboxes).every(cb => cb.checked);
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("labAll").addEventListener("change", function () {
-            toggleAllCheckboxes(this, "#filterLab");
-        });
+document.addEventListener("DOMContentLoaded", function () {
+    const tableBody = document.querySelector("#reservation-table tbody");
 
-        document.getElementById("statusAll").addEventListener("change", function () {
-            toggleAllCheckboxes(this, "#filterStatus");
-        });
+    tableBody.addEventListener("click", function (event) {
+        const row = event.target.closest("tr");
 
-        document.querySelectorAll("#filterLab input[type=checkbox]:not(#labAll)").forEach(cb => {
-            cb.addEventListener("change", function () {
-                updateAllCheckbox("labAll", "#filterLab");
-            });
-        });
-
-        document.querySelectorAll("#filterStatus input[type=checkbox]:not(#statusAll)").forEach(cb => {
-            cb.addEventListener("change", function () {
-                updateAllCheckbox("statusAll", "#filterStatus");
-            });
-        });
+        if (event.target.classList.contains("delete-btn")) {
+            if (confirm("Are you sure you want to delete this reservation?")) {
+                row.remove(); // Temporarily removes the row from UI
+            }
+        }
     });
+});
+
 </script>
 
 
 
 
 <body>
+
     <div class="content-area-admin">
             <div class="container mt-5">
                 <!-- Filtering Options -->
@@ -133,7 +129,7 @@
                             <input type="text" id="filterRequester" class="form-control" placeholder="Enter name">
                         </div>
                         <div class="col-md-3">
-                            <label for="filterCredited" class="form-label">Credited Individuals</label>
+                            <label for="filterCredited" class="form-label">Reservers</label>
                             <input type="text" id="filterCredited" class="form-control" placeholder="Enter names (comma-separated)">
                         </div>
                         <div class="col-md-3">
@@ -146,6 +142,8 @@
 
                     </div>
                 </div>
+
+
                 
                 <!-- Tabs for Reservation Categories -->
             <ul class="nav nav-tabs" id="adminReservationTabs">
@@ -186,7 +184,7 @@
                                     </select>
                                 </th>
 
-                                <th>Credited Individuals</th>
+                                <th>Reservers</th>
                                 <th>Purpose</th>
                                 <th>Status</th>
                                 <th>Actions</th>
@@ -204,6 +202,14 @@
                                 <td>{{this.reservers}}</td>
                                 <td>{{this.purpose}}</td>
                                 <td><span class="badge {{#if (eq this.status 'Reserved')}}bg-success{{else}}bg-danger{{/if}}">{{this.status}}</span></td>
+                                <td>
+                                    
+                                
+                                <a href="/edit-reservations/{{this.id}}">
+                                        <button class="btn btn-warning btn-sm">Edit</button>
+                                    </a>
+                                <button class="btn btn-danger btn-sm delete-btn">Delete</button>
+                            </td>
                             </tr>
                             {{/each}}
                         </tbody>

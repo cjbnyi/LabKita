@@ -13,7 +13,7 @@
                 {{#if error}}
                     <p class="error">{{error}}</p>
                 {{/if}}
-                <form action="/api/auth/login" method="POST">
+                <form id="loginForm" action="/api/auth/login" method="POST">
                     <input type="email" name="email" placeholder="Enter your email" value="{{email}}" required>
                     <input type="password" name="password" placeholder="Enter your password" required>
                     <button type="submit">Login</button>

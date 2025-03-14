@@ -16,16 +16,16 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 
         if (response.ok) {
             if (data.userType === 'student') {
-                isLoggedInAsStudent = true;
-                isLoggedInAsAdmin = false;
+                localStorage.setItem('userType', 'student');
             } else if (data.userType === 'admin') {
-                isLoggedInAsStudent = false;
-                isLoggedInAsAdmin = true;
+                localStorage.setItem('userType', 'admin');
             }
 
-            alert('Login successful!'); // You can replace this with a redirect
+            alert('Login successful!');
+            window.location.href = '/'; // Change to your actual home page URL
+
         } else {
-            alert(data.error); // Show error message if login fails
+            alert(data.error);
         }
     } catch (error) {
         console.error('Error:', error);
