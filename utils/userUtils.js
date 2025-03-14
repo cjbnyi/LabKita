@@ -24,3 +24,12 @@ export async function getUserByEmail(email) {
         return null;
     }
 }
+
+export async function getStudentByID(studentID) {
+    try {
+        return await Student.model.findOne({ universityID: studentID }).lean();
+    } catch (error) {
+        console.error("Error fetching Student document:", error);
+        throw new Error('Error fetching student');
+    }
+}

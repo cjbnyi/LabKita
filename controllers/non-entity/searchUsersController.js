@@ -25,7 +25,7 @@ const getProfilePage = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        res.render('profile', { student });
+        res.render('view-other-profile', { student });
     } catch (error) {
         res.status(500).json({ error: 'Error loading profile page' });
     }

@@ -1,0 +1,123 @@
+<body>
+    <div class="content-area">
+        <div class="container mt-5">
+            <div class="card shadow-sm p-4">
+                <div class="row align-items-center">
+                    <!-- Profile Picture -->
+                    <div class="col-md-2 text-center">
+                        <img src="{{#if profile.profilePictureUrl}}{{profile.profilePictureUrl}}{{else}}/public/img/default-profile.png{{/if}}" 
+                            class="rounded-circle mb-3" 
+                            alt="Profile Picture" 
+                            width="150" 
+                            height="150">
+                    </div>
+
+                    <!-- Profile Information -->
+                    <div class="col-md-5">
+                        <h3 class="mb-1">{{profile.firstName}} {{profile.lastName}}</h3>
+                        <p class="text-muted mb-1"><strong>Role:</strong> Student | <strong>University ID:</strong> {{profile.universityId}}</p>
+                        <p class="text-muted mb-1"><strong>Email:</strong> {{profile.email}}</p>
+                        <p class="text-muted mb-3"><strong>Department:</strong> {{profile.department}}</p>
+                    </div>
+                </div>
+
+                <!-- Bio Section -->
+                <div class="mt-4">
+                    <h5>Bio</h5>
+                    <p class="text-muted">{{profile.bio}}</p>
+                </div>
+            </div>
+
+            <!-- Tabs for Reservations -->
+            <div class="mt-4">
+                <ul class="nav nav-tabs" id="reservationTabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#upcoming">Upcoming Reservations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#past">Past Reservations</a>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content mt-3">
+                    <!-- Upcoming Reservations -->
+                    <div class="tab-pane fade show active" id="upcoming">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-primary">
+                            <tr>
+                                <th>Reservation ID</th>
+                                <th>Lab Name</th>
+                                <th>Lab Slot/s</th>
+                                <th>Start Date & Time</th>
+                                <th>End Date & Time</th>
+                                <th>Requester’s Name</th>
+                                <th>Reservers’ Names</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#each reservations.upcoming}}
+                            <tr>
+                                <td>{{this.reservationId}}</td>
+                                <td>{{this.labName}}</td>
+                                <td>{{this.labSlots}}</td>
+                                <td>{{this.formattedStartDateTime}}</td>
+                                <td>{{this.formattedEndDateTime}}</td>
+                                <td><a href="/profile/{{this.requester.universityId}}">{{this.requester.name}}</a></td>
+                                <td>
+                                    {{#each this.reservers}}
+                                        <a href="/profile/{{this.universityId}}">{{this.name}}</a>{{#unless @last}}, {{/unless}}
+                                    {{/each}}
+                                </td>
+                                <td>{{this.purpose}}</td>
+                                <td><span class="badge bg-{{this.statusColor}}">{{this.status}}</span></td>
+                            </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Past Reservations -->
+                    <div class="tab-pane fade" id="past">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-secondary">
+                            <tr>
+                                <th>Reservation ID</th>
+                                <th>Lab Name</th>
+                                <th>Lab Slot/s</th>
+                                <th>Start Date & Time</th>
+                                <th>End Date & Time</th>
+                                <th>Requester’s Name</th>
+                                <th>Reservers’ Names</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#each reservations.past}}
+                            <tr>
+                                <td>{{this.reservationId}}</td>
+                                <td>{{this.labName}}</td>
+                                <td>{{this.labSlots}}</td>
+                                <td>{{this.formattedStartDateTime}}</td>
+                                <td>{{this.formattedEndDateTime}}</td>
+                                <td><a href="/profile/{{this.requester.universityId}}">{{this.requester.name}}</a></td>
+                                <td>
+                                    {{#each this.reservers}}
+                                        <a href="/profile/{{this.universityId}}">{{this.name}}</a>{{#unless @last}}, {{/unless}}
+                                    {{/each}}
+                                </td>
+                                <td>{{this.purpose}}</td>
+                                <td><span class="badge bg-{{this.statusColor}}">{{this.status}}</span></td>
+                            </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
