@@ -1,0 +1,80 @@
+{{> navbar}} <!-- Include the navbar partial -->
+
+<div class="content-area-manage-reservations">
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Edit Reservation</h2>
+
+        <table class="table table-bordered table-hover">
+            <thead class="table-primary">
+                <tr>
+                    <th>Reservation ID</th>
+                    <th>Lab Name</th>
+                    <th>Seats</th>
+                    <th>Start Date & Time</th>
+                    <th>End Date & Time</th>
+                    <th>Requesting Student</th>
+                    <th>Credited Students</th>
+                    <th>Purpose</th>
+                    <th>Status</th>
+                    <th>Anonymous</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{reservation._id}}</td>
+                    <td>{{reservation.lab_name}}</td> <!-- Not editable -->
+                    <td>{{reservation.seats}}</td> <!-- Not editable -->
+                    <td>{{reservation.start_datetime}}</td> <!-- Not editable -->
+                    <td>{{reservation.end_datetime}}</td> <!-- Not editable -->
+                    <td><span class="editable" contenteditable="true">{{reservation.requester_name}}</span></td>
+                    <td><span class="editable" contenteditable="true">{{reservation.credited_names}}</span></td>
+                    <td><span class="editable" contenteditable="true">{{reservation.purpose}}</span></td>
+                    <td><span>{{reservation.status}}</span></td> <!-- Now non-editable -->
+                    <td>
+                        <input type="checkbox" id="isAnonymous" {{#if reservation.isAnonymous}}checked{{/if}}>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="text-center mt-4">
+            <button id="saveButton" class="btn btn-primary btn-lg">💾 Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('saveButton').addEventListener('click', async () => {
+        let row = document.querySelector("tbody tr");
+        let cells = row.querySelectorAll(".editable");
+
+        let reservationId = row.children[0].innerText; // Extract reservation ID
+
+        let data = {
+            requester_name: cells[0].innerText, 
+            credited_names: cells[1].innerText,
+            purpose: cells[2].innerText,
+            isAnonymous: document.getElementById('isAnonymous').checked
+        };
+
+        try {
+            let response = await fetch(`/api/reservations/${reservationId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert('Reservation updated successfully!');
+                window.location.href = "/api/manage-reservations"; // Redirect after saving
+            } else {
+                let errorData = await response.json();
+                alert('Error updating reservation: ' + (errorData.message || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error("Update Error:", error);
+            alert('Failed to update reservation.');
+        }
+    });
+</script>
+
