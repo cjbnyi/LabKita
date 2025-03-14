@@ -18,23 +18,22 @@
             <div class="tab-pane fade show active" id="upcoming">
                 <table class="table table-bordered table-hover">
                     <thead class="table-primary">
-                    <tr>
-                        <th>Reservation ID</th>
-                        <th>Lab Name</th>
-                        <th>Lab Slot/s</th>
-                        <th>Start Date & Time</th>
-                        <th>End Date & Time</th>
-                        <th>Requester’s Name</th>
-                        <th>Reservers’ Names</th>
-                        <th>Purpose</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th>Reservation ID</th>
+                            <th>Lab</th>
+                            <th>Seats</th>
+                            <th>Start Date & Time</th>
+                            <th>End Date & Time</th>
+                            <th>Requesting Student</th>
+                            <th>Credited Students</th>
+                            <th>Purpose</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
-                    <tbody>
-                    {{#if upcomingReservations.length}}
+                    <tbody id="upcomingReservationsBody">
                         {{#each upcomingReservations}}
-                            <tr>
+                            <tr data-id="{{this.id}}">
                                 <td>{{this.id}}</td>
                                 <td>{{this.lab_name}}</td>
                                 <td>{{this.slots}}</td>
@@ -45,18 +44,17 @@
                                 <td>{{this.purpose}}</td>
                                 <td><span class="badge bg-success">Reserved</span></td>
                                 <td>
-                                    <a href="/edit-reservations/{{this.id}}">
+                                    <a href="/api/manage-reservations/edit/{{this.id}}">
                                         <button class="btn btn-warning btn-sm">Edit</button>
                                     </a>
-                                    <button class="btn btn-danger btn-sm" onclick="cancelReservation('{{this.id}}')">Cancel</button>
+                                    <button class="btn btn-danger btn-sm cancel-btn" onclick="cancelReservation('{{this.id}}')">Cancel</button>
                                 </td>
                             </tr>
+                        {{else}}
+                            <tr>
+                                <td colspan="10" class="text-center">No upcoming reservations found.</td>
+                            </tr>
                         {{/each}}
-                    {{else}}
-                        <tr>
-                            <td colspan="10" class="text-center">No upcoming reservations found.</td>
-                        </tr>
-                    {{/if}}
                     </tbody>
                 </table>
             </div>
@@ -77,10 +75,9 @@
                         <th>Status</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    {{#if pastReservations.length}}
+                    <tbody id="pastReservationsBody">
                         {{#each pastReservations}}
-                            <tr>
+                            <tr data-id="{{this.id}}">
                                 <td>{{this.id}}</td>
                                 <td>{{this.lab_name}}</td>
                                 <td>{{this.slots}}</td>
@@ -89,24 +86,28 @@
                                 <td>{{this.requester_name}}</td>
                                 <td>{{this.reservers}}</td>
                                 <td>{{this.purpose}}</td>
-                                <td><span class="badge bg-secondary">Completed</span></td>
+                                <td>
+                                    <span class="badge {{#if (eq this.status 'Cancelled')}}bg-danger{{else}}bg-secondary{{/if}}">
+                                        {{this.status}}
+                                    </span>
+                                </td>
+                            </tr>
+                        {{else}}
+                            <tr>
+                                <td colspan="9" class="text-center">No past reservations found.</td>
                             </tr>
                         {{/each}}
-                    {{else}}
-                        <tr>
-                            <td colspan="9" class="text-center">No past reservations found.</td>
-                        </tr>
-                    {{/if}}
                     </tbody>
                 </table>
             </div>
 
             <!-- Reserve Lab Button -->
             <div class="text-center mt-4">
-                <a href="manage-reservations/create" class="btn btn-primary btn-lg"> 📅 Make a Reservation </a>
+                <a href="manage-reservations/create" class="btn btn-primary btn-lg">
+                    📅 Make a Reservation
+                </a>
             </div>
         </div>
     </div>
-</section>
-
-</body>
+</div>
+<script src="../public/js/manageReservationsScripts.js"></script>

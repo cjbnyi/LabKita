@@ -7,6 +7,9 @@ import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
+// Import jobs
+import { updateExpiredReservations } from './jobs/updateReservations.js';
+
 // Import database functions
 import { connectToMongo } from './database/conn.js';
 import { seedDatabase } from './database/seed.js';
@@ -22,6 +25,9 @@ import {
     searchUsersRoutes,
     viewLabsRoutes
 } from './routes/routes.js';
+
+// Run jobs
+updateExpiredReservations()
 
 // Obtain __filename and __dirname in ES6 standard
 const __filename = fileURLToPath(import.meta.url);

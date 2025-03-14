@@ -8,7 +8,7 @@ router.get('/manage-reservations', (req, res) => {
         title: "Manage Reservations"});
 });
 
-router.get('/manage-reservations/edit', manageReservationController.getEditReservationPage);
+router.get('/manage-reservations/edit/:reservationId', manageReservationController.getEditReservationPage);
 
 router.get('/manage-reservations/create', (req, res) => {
     res.render('reserve-slot', { 
