@@ -1,4 +1,5 @@
 # LabKita!
+
 **LabKita!** is a lab reservation system web application created for CCAPDEV (Web Application Development).  
 
 The name is a play on "Lab," referring to laboratories, and "Kita," a Filipino word that can mean "you," "to see," or even "profit" (if you want to stretch the interpretation). It can also be read romantically, inspired by the Filipino phrase "*Love kita!*"—meaning "*I love you!*" in English.  
@@ -69,7 +70,9 @@ The following students of De La Salle University - Manila, Philippines collabora
 
 
 ## Tech Stack  
+
 List of technologies and frameworks used in the project:
+
 - **Backend**: Node.js, Express.js, MongoDB
 - **Frontend**: Bootstrap, Handlebars, JavaScript
 - **Authentication**: JWT (has yet to be implemented in Phase 3)  
@@ -79,7 +82,9 @@ List of technologies and frameworks used in the project:
 ## Setup & Installation  
 
 ### Prerequisites  
+
 Ensure you have the following installed in your system:
+
 - Node.js
 - MongoDB (local)
 - npm or yarn  
@@ -131,6 +136,27 @@ Ensure you have the following installed in your system:
     ```
 
     *Note: If you have Nodemon installed, you can run `nodemon app.js` instead.*  
+<br>
+
+
+## AI & LLM Usage  
+
+This project significantly utilized AI assistance in its development.
+Large Language Models (LLMs) like ChatGPT were used to:
+
+- Generate boilerplate code and documentation  
+- Provide debugging suggestions and optimizations  
+- Assist in structuring API endpoints and database queries  
+- Suggest improvements to project architecture and data models  
+- Explain and optimize regular expressions used in search functionality  
+- Troubleshoot JavaScript and MongoDB-related issues  
+- Help with writing and formatting the `README.md`  
+- Improve UI/UX elements in the Handlebars templates  
+- etc.
+
+While AI-assisted, code was sufficiently reviewed, modified, and tested by the development team.
+Notably, the collaboration served as a good learning opportunity for the developers, especially for
+new or confusing programming concepts and syntax.  
 <br>
 
 
