@@ -64,27 +64,25 @@
         <!-- Right: Authentication and User Controls -->
         <ul class="navbar-nav ms-auto align-items-center">
             {{#if isLoggedIn}}
-                <!-- Search Bar -->
+                <!-- User is logged in: Show profile dropdown -->
                 <form class="d-flex me-3" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search users..." aria-label="Search">
                     <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
                 </form>
 
-                <!-- Notification Bell -->
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Notifications">
+                    <a class="nav-link text-light" href="#" data-bs-toggle="tooltip" title="Notifications">
                         <i class="fas fa-bell"></i>
                     </a>
                 </li>
 
-                <!-- Profile Dropdown -->
                 <li class="nav-item dropdown position-relative">
                     <a class="nav-link dropdown-toggle text-light" href="#" id="profileDropdown" data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle fa-2x"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end">
                         <li>
-                            <a href="view-profile" class="dropdown-item d-flex align-items-center text-decoration-none">
+                            <a href="/view-profile" class="dropdown-item d-flex align-items-center">
                                 <img src="/public/img/camellya.jpeg" alt="Profile Picture" class="rounded-circle" width="40" height="40">
                                 <div class="ms-2">
                                     <strong class="d-block" style="color: black;">{{user.name}}</strong>
@@ -93,12 +91,12 @@
                             </a>
                         </li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="privacy-settings.html">Settings</a></li>
+                        <li><a class="dropdown-item" href="/privacy-settings.html">Settings</a></li>
                         <li><a class="dropdown-item" href="/logout">Logout</a></li>
                     </ul>
                 </li>
             {{else}}
-                <!-- Login Button -->
+                <!-- User is NOT logged in: Show Login Button -->
                 <li class="nav-item">
                     <a class="nav-link" href="/api/auth/login">
                         <button type="button" class="btn btn-outline-light me-1">Login</button>
