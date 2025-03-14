@@ -15,8 +15,9 @@
 
     </head>
     <body>
-
-        {{> navbar }}
+    {{#unless pageCSS}}
+            {{> navbar }}
+    {{/unless}}
 
         {{{ body }}}
 
