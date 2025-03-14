@@ -1,12 +1,30 @@
 body {
   font-family: Arial, sans-serif;
-  background: url('/public/img/bg-img.jpg') no-repeat center center/cover;
-  display: block; /* Prevent flex from messing up positioning */
   margin: 0;
   padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: white; /* Keeps the body white */
+}
+
+/* Section containing login elements with the background image */
+.login-section {
+  flex: 1;
+  display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  background: url('/public/img/bg-img.jpg') no-repeat center center/cover;
+  padding: 50px 0;
+}
+
+/* Ensures content expands and pushes the footer to the bottom */
+.content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
 /* Login Box - Floating */
@@ -55,13 +73,22 @@ body {
   background: #ff4a6b;
 }
 
-/* Placeholder Image - Floating */
+/* Image stays properly aligned */
 .computer-picture {
-  width: 450px;
+  max-width: 500px;
   height: auto;
   opacity: 0.9;
   position: absolute;
   top: 50%;
-  right: 20%;
+  right: 15%;
   transform: translate(0, -50%);
+}
+
+/* Footer stays at the bottom */
+.footer {
+  background: white;
+  text-align: center;
+  padding: 15px 0;
+  width: 100%;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
