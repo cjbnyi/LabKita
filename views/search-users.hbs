@@ -1,0 +1,23 @@
+<div class="container mt-4">
+    <h2>Search Results</h2>
+
+    {{#if students.length}}
+        <div class="row">
+            {{#each students}}
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <img src="{{this.profilePicture}}" alt="{{this.firstName}}'s Profile Picture" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                            <h5 class="card-title">{{this.firstName}} {{this.lastName}}</h5>
+                            <p class="card-text text-muted">{{this.college}}</p>
+                            <p class="card-text">{{this.course}}</p>
+                            <a href="/students/{{this.universityID}}" class="btn btn-primary">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    {{else}}
+        <p class="text-muted">No students found matching your search.</p>
+    {{/if}}
+</div>
