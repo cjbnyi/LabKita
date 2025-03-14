@@ -1,4 +1,3 @@
-<body class="d-flex flex-column min-vh-100">
 <section class="content-section flex-grow-1 d-flex flex-column justify-content-center">
     <div class="container mt-3" style="max-width: 600px;">
         <h2 class="mb-4">Reserve Your Slot</h2>
@@ -13,8 +12,8 @@
 
         <!-- Lab Selection -->
         <div class="mb-3">
-            <label for="lab" class="form-label d-block text-start">Choose a Lab:</label>
-            <select id="lab" class="form-select w-100">
+            <label for="room" class="form-label d-block text-start">Choose a Room:</label>
+            <select id="room" class="form-select w-100">
                 <option value="" disabled selected>Select a building first</option>
             </select>
         </div>
@@ -60,87 +59,4 @@
         </div>
     </div>
 </section>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const startTimeSelect = document.getElementById("start-time");
-        const endTimeSelect = document.getElementById("end-time");
-        const buildingSelect = document.getElementById("building");
-        const labSelect = document.getElementById("lab");
-
-        // Placeholder: Simulate loading buildings from a database
-        setTimeout(() => {
-            const buildings = ["Engineering Building", "Science Hall", "Technology Center"];
-            buildings.forEach(building => {
-                const option = new Option(building, building);
-                buildingSelect.appendChild(option);
-            });
-        }, 500);
-
-        // Populate labs based on selected building
-        buildingSelect.addEventListener("change", function () {
-            labSelect.innerHTML = '<option value="" disabled selected>Loading labs...</option>';
-
-            setTimeout(() => {
-                labSelect.innerHTML = '<option value="" disabled selected>Select a lab</option>';
-                const labs = {
-                    "Engineering Building": ["Eng Lab 101", "Eng Lab 202"],
-                    "Science Hall": ["Sci Lab 301", "Sci Lab 402"],
-                    "Technology Center": ["Tech Lab A", "Tech Lab B"]
-                };
-
-                labs[this.value].forEach(lab => {
-                    const option = new Option(lab, lab);
-                    labSelect.appendChild(option);
-                });
-            }, 500);
-        });
-
-        // Generate 30-minute interval time slots from 7 AM to 5 PM
-        function generateTimeSlots() {
-            const timeSlots = [];
-            for (let hour = 7; hour <= 17; hour++) {
-                for (let min of [0, 30]) {
-                    const formattedHour = hour > 12 ? hour - 12 : hour;
-                    const amPm = hour >= 12 ? "PM" : "AM";
-                    const formattedTime = `${formattedHour}:${min === 0 ? "00" : "30"} ${amPm}`;
-                    const value = `${hour}:${min}`;
-                    timeSlots.push({ value, formattedTime });
-                }
-            }
-            return timeSlots;
-        }
-
-        // Populate start time dropdown
-        function populateStartTimes() {
-            const slots = generateTimeSlots();
-            slots.forEach(slot => {
-                const option = new Option(slot.formattedTime, slot.value);
-                startTimeSelect.appendChild(option);
-            });
-        }
-
-        // Update end time dropdown based on selected start time
-        startTimeSelect.addEventListener("change", function () {
-            endTimeSelect.innerHTML = '<option value="" disabled selected>Select end time</option>';
-            const selectedTime = startTimeSelect.value;
-            const slots = generateTimeSlots();
-
-            // Filter end times to be later than selected start time
-            slots.forEach(slot => {
-                if (slot.value > selectedTime) {
-                    const option = new Option(slot.formattedTime, slot.value);
-                    endTimeSelect.appendChild(option);
-                }
-            });
-        });
-
-        populateStartTimes();
-
-        // Placeholder logic for reserve button
-        document.getElementById("reserveButton").addEventListener("click", function () {
-            alert("Reservation logic will be implemented here.");
-        });
-    });
-</script>
-</body>
+<script src="../public/js/reserveSlot.js"></script>
