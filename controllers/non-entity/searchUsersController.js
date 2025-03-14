@@ -1,11 +1,16 @@
-// TODO: Finalize!
-
 import { Student } from '../../database/models/models.js';
 
 const getSearchUsersPage = async (req, res) => {
     try {
-        const students = await Student.model.find();
-        res.render('searchUsers', { students });
+        const query = req.query.name;
+        const students = await Student.model.find({
+            $or: [
+                { firstName: new RegExp(query, "i") },
+                { lastName: new RegExp(query, "i") }
+            ]
+        }).lean();
+        console.log("Search results:", students); // DEBUGGING
+        res.render('search-users', { students });
     } catch (error) {
         res.status(500).json({ error: 'Error loading search users page' });
     }
