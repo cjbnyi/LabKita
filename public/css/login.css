@@ -1,113 +1,67 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f0f0f0;
-    margin: 0;
-  }
-  
-  .container {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-  }
-  
-  /* Left Section */
-  .left {
-    flex: 1;
-    background: #DD2D4A;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
-  
-  .form-container {
-    background: #7b0217;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    width: 300px;
-    color: #fff;
-    text-align: center;
-  }
-  
-  .form-container h1 {
-    margin-bottom: 10px;
-  }
-  
-  .form-container input[type="email"],
-  .form-container input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 5px;
-    outline: none;
-  }
-  
-  .form-container input[type="checkbox"] {
-    margin-right: 10px;
-  }
-  
-  .form-container button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    background: #ff7f94;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .form-container button:hover {
-    background: #ff4a6b;
-  }
-  
-  
-  
-  /* Right Section */
-  .right {
-    flex: 1;
-    background: linear-gradient(135deg, #CBEEF3, #F49CBB);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .right img {
-    width: 250px;
-    height: auto;
-    position: static;
-    left: 50px;
-    opacity: 0.5;
-  }
-  
-  .arrow-container {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 10;
-  }
-  
-  .arrow-container .arrow {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    transition: opacity 0.3s;
-  }
-  
-  .arrow-container .arrow:hover {
-    opacity: 0.7;
-  }
+body {
+  font-family: Arial, sans-serif;
+  background: url('/public/img/bg-img.jpg') no-repeat center center/cover;
+  display: block; /* Prevent flex from messing up positioning */
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Login Box - Floating */
+.form-container {
+  background: rgba(123, 2, 23, 0.95); /* Semi-transparent */
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 400px;
+  color: #fff;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+}
+
+.form-container h1 {
+  margin-bottom: 15px;
+  font-size: 28px;
+}
+
+.form-container input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 5px;
+  background: #ff7f94;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.form-container button:hover {
+  background: #ff4a6b;
+}
+
+/* Placeholder Image - Floating */
+.computer-picture {
+  width: 450px;
+  height: auto;
+  opacity: 0.9;
+  position: absolute;
+  top: 50%;
+  right: 20%;
+  transform: translate(0, -50%);
+}
