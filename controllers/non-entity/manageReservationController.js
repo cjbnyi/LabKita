@@ -43,7 +43,9 @@ const getManageReservations = async (req, res) => {
         const formatReservations = (reservations) =>
             reservations.map((reservation) => ({
                 id: reservation._id.toString(),
-                lab_name: reservation.labID?.name || "N/A",
+                lab_name: reservation.labID 
+                    ? `${reservation.labID.building} ${reservation.labID.room}` 
+                    : "N/A",
                 slots: Array.isArray(reservation.seatIDs) ? reservation.seatIDs.length : 1,
                 start_datetime: new Date(reservation.startDateTime).toLocaleString(),
                 end_datetime: new Date(reservation.endDateTime).toLocaleString(),
