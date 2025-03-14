@@ -32,7 +32,7 @@
                 </a>
             </li>
 
-            {{#if isLoggedIn}}
+            {{!-- {{#if isLoggedIn}} --}}
                 <li class="nav-item text-center me-3">
                     <a class="nav-link text-light" href="/api/manage-reservations">
                         <div class="d-flex flex-column">
@@ -42,14 +42,15 @@
                     </a>
                 </li>
                 <li class="nav-item text-center">
-                    <a class="nav-link text-light" href="/admins">
+                    <a class="nav-link text-light" href="/api/admin/admin-panel">
                         <div class="d-flex flex-column">
                             <i class="fas fa-cogs mb-1"></i>
                             <span class="fs-6">Admin Panel</span>
                         </div>
                     </a>
                 </li>
-            {{else}}
+            
+            {{!-- {{else}}
                 <li class="nav-item text-center me-3">
                     <a class="nav-link text-light" href="/api/manage-reservations/create">
                         <div class="d-flex flex-column">
@@ -58,12 +59,12 @@
                         </div>
                     </a>
                 </li>
-            {{/if}}
+            {{/if}} --}}
         </ul>
 
         <!-- Right: Authentication and User Controls -->
         <ul class="navbar-nav ms-auto align-items-center">
-            {{#if isLoggedIn}}
+            {{!-- {{#if isLoggedIn}} --}}
                 <!-- User is logged in: Show profile dropdown -->
                 <form class="d-flex me-3" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search users..." aria-label="Search">
@@ -82,27 +83,32 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
-                            <a href="/view-profile" class="dropdown-item d-flex align-items-center">
+                            <a href="/api/profile/me" class="dropdown-item d-flex align-items-center">
                                 <img src="/public/img/camellya.jpeg" alt="Profile Picture" class="rounded-circle" width="40" height="40">
                                 <div class="ms-2">
-                                    <strong class="d-block" style="color: black;">{{user.name}}</strong>
-                                    <span style="font-size: 0.85rem; color: grey;">{{user.id}}</span>
+                                    <strong class="d-block" style="color: black;">defaultUser</strong>
+                                    <span style="font-size: 0.85rem; color: grey;">12345678</span>
                                 </div>
                             </a>
                         </li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/privacy-settings.html">Settings</a></li>
-                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                        <li><a class="dropdown-item" href="/api/profile/me/privacy">Settings</a></li>
+                        <li><a class="dropdown-item" href="/">Logout</a></li>
                     </ul>
                 </li>
-            {{else}}
+            {{!-- {{else}} --}}
                 <!-- User is NOT logged in: Show Login Button -->
                 <li class="nav-item">
                     <a class="nav-link" href="/api/auth/login">
                         <button type="button" class="btn btn-outline-light me-1">Login</button>
                     </a>
                 </li>
-            {{/if}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/api/auth/signup">
+                        <button type="button" class="btn btn-outline-light me-1">Signup</button>
+                    </a>
+                </li>
+            {{!-- {{/if}} --}}
         </ul>
     </div>
 </nav>
