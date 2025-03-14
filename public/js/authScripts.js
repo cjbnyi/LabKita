@@ -1,34 +1,57 @@
-document.getElementById('loginForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
-
-    const formData = new FormData(this);
-    const email = formData.get('email');
-    const password = formData.get('password');
-
-    try {
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+export function initializeLogForms() {
+    $(document).ready(function () {
+        $('#loginForm').submit(function (event) {
+            event.preventDefault(); // Prevent default form submission
+        
+            let email = $('input[name="email"]').val();
+            let password = $('input[name="password"]').val();
+        
+            $.ajax({
+                url: '/api/auth/login',
+                method: 'POST', // Ensure it's POST
+                contentType: 'application/json', // Ensures JSON body
+                data: JSON.stringify({ email, password }), // Send data properly
+                success: function (data) {
+                    localStorage.setItem('userType', data.userType);
+                    window.location.href = '/'; // Redirect on success
+                },
+                error: function (xhr) {
+                    let errorMessage = xhr.responseJSON && xhr.responseJSON.error ? xhr.responseJSON.error : 'Invalid credentials';
+                    $('#errorMessage').text(errorMessage).show();
+                }
+            });
         });
 
-        const data = await response.json();
-
-        if (response.ok) {
-            if (data.userType === 'student') {
-                localStorage.setItem('userType', 'student');
-            } else if (data.userType === 'admin') {
-                localStorage.setItem('userType', 'admin');
+        $('#signupForm').submit(function (event) {
+            event.preventDefault(); // Stop page reload
+            
+            let universityID = $('#universityID').val();
+            let email = $('#email').val();
+            let password = $('#password').val();
+            let confirmPassword = $('#confirm-password').val();
+    
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                $('#errorMessage').text('Passwords do not match').show();
+                return;
             }
-
-            alert('Login successful!');
-            window.location.href = '/'; // Change to your actual home page URL
-
-        } else {
-            alert(data.error);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Something went wrong. Please try again.');
-    }
-});
+    
+            // Send AJAX request
+            $.ajax({
+                url: '/api/auth/signup',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ universityID, email, password }),
+                success: function (data) {
+                    console.log("Signup success:", data);
+                    alert('Signup successful! Redirecting to profile...');
+                    window.location.href = '/api/profile/me/update';
+                },
+                error: function (xhr) {
+                    let errorMessage = xhr.responseJSON ? xhr.responseJSON.error : 'Signup failed';
+                    $('#errorMessage').text(errorMessage).show();
+                }
+            });
+        });
+    });
+}

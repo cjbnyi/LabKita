@@ -1,29 +1,26 @@
-
-<body>
-    <div class="container">
+<div class="container">
     <!-- Left Section -->
     <div class="arrow-container">
-      <a href="/">
-        <img src="/public/img/arrow.png" class="arrow">
-      </a>
+        <a href="/">
+            <img src="/public/img/arrow.png" class="arrow">
+        </a>
     </div>
     <div class="left">
-      <div class="form-container">
-        <h1>Login</h1>
-                {{#if error}}
-                    <p class="error">{{error}}</p>
-                {{/if}}
-                <form id="loginForm" action="/api/auth/login" method="POST">
-                    <input type="email" name="email" placeholder="Enter your email" value="{{email}}" required>
-                    <input type="password" name="password" placeholder="Enter your password" required>
-                    <button type="submit">Login</button>
-                </form>
-      </div>
+        <div class="form-container">
+            <h1>Login</h1>
+            <p id="errorMessage" class="error" style="color: red; display: none;"></p>
+
+            <form id="loginForm">
+                <input type="email" name="email" placeholder="Enter your email" required>
+                <input type="password" name="password" placeholder="Enter your password" required>
+                <button type="submit">Login</button>
+                <p id="errorMessage" style="color: red; display: none;"></p>
+            </form>
+        </div>
     </div>
 
     <!-- Right Section -->
     <div class="right">
-      <img class="computer-picture" src="/public/img/computer.png">
+        <img class="computer-picture" src="/public/img/computer.png">
     </div>
-  </div>
-</body>
+</div>
