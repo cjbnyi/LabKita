@@ -1,64 +1,4 @@
-
-
-<script>
-    function applySorting(column, order) {
-        let tbody = document.querySelector("#reservation-table tbody");
-        let rows = Array.from(tbody.querySelectorAll("tr"));
-
-        rows.sort((a, b) => {
-            let valA = a.cells[column === 'start_datetime' ? 3 : column === 'end_datetime' ? 4 : 5].innerText;
-            let valB = b.cells[column === 'start_datetime' ? 3 : column === 'end_datetime' ? 4 : 5].innerText;
-            
-            if (column.includes("datetime")) {
-                valA = new Date(valA);
-                valB = new Date(valB);
-                return order === "earliest" ? valA - valB : valB - valA;
-            } else {
-                return order === "A-Z" ? valA.localeCompare(valB) : valB.localeCompare(valA);
-            }
-        });
-
-        tbody.innerHTML = ""; // Clear existing content
-        rows.forEach(row => tbody.appendChild(row)); // Append sorted rows back
-    }
-</script>
-
-<script>
-    function toggleAllCheckboxes(mainCheckbox, groupSelector) {
-        const checkboxes = document.querySelectorAll(`${groupSelector} input[type=checkbox]`);
-        checkboxes.forEach(cb => {
-            if (cb !== mainCheckbox) cb.checked = mainCheckbox.checked;
-        });
-    }
-
-    function updateAllCheckbox(mainCheckboxId, groupSelector) {
-        const mainCheckbox = document.getElementById(mainCheckboxId);
-        const checkboxes = document.querySelectorAll(`${groupSelector} input[type=checkbox]:not(#${mainCheckboxId})`);
-        mainCheckbox.checked = Array.from(checkboxes).every(cb => cb.checked);
-    }
-
-document.addEventListener("DOMContentLoaded", function () {
-    const tableBody = document.querySelector("#reservation-table tbody");
-
-    tableBody.addEventListener("click", function (event) {
-        const row = event.target.closest("tr");
-
-        if (event.target.classList.contains("delete-btn")) {
-            if (confirm("Are you sure you want to delete this reservation?")) {
-                row.remove(); // Temporarily removes the row from UI
-            }
-        }
-    });
-});
-
-</script>
-
-
-
-
-<body>
-
-    <div class="content-area-admin">
+<div class="content-area-admin">
             <div class="container mt-5">
                 <!-- Filtering Options -->
                 <div class="card p-3 mb-3">
@@ -149,6 +89,11 @@ document.addEventListener("DOMContentLoaded", function () {
             <ul class="nav nav-tabs" id="adminReservationTabs">
                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#all-reservations">All Reservations</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#upcoming-reservations">Upcoming Reservations</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#manage-labs">Manage Labs</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#manage-seats">Manage Seats</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#view-labs-seats">View Labs & Seats</a></li>
+               
+                
             </ul>
 
             <!-- Tab Content -->
@@ -256,114 +201,203 @@ document.addEventListener("DOMContentLoaded", function () {
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Tab Content for Managing Labs -->
+<div class="tab-content mt-3">
+    <div class="tab-pane fade" id="manage-labs">
+    <div class="container mt-4">
+        <h3>Manage Labs</h3>
+        <form id="createLabForm">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="labBuilding" class="form-label">Building</label>
+                    <input type="text" class="form-control" id="labBuilding" name="building" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="labRoom" class="form-label">Room</label>
+                    <input type="text" class="form-control" id="labRoom" name="room" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="labDaysOpen" class="form-label">Days Open</label>
+                    <input type="text" class="form-control" id="labDaysOpen" name="daysOpen" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="labOpeningTime" class="form-label">Opening Time</label>
+                    <input type="time" class="form-control" id="labOpeningTime" name="openingTime" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="labClosingTime" class="form-label">Closing Time</label>
+                    <input type="time" class="form-control" id="labClosingTime" name="closingTime" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="labStatus" class="form-label">Status</label>
+                    <select class="form-select" id="labStatus" name="status">
+                        <option value="Open">Open</option>
+                        <option value="Closed">Closed</option>
+                        <option value="Under Maintenance">Under Maintenance</option>
+                    </select>
+                </div>
             </div>
+            <button type="submit" class="btn btn-primary mt-3">Create Lab</button>
+        </form>
+
+        <hr>
+
+        <h3>Existing Labs</h3>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Building</th>
+                    <th>Room</th>
+                    <th>Days Open</th>
+                    <th>Opening Time</th>
+                    <th>Closing Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each labs}}
+                <tr>
+                    <td>{{this.building}}</td>
+                    <td>{{this.room}}</td>
+                    <td>{{this.daysOpen}}</td>
+                    <td>{{this.openingTime}}</td>
+                    <td>{{this.closingTime}}</td>
+                    <td>{{this.status}}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm">Edit</button>
+                        <button class="btn btn-danger btn-sm delete-lab" data-id="{{this._id}}">Delete</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+    <!-- Tab Content for Managing Seats -->
+    <div class="tab-pane fade" id="manage-seats">
+        <div class="container mt-4">
+            <h3>Manage Seats</h3>
+            <form id="createSeatForm">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="seatLabID" class="form-label">Lab</label>
+                        <select class="form-select" id="seatLabID" name="LabID" required>
+                            {{#each labs}}
+                            <option value="{{this._id}}">{{this.building}} - {{this.room}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="seatNumber" class="form-label">Seat Number</label>
+                        <input type="number" class="form-control" id="seatNumber" name="seatNumber" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="seatStatus" class="form-label">Status</label>
+                        <select class="form-select" id="seatStatus" name="status">
+                            <option value="Available">Available</option>
+                            <option value="Unavailable">Unavailable</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Add Seat</button>
+            </form>
+
+            <hr>
+            <h3>Existing Seats</h3>
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>Lab</th>
+                        <th>Seat Number</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each seats}}
+                    <tr>
+                        <td>{{this.LabID.building}} - {{this.LabID.room}}</td>
+                        <td>{{this.seatNumber}}</td>
+                        <td>{{this.status}}</td>
+                        <td>{{this.createdAt}}</td>
+                        <td>{{this.updatedAt}}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm">Edit</button>
+                            <button class="btn btn-danger btn-sm delete-seat" data-id="{{this._id}}">Delete</button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 
-    <script>
-    function cancelReservation(reservationId) {
-        if (confirm("Are you sure you want to cancel this reservation?")) {
-            fetch('/api/reservations/cancel', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: reservationId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Reservation canceled successfully!");
-                    location.reload(); // Reload page to update UI
-                } else {
-                    alert("Error canceling reservation.");
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Failed to cancel reservation.");
-            });
-        }
-    }
-    </script>
 
-   
-<script>
-    function applyFilters() {
-        const selectedLabs = Array.from(document.querySelectorAll('#filterLab input[type=checkbox]:checked'))
-            .map(cb => cb.value);
-        const selectedStatuses = Array.from(document.querySelectorAll('#filterStatus input[type=checkbox]:checked'))
-            .map(cb => cb.value);
-        let startDate = document.getElementById("filterStartDate").value;
-        let endDate = document.getElementById("filterEndDate").value;
-        const requesterName = document.getElementById("filterRequester").value.trim();
-        const creditedIndividuals = document.getElementById("filterCredited").value.trim();
-        const purpose = document.getElementById("filterPurpose").value.trim();
+    <!-- Tab Content for Viewing Labs & Seats -->
+    <div class="tab-pane fade" id="view-labs-seats">
+        <div class="container mt-4">
+            <h3>Current Labs</h3>
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>Building</th>
+                        <th>Room</th>
+                        <th>Days Open</th>
+                        <th>Opening Time</th>
+                        <th>Closing Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each labs}}
+                    <tr>
+                        <td>{{this.building}}</td>
+                        <td>{{this.room}}</td>
+                        <td>{{this.daysOpen}}</td>
+                        <td>{{this.openingTime}}</td>
+                        <td>{{this.closingTime}}</td>
+                        <td>{{this.status}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <hr>
+            <h3>Current Seats</h3>
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>Lab</th>
+                        <th>Seat Number</th>
+                        <th>Status</th>
+                        <th>Reservations</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each seats}}
+                    <tr>
+                        <td>{{this.LabID.building}} - {{this.LabID.room}}</td>
+                        <td>{{this.seatNumber}}</td>
+                        <td>{{this.status}}</td>
+                        <td>{{this.reservations.length}}</td>
+                        <td>{{this.createdAt}}</td>
+                        <td>{{this.updatedAt}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
 
-        console.log("🔄 Sending Filters to Backend:");
-        console.log("Start Date (Raw):", startDate);
-        console.log("End Date (Raw):", endDate);
-
-        // Determine which tab is active
-        const activeTab = document.querySelector("#adminReservationTabs .nav-link.active").getAttribute("href");
-        const isUpcomingTab = activeTab === "#upcoming-reservations";
-
-        fetch('/api/filter-reservations', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                labs: selectedLabs.length ? selectedLabs : null,
-                statuses: selectedStatuses.length ? selectedStatuses : null,
-                start_date: startDate || null,
-                end_date: endDate || null,
-                requester_name: requesterName || null,
-                credited_individuals: creditedIndividuals || null,
-                purpose: purpose || null,
-                upcoming_only: isUpcomingTab
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            let tableId = isUpcomingTab ? "#upcoming-reservations tbody" : "#reservation-table tbody";
-            const tbody = document.querySelector(tableId);
-            tbody.innerHTML = ""; // Clear previous content
-
-            if (data.reservations.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="10" class="text-center">No reservations found</td></tr>`;
-                return;
-            }
-
-            let rows = data.reservations.map(reservation => `
-                <tr>
-                    <td>${reservation.id}</td>
-                    <td>${reservation.lab_name}</td>
-                    <td>${reservation.slots}</td>
-                    <td>${reservation.start_datetime}</td>
-                    <td>${reservation.end_datetime}</td>
-                    <td>${reservation.requester_name}</td>
-                    <td>${reservation.reservers}</td>
-                    <td>${reservation.purpose}</td>
-                    <td>
-                        <span class="badge ${reservation.status === 'Reserved' ? 'bg-success' : 'bg-danger'}">
-                            ${reservation.status}
-                        </span>
-                    </td>
-                    ${isUpcomingTab ? `
-                    <td>
-                        <a href="/edit-reservations/${reservation.id}">
-                            <button class="btn btn-warning btn-sm">Edit</button>
-                        </a>
-                        <button class="btn btn-danger btn-sm" onclick="cancelReservation('${reservation.id}')">Cancel</button>
-                    </td>` : ''}
-                </tr>
-            `).join('');
-
-            tbody.innerHTML = rows;
-        })
-        .catch(error => {
-            console.error("❌ Error fetching reservations:", error);
-            alert("Failed to filter reservations.");
-        });
-    }
-
-    document.querySelector("#applyFiltersBtn").addEventListener("click", applyFilters);
-</script>
-</body>
+<script src="/public/js/admin.js"></script>
