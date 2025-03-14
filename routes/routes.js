@@ -1,4 +1,3 @@
-import aboutUsRoutes from './aboutUsRoutes.js';
 import adminPanelRoutes from './adminPanelRoutes.js';
 import authRoutes from './authRoutes.js';
 import entityRoutes from './entityRoutes.js';

@@ -8,4 +8,10 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/about', (req, res) => {
+    res.status(200).render('about-us', {
+        title: 'LabKita!'
+    });
+});
+
 export default router;
