@@ -3,9 +3,7 @@ import { manageReservationController } from '../controllers/controllers.js';
 
 const router = express.Router();
 
-router.get('/manage-reservations', (req, res) => {
-    res.render('manage-reservations', { title: "Manage Reservations" });
-});
+router.get('/manage-reservations', manageReservationController.getManageReservations);
 
 router.get('/manage-reservations/edit', manageReservationController.getEditReservationPage);
 
