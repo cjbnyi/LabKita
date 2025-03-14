@@ -9,6 +9,7 @@ import studentController from './entity/studentController.js';
 import adminPanelController from './non-entity/adminPanelController.js';
 import authController from './non-entity/authController.js';
 import manageReservationController from './non-entity/manageReservationController.js';
+import profileController from './non-entity/profileController.js';
 import searchUsersController from './non-entity/searchUsersController.js';
 import viewLabsController from './non-entity/viewLabsController.js';
 
@@ -24,6 +25,7 @@ export {
     adminPanelController,
     authController,
     manageReservationController,
+    profileController,
     searchUsersController,
     viewLabsController
 };
