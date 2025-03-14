@@ -8,11 +8,11 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="/public/css/styles.css">
         <link rel="stylesheet" href="/public/css/index.css">
+        {{#if pageCSS}}
+            <link rel="stylesheet" href="{{pageCSS}}">
+        {{/if}}
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-        {{#if pageCSS}}
-        <link rel="stylesheet" href="{{pageCSS}}">
-        {{/if}}
     </head>
     <body>
         {{#unless pageCSS}}
@@ -21,12 +21,14 @@
 
         {{{ body }}}
 
-        {{#unless pageCSS}}
-        {{> footer }}
-        {{/unless}}
-
         <script type="module" src="/public/js/main.js"></script>
         <script src="https://unpkg.com/@popperjs/core@2"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
+
+    <footer class="mt-auto">
+        {{#unless pageCSS}}
+            {{> footer }}
+        {{/unless}}
+    </footer>
 </html>
