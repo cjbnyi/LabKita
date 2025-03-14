@@ -65,12 +65,13 @@
         <!-- Right: Authentication and User Controls -->
         <ul class="navbar-nav ms-auto align-items-center">
             {{!-- {{#if isLoggedIn}} --}}
-                <!-- User is logged in: Show profile dropdown -->
+                <!-- Search Form -->
                 <form class="d-flex me-3" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search users..." aria-label="Search">
                     <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
                 </form>
-                
+
+                <!-- Profile Dropdown -->
                 <li class="nav-item dropdown position-relative">
                     <a class="nav-link dropdown-toggle text-light" href="#" id="profileDropdown" data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle fa-2x"></i>
@@ -106,3 +107,4 @@
         </ul>
     </div>
 </nav>
+<script type="module" src="/public/js/searchUsersScripts.js"></script>
