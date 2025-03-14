@@ -2,7 +2,7 @@
 
 ## 🛠 GENERAL (Both)
 - [x] **Set up project repository** on GitHub and initialize it with a README  
-- [ ] **Include project setup & run instructions** in `README.md`  
+- [x] **Include project setup & run instructions** in `README.md`  
 - [x] **Set up folder structure** (`models/`, `views/`, `routes/`, `controllers/`, etc.)  
 - [x] **Install required dependencies** (Express, Handlebars, Mongoose, dotenv, etc.)  
 - [x] **Configure environment variables** (`.env` for database URI, port, etc.)  
@@ -17,12 +17,12 @@
 
 ### 🛠 Server & Routing
 - [x] **Set up Express server** and listen on `localhost:3000`  
-- [ ] **Implement routes** in the `routes/` folder (e.g., `routes/index.routes.js`, `routes/user.routes.js`)  
+- [x] **Implement routes** in the `routes/` folder (e.g., `routes/index.routes.js`, `routes/user.routes.js`)  
 - [x] **Connect the server to MongoDB using Mongoose**  
 - [x] **Implement controller logic for CRUD operations** in `controllers/`  
-- [ ] **Ensure that all forms use the appropriate HTTP methods** (e.g., POST for logins, GET for searches)  
+- [x] **Ensure that all forms use the appropriate HTTP methods** (e.g., POST for logins, GET for searches)  
 - [x] **Implement redirects for incorrect URLs (404 page)**  
-- [ ] **Ensure that pages and features load data dynamically from MongoDB**  
+- [x] **Ensure that pages and features load data dynamically from MongoDB**  
 
 ---
 
@@ -38,7 +38,7 @@
 
 ## 🚀 FINALIZATION & SUBMISSION (Both)
 - [ ] **Test all routes & functionality** (ensure correct data retrieval)  
-- [ ] **Ensure app runs on `localhost:3000` without errors**  
+- [x] **Ensure app runs on `localhost:3000` without errors**  
 - [ ] **Prepare & test zip file for submission** (`CCAPDEV-Phase2-Group<#>.zip`)  
 - [ ] **Include the GitHub repo link in submission comments**  
 - [ ] **Perform a final review of the code, docs, and folder structure**  
