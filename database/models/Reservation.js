@@ -33,7 +33,7 @@ export default class Reservation {
     static async createReservation(reservationData) {
         try {
             const newReservation = new this.model(reservationData);
-            await newReservation.save();
+            await newReservation.save({ validateBeforeSave: false });
             return newReservation.toObject();
         } catch (error) {
             console.error("Error creating Reservation document:", error);

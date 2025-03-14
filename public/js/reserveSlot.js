@@ -1,5 +1,3 @@
-// TODO: Finalize.
-
 document.addEventListener("DOMContentLoaded", function () {
     const buildingSelect = document.getElementById("building");
     const roomSelect = document.getElementById("room");
@@ -7,110 +5,137 @@ document.addEventListener("DOMContentLoaded", function () {
     const startTimeSelect = document.getElementById("start-time");
     const endTimeSelect = document.getElementById("end-time");
     const seatSelect = document.getElementById("seat");
-    
-    // Fetch and populate buildings
-    fetch("/api/buildings")
-        .then(response => response.json())
-        .then(buildings => {
-            buildingSelect.innerHTML = '<option value="" disabled selected>Select a building</option>';
-            buildings.forEach(building => {
-                const option = new Option(building.name, building._id);
-                buildingSelect.appendChild(option);
-            });
-        });
-    
-    // Fetch and populate rooms based on selected building
+    const anonymousCheck = document.getElementById("anonymous");
+    const reserveButton = document.getElementById("reserveButton");
+
+    let labs = window.labsData || [];
+    console.log("Labs data loaded:", labs);
+
+    // Load buildings
+    const buildings = [...new Set(labs.map(lab => lab.building))];
+    buildingSelect.innerHTML = '<option value="" disabled selected>Select a building</option>';
+    buildings.forEach(building => {
+        const option = document.createElement("option");
+        option.value = building;
+        option.textContent = building;
+        buildingSelect.appendChild(option);
+    });
+
+    // Load rooms based on selected building
     buildingSelect.addEventListener("change", function () {
-        const buildingId = this.value;
-        roomSelect.innerHTML = '<option value="" disabled selected>Loading rooms...</option>';
-        
-        fetch(`/api/rooms?buildingId=${buildingId}`)
-            .then(response => response.json())
-            .then(rooms => {
-                roomSelect.innerHTML = '<option value="" disabled selected>Select a room</option>';
-                rooms.forEach(room => {
-                    const option = new Option(room.name, room._id);
-                    roomSelect.appendChild(option);
-                });
+        const selectedBuilding = this.value;
+        roomSelect.innerHTML = '<option value="" disabled selected>Select a room</option>';
+        roomSelect.disabled = !selectedBuilding;
+
+        if (selectedBuilding) {
+            const rooms = labs.filter(lab => lab.building === selectedBuilding);
+            rooms.forEach(lab => {
+                const option = document.createElement("option");
+                option.value = lab.room;
+                option.textContent = lab.room;
+                roomSelect.appendChild(option);
             });
+        }
     });
 
-    // Generate 30-minute interval time slots from start to end time
-    function generateTimeSlots(startHour, endHour) {
-        const timeSlots = [];
-        for (let hour = startHour; hour < endHour; hour++) {
-            for (let min of [0, 30]) {
-                const formattedHour = hour > 12 ? hour - 12 : hour;
-                const amPm = hour >= 12 ? "PM" : "AM";
-                const formattedTime = `${formattedHour}:${min === 0 ? "00" : "30"} ${amPm}`;
-                const value = `${hour}:${min}`;
-                timeSlots.push({ value, formattedTime });
-            }
+    // Load seats and time slots when room is selected
+    roomSelect.addEventListener("change", function () {
+        const selectedRoom = this.value;
+        const selectedLab = labs.find(lab => lab.room === selectedRoom);
+        if (selectedLab) {
+            populateTimeSlots(selectedLab.openingTime, selectedLab.closingTime);
+            populateSeats(selectedLab.seatIds);
         }
-        return timeSlots;
-    }
-    
-    // Fetch available time slots based on building, room, and date
-    function fetchTimeSlots() {
-        const buildingId = buildingSelect.value;
-        const roomId = roomSelect.value;
-        const date = dateInput.value;
-        
-        if (buildingId && roomId && date) {
-            fetch(`/api/time-slots?buildingId=${buildingId}&roomId=${roomId}&date=${date}`)
-                .then(response => response.json())
-                .then(timeSlots => {
-                    startTimeSelect.innerHTML = '<option value="" disabled selected>Select start time</option>';
-                    timeSlots.forEach(slot => {
-                        const option = new Option(slot.formattedTime, slot.value);
-                        startTimeSelect.appendChild(option);
-                    });
-                });
-        }
-    }
-    
-    roomSelect.addEventListener("change", fetchTimeSlots);
-    dateInput.addEventListener("change", fetchTimeSlots);
-    
-    // Update end time options based on selected start time
-    startTimeSelect.addEventListener("change", function () {
-        endTimeSelect.innerHTML = '<option value="" disabled selected>Select end time</option>';
-        const selectedTime = startTimeSelect.value;
-        const slots = generateTimeSlots(parseInt(selectedTime.split(":")[0]), 18);
+    });
 
-        slots.forEach(slot => {
-            if (slot.value > selectedTime) {
-                const option = new Option(slot.formattedTime, slot.value);
-                endTimeSelect.appendChild(option);
-            }
+    function populateSeats(seats) {
+        seatSelect.innerHTML = '<option value="" disabled selected>Select an available seat</option>';
+        seats.forEach(seat => {
+            const option = document.createElement("option");
+            option.value = seat._id; // Use MongoDB ObjectId, not seatNumber
+            option.textContent = `${seat.seatNumber}`;
+            seatSelect.appendChild(option);
         });
-    });
-    
-    // Fetch and populate available seats
-    function fetchSeats() {
-        const buildingId = buildingSelect.value;
-        const roomId = roomSelect.value;
-        const date = dateInput.value;
-        const startTime = startTimeSelect.value;
-        const endTime = endTimeSelect.value;
-        
-        if (buildingId && roomId && date && startTime && endTime) {
-            fetch(`/api/seats?buildingId=${buildingId}&roomId=${roomId}&date=${date}&startTime=${startTime}&endTime=${endTime}`)
-                .then(response => response.json())
-                .then(seats => {
-                    seatSelect.innerHTML = '<option value="" disabled selected>Select an available seat</option>';
-                    seats.forEach(seat => {
-                        const option = new Option(`Seat ${seat.number}`, seat._id);
-                        seatSelect.appendChild(option);
-                    });
-                });
+    }
+
+    function populateTimeSlots(startTime, endTime) {
+        startTimeSelect.innerHTML = '<option value="" disabled selected>Select a start time</option>';
+        endTimeSelect.innerHTML = '<option value="" disabled selected>Select an end time</option>';
+
+        let startHour = parseInt(startTime.split(":")[0]);
+        let endHour = parseInt(endTime.split(":")[0]);
+
+        for (let hour = startHour; hour < endHour; hour++) {
+            let timeString = `${String(hour).padStart(2, "0")}:00`;
+            startTimeSelect.appendChild(new Option(timeString, timeString));
         }
     }
-    
-    endTimeSelect.addEventListener("change", fetchSeats);
-    
-    // Placeholder reservation logic
-    document.getElementById("reserveButton").addEventListener("click", function () {
-        alert("Reservation logic will be implemented here.");
+
+    startTimeSelect.addEventListener("change", function () {
+        const selectedStartTime = this.value;
+        endTimeSelect.innerHTML = '<option value="" disabled selected>Select an end time</option>';
+        let startHour = parseInt(selectedStartTime.split(":")[0]);
+
+        for (let hour = startHour + 1; hour <= 22; hour++) {
+            let timeString = `${String(hour).padStart(2, "0")}:00`;
+            endTimeSelect.appendChild(new Option(timeString, timeString));
+        }
+    });
+
+    reserveButton.addEventListener("click", function () {
+        const selectedRoom = roomSelect.value;
+        const selectedLab = labs.find(lab => lab.room === selectedRoom);
+        const selectedSeatId = seatSelect.value;
+
+        if (!selectedLab || !selectedSeatId) {
+            alert("Please select a seat.");
+            return;
+        }
+
+        // Convert date and time to JavaScript Date object
+        const selectedDate = dateInput.value; // YYYY-MM-DD
+        const startTime = startTimeSelect.value; // HH:MM
+        const endTime = endTimeSelect.value; // HH:MM
+
+        if (!selectedDate || !startTime || !endTime) {
+            alert("Please select a valid date and time.");
+            return;
+        }
+
+        const startDateTime = new Date(`${selectedDate}T${startTime}:00.000Z`);
+        const endDateTime = new Date(`${selectedDate}T${endTime}:00.000Z`);
+
+        const reservationData = {
+            labID: selectedLab._id, // Pass the correct lab ID
+            seatIDs: [selectedSeatId], // Send as an array
+            startDateTime: startDateTime,
+            endDateTime: endDateTime,
+            requestingStudentID: "", // Replace with the actual student ID
+            creditedStudentIDs: [], // Optional
+            purpose: "Lab reservation", // Optional, adjust as needed
+            status: "Reserved",
+            isAnonymous: anonymousCheck.checked,
+        };
+
+        console.log("Reservation data to be sent:", reservationData);
+
+        fetch(`/api/reservations`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(reservationData),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Server response:", data);
+            alert("Reservation successful!");
+        })
+        .catch(error => {
+            console.error("Error making reservation:", error);
+        });
     });
 });
