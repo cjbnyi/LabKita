@@ -27,25 +27,18 @@
 ---
 
 ## 🎨 FRONTEND TASKS (Views & Navigation)
-- [ ] **Create Handlebars layout (`main.hbs`)** for a consistent structure  
-- [ ] **Implement necessary partials** (e.g., `header.hbs`, `footer.hbs`, `navbar.hbs`)  
-- [ ] **Develop all required views (`index.hbs`, `about.hbs`, etc.)**  
-- [ ] **Ensure all views are navigable via buttons/links**  
-- [ ] **Style all views using CSS** (or a framework like Bootstrap, Tailwind)  
-- [ ] **Make sure UI elements align with backend functionality**  
+- [x] **Create Handlebars layout (`main.hbs`)** for a consistent structure  
+- [x] **Implement necessary partials** (e.g., `header.hbs`, `footer.hbs`, `navbar.hbs`)  
+- [x] **Develop all required views (`index.hbs`, `about.hbs`, etc.)**  
+- [x] **Ensure all views are navigable via buttons/links**  
+- [x] **Style all views using CSS** (or a framework like Bootstrap, Tailwind)  
+- [x] **Make sure UI elements align with backend functionality**  
 
 ---
 
 ## 🚀 FINALIZATION & SUBMISSION (Both)
-- [ ] **Test all routes & functionality** (ensure correct data retrieval)  
+- [x] **Test all routes & functionality** (ensure correct data retrieval)  
 - [x] **Ensure app runs on `localhost:3000` without errors**  
-- [ ] **Prepare & test zip file for submission** (`CCAPDEV-Phase2-Group<#>.zip`)  
-- [ ] **Include the GitHub repo link in submission comments**  
-- [ ] **Perform a final review of the code, docs, and folder structure**  
-
----
-
-### 📌 Optional Enhancements (Future Work)
-- [ ] Implement form validation  
-- [ ] Add session management & authentication  
-- [ ] Improve UI/UX with animations or better styling  
+- [x] **Prepare & test zip file for submission** (`CCAPDEV-Phase2-Group<#>.zip`)  
+- [x] **Include the GitHub repo link in submission comments**  
+- [x] **Perform a final review of the code, docs, and folder structure**  
