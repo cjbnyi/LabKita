@@ -81,7 +81,7 @@ app.use('/api', viewLabsRoutes);
 
 // 404 error handler
 app.use((req, res) => {
-    res.status(404).send('Page not found :(');
+    res.status(404).render('errors/page-dne', { title: 'Page Not Found | LabKita!' });
 });
 
 // Global error handler
