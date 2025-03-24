@@ -1,25 +1,36 @@
+import bcrypt from 'bcryptjs';
 import { Schema, model } from 'mongoose';
 
 const StudentSchema = new Schema({
-    universityID: { type: String, required: true, unique: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    universityID: { type: String, required: true, unique: true, trim: true, index: true},
+    firstName: { type: String, required: true, trim: true },
+    lastName: { type: String, required: true, trim: true },
+    email: { 
+        type: String, 
+        required: true, 
+        unique: true, 
+        trim: true, 
+        lowercase: true,
+        immutable: true,
+        index: true,
+        match: [/^[a-zA-Z0-9._%+-]+@dlsu\.edu\.ph$/, 'Email must be a valid DLSU email (e.g., example@dlsu.edu.ph).']
+    },
+    password: { type: String, required: true, select: false },
     role: { type: String, enum: ['student'], default: 'student' },
     profilePicture: { type: String, default: '../../public/img/default-profile.png' },
     college: { type: String },
     course: { type: String },
     bio: { type: String },
-    reservationList: [{ type: Schema.Types.ObjectId, ref: 'Reservation' }],
-    status: { type: String, enum: ['Active', 'Inactive'], default: 'Active' },
-    lastLoginAt: { type: Date },
-    rememberToken: { type: String },
-    rememberTokenExpiresAt: { type: Date },
-    is2FAEnabled: { type: Boolean, default: false },
-    twoFACode: { type: String },
-    twoFACodeExpiresAt: { type: Date },
 }, { timestamps: true });
+
+// Ensure passwords are hashed before saving
+StudentSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
+    if (!this.password.startsWith('$2a$')) { // Prevent double hashing
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+});
 
 export default class Student {
     static model = model('Student', StudentSchema);
@@ -27,36 +38,39 @@ export default class Student {
     static async getStudents(filter = {}) {
         try {
             return await this.model.find(filter)
-                .populate("reservationList")
                 .sort({ lastName: 1, firstName: 1 })
                 .lean();
         } catch (error) {
             console.error("Error fetching Student documents:", error);
-            throw new Error('Error fetching students');
+            throw new Error(`Error fetching students: ${error.message}`);
         }
     }
 
     static async createStudent(studentData) {
         try {
-            const newStudent = new this.model(studentData);
-            await newStudent.save();
+            const newStudent = await this.model.create(studentData);
             return newStudent.toObject();
         } catch (error) {
             console.error("Error creating Student document:", error);
-            throw new Error('Error creating student');
+            throw new Error(`Error creating student: ${error.message}`);
         }
     }
 
     static async updateStudent(id, studentData) {
         try {
-            const student = await this.model.findByIdAndUpdate(id, studentData, { new: true });
+            if (studentData.password && !studentData.password.startsWith('$2a$')) {
+                studentData.password = await bcrypt.hash(studentData.password, 10);
+            } else {
+                delete studentData.password; // Prevent overwriting with undefined
+            }
+            const student = await this.model.findByIdAndUpdate(id, studentData, { new: true, runValidators: true });
             if (!student) throw new Error('Student not found');
             return student.toObject();
         } catch (error) {
             console.error("Error updating Student document by id:", error);
-            throw new Error('Error updating student');
+            throw new Error(`Error updating student: ${error.message}`);
         }
-    }
+    }    
 
     static async deleteStudent(id) {
         try {
@@ -65,7 +79,7 @@ export default class Student {
             return student.toObject();
         } catch (error) {
             console.error("Error deleting Student document by id:", error);
-            throw new Error('Error deleting student');
+            throw new Error(`Error deleting student: ${error.message}`);
         }
     }
 }

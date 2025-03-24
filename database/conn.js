@@ -1,10 +1,19 @@
 import mongoose from 'mongoose';
+import { Lab } from '../database/models/models.js';
 
 const mongoDbURI = process.env.MONGODB_URI;
 if (!mongoDbURI) {
     console.error("MONGO_URI is not defined in .env");
     process.exit(1);
 }
+
+/**
+ * Helper function that syncs schema indexes.
+ */
+const syncIndexes = async () => {
+    await Lab.model.syncIndexes();
+    console.log('Indexes synced');
+};
 
 /**
  * Connects to MongoDB using Mongoose.
@@ -17,6 +26,7 @@ export async function connectToMongo() {
     
     try {
         await mongoose.connect(mongoDbURI);
+        await syncIndexes();
         console.log("Successfully connected to MongoDB.");
     } catch (error) {
         console.error("MongoDB connection error:", error);

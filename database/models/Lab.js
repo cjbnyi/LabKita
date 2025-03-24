@@ -3,12 +3,31 @@ import { Schema, model } from 'mongoose';
 const LabSchema = new Schema({
     building: { type: String, required: true },
     room: { type: String, required: true },
-    seatIds: [{ type: Schema.Types.ObjectId, ref: 'Seat' }],
-    daysOpen: [{ type: String, required: true }],
-    openingTime: { type: String, required: true },
-    closingTime: { type: String, required: true },
+    daysOpen: [{
+        type: String,
+        enum: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        required: true
+    }],
+    openingTime: { type: Date, required: true },
+    closingTime: { 
+        type: Date, 
+        required: true,
+        validate: {
+            validator: function (value) {
+                return value > this.openingTime;
+            },
+            message: 'Closing time must be later than opening time.'
+        }
+    },
     status: { type: String, enum: ['Open', 'Closed', 'Under Maintenance'], default: 'Open' },
 }, { timestamps: true });
+
+// Enforce unique days in the daysOpen array
+LabSchema.path('daysOpen').validate(function (value) {
+    return Array.isArray(value) && new Set(value).size === value.length;
+}, 'Days open must have unique values.');
+
+LabSchema.index({ building: 1, room: 1 }, { unique: true });
 
 export default class Lab {
     static model = model('Lab', LabSchema);
@@ -16,23 +35,21 @@ export default class Lab {
     static async getLabs(filter = {}) {
         try {
             return await this.model.find(filter)
-                .populate("seatIds")
                 .sort({ building: 1, room: 1 })
                 .lean();
         } catch (error) {
             console.error("Error fetching Lab documents:", error);
-            throw new Error('Error fetching labs');
+            throw new Error(`Error fetching labs: ${error.message}`);
         }
     }
 
     static async createLab(labData) {
         try {
-            const newLab = new this.model(labData);
-            await newLab.save();
+            const newLab = await this.model.create(labData);
             return newLab.toObject();
         } catch (error) {
             console.error("Error creating Lab document:", error);
-            throw new Error('Error creating lab');
+            throw new Error(`Error creating lab: ${error.message}`);
         }
     }
 
@@ -43,7 +60,7 @@ export default class Lab {
             return lab.toObject();
         } catch (error) {
             console.error("Error updating Lab document by id:", error);
-            throw new Error('Error updating lab');
+            throw new Error(`Error updating lab: ${error.message}`);
         }
     }
 
@@ -54,7 +71,7 @@ export default class Lab {
             return lab.toObject();
         } catch (error) {
             console.error("Error deleting Lab document by id:", error);
-            throw new Error('Error deleting lab');
+            throw new Error(`Error deleting lab: ${error.message}`);
         }
     }
 }
