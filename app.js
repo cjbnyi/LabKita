@@ -1,7 +1,10 @@
+import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 import express from 'express';
 import { create } from 'express-handlebars';
+import rateLimit from 'express-rate-limit';
 import fs from 'fs';
+import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
 import { dirname } from 'path';
@@ -29,12 +32,28 @@ import {
 // Run jobs
 updateExpiredReservations();
 
-// Obtain __filename and __dirname in ES6 standard
+// Obtain __filename and __dirname in ES6
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Configure rate limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: "Too many requests from this IP, please try again later.",
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
 // Create an Express application
 const app = express();
+
+// Enhance security
+app.use(limiter);
+app.use(helmet());
+
+// Enable cookie reading
+app.use(cookieParser());
 
 // Request logging (writes to access.log)
 const accessLogStream = fs.createWriteStream(path.join(process.cwd(), 'access.log'), { flags: 'a' });
