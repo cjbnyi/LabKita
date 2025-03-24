@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { Admin, Student } from '../database/models/models.js';
 
 export async function getUserByEmail(email) {
