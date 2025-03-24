@@ -18,7 +18,7 @@
 
 ### 🛠 Server & Routing (Express.js)
 - [x] **Set up Express server** and ensure it's running.  
-- [ ] **Implement API routes for each feature.**  
+- [x] **Implement API routes for each feature.**  
 - [x] **Connect server to database and verify CRUD operations.**  
 - [x] **Implement periodic updates for seat availability.**  
 - [x] **Ensure proper HTTP methods are used (GET, POST, PUT, DELETE).**  
@@ -57,12 +57,3 @@
 - [ ] **Test deployment for bugs and security issues.**  
 - [ ] **Ensure project documentation is up to date (`README.md`, deployment guide).**  
 - [ ] **Prepare and submit final project deliverables.**  
-
----
-
-## 📌 Optional Enhancements (Future Work)
-- [ ] Implement a notification system for reservation reminders.  
-- [ ] Enhance UI with animations and better UX.  
-- [ ] Add analytics dashboard for lab usage statistics.  
-- [ ] Implement two-factor authentication (2FA).  
-- [ ] Improve accessibility for better usability.  
