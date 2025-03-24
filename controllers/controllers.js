@@ -8,6 +8,7 @@ import studentController from './entity/studentController.js';
 // non-entity controllers
 import adminPanelController from './non-entity/adminPanelController.js';
 import authController from './non-entity/authController.js';
+import homepageController from './non-entity/homepageController.js';
 import manageReservationController from './non-entity/manageReservationController.js';
 import profileController from './non-entity/profileController.js';
 import searchUsersController from './non-entity/searchUsersController.js';
@@ -24,6 +25,7 @@ export {
     // non-entity controllers
     adminPanelController,
     authController,
+    homepageController,
     manageReservationController,
     profileController,
     searchUsersController,

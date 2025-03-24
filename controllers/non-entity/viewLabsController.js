@@ -1,20 +1,25 @@
-// TODO: Finalize!
-
-import { Lab, Reservation, Seat } from '../../database/models/models.js';
+import {
+    Seat
+} from '../../database/models/models.js';
 
 const getViewLabsPage = async (req, res) => {
     try {
-        const labs = await Lab.find();
-        const reservations = await Reservation.find();
-        res.render('viewLabs', { labs, reservations });
+        const response = await fetch('http://localhost:3000/api/labs');
+        const labs = await response.json();
+        const buildings = [...new Set(labs.map(lab => lab.building))];
+
+        res.render('view-labs', { title: "View Labs", labs, buildings });
     } catch (error) {
         res.status(500).json({ error: 'Error loading view labs page' });
     }
 };
 
-const getAvailableSeatsForm = (req, res) => {
+const getAvailableSeatsForm = async (req, res) => {
     try {
-        res.render('availableSeatsForm');
+        const response = await fetch('http://localhost:3000/api/labs');
+        const labs = await response.json();
+
+        res.render('view-seats', { title: "View Labs", labs });
     } catch (error) {
         res.status(500).json({ error: 'Error loading available seats form' });
     }

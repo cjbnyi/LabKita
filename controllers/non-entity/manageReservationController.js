@@ -1,4 +1,5 @@
 import { Reservation } from '../../database/models/models.js';
+import { formatDate } from '../../utils/generalUtils.js';
 
 const getEditReservationPage = async (req, res) => {
     try {
@@ -71,16 +72,23 @@ const getEditReservationPage = async (req, res) => {
     }
 };
 
-const getCreateReservationPage = (req, res) => {
+const renderCreateReservation = async (req, res) => {
     try {
-        res.render('createReservation');
+        const response = await fetch('http://localhost:3000/api/labs');
+        const labs = await response.json();
+
+        res.render('reserve-slot', { 
+            title: "Reserve Slot",
+            labsData: JSON.stringify(labs)
+        });
     } catch (error) {
-        res.status(500).json({ error: 'Error loading create reservation page' });
+        console.error("Error fetching labs:", error);
+        res.render('reserve-slot', { 
+            title: "Reserve Slot",
+            labsData: "[]"
+        });
     }
 };
-
-// Helper function for date formatting
-const formatDate = (date) => new Date(date).toLocaleString(); 
 
 const getManageReservations = async (req, res) => {
     try {
@@ -131,6 +139,6 @@ const getManageReservations = async (req, res) => {
 
 export default {
     getEditReservationPage,
-    getCreateReservationPage,
+    renderCreateReservation,
     getManageReservations
 };

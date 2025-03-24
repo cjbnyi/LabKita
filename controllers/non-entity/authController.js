@@ -1,32 +1,41 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import { getUserByEmail } from '../../utils/userUtils.js';
 import Student from '../../database/models/Student.js'
 
-/* =============================== */
-/* SIGN-UP */
-/* =============================== */
+import {
+    generateAccessToken,
+    generateRefreshToken,
+    refreshAccessToken
+} from '../../utils/tokenUtils.js';
+
+const renderSignup = (req, res) => {
+    res.status(200).render('register', { 
+        title: "Signup to LabKita!",
+        pageCSS: "/public/css/register.css"
+    })
+}
+
 const signup = async (req, res) => {
-    const {universityID, email, password } = req.body;
+    const { universityID, email, password } = req.body;
 
     try {
         // Check if the user already exists
-        const existingUser = await Student.model.findOne({ email });
+        const existingUser = await Student.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ error: 'Email already in use' });
         }
 
         // Check if universityID is already taken
-        const existingID = await Student.model.findOne({ universityID });
-        if (existingID) {
+        const existingID = await Student.findOne({ universityID });
+        if (existingID){
             return res.status(400).json({ error: 'Student ID already in use' });
         }
 
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Use createStudent function to insert the student
-        const newStudent = await Student.createStudent({
+        // Create new student
+        const newStudent = await Student.create({
             universityID,
             email,
             password: hashedPassword,
@@ -37,16 +46,32 @@ const signup = async (req, res) => {
             bio: 'gesic'
         });
 
-        res.status(201).json(newStudent);
+        // Generate tokens
+        const accessToken = generateAccessToken(newStudent);
+        const refreshToken = generateRefreshToken(newStudent);
+
+        // Store refresh token in an httpOnly cookie
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+            maxAge: 21 * 24 * 60 * 60 * 1000 // 21 days
+        });
+
+        res.status(201).json({ accessToken, message: 'User registered successfully' });
     } catch (error) {
         console.error('Signup error:', error);
         res.status(500).json({ error: 'Error registering user', details: error.message });
     }
 };
 
-/* =============================== */
-/* LOGIN */
-/* =============================== */
+const renderLogin = (req, res) => {
+    res.status(200).render('login', { 
+        title: "Login to LabKita!",
+        pageCSS: "/public/css/login.css"
+    })
+}
+
 const login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -65,42 +90,47 @@ const login = async (req, res) => {
             return res.status(400).json({ error: 'Invalid credentials' });
         }
 
-        // Return success response
-        return res.status(200).json({ message: "Login successful!", userType: user.role });
+        // Generate tokens
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+
+        // Store refresh token in an httpOnly cookie
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+            maxAge: 21 * 24 * 60 * 60 * 1000 // 21 days
+        });
+
+        return res.status(200).json({ accessToken, userType: user.role, message: "Login successful!" });
     } catch (error) {
         console.error("Login Error:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 };
 
-/* =============================== */
-/* LOGOUT */
-/* =============================== */
 const logout = async (req, res) => {
     try {
-        const { email } = req.body;
-        
-        // Check if the user exists
-        const { user } = await getUserByEmail(email);
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-        
-        // Clear the remember token
-        if (user.rememberToken) {
-            user.rememberToken = null;
-            user.rememberTokenExpiresAt = null;
-            await user.save();
-        }
-        
+        res.clearCookie('refreshToken');
         res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {
         res.status(500).json({ error: 'Error logging out' });
     }
 };
 
+const refreshToken = async (req, res) => {
+    try {
+        refreshAccessToken(req, res);
+    } catch (error) {
+        res.status(500).json({ error: 'Error refreshing token' });
+    }
+};
+
 export default {
+    renderSignup,
     signup,
+    renderLogin,
     login,
-    logout
+    logout,
+    refreshToken
 };

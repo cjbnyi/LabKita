@@ -1,8 +1,19 @@
-import Student from "../../database/models/Student.js";
-import Reservation from "../../database/models/Reservation.js";
+import { Reservation } from '../../database/models/models.js';
 import { getStudentByID } from "../../utils/userUtils.js";
 
-const showProfile = async(req,res) => {
+const renderViewProfile = (req, res) => {
+    res.status(200).render('view-profile', { title : "Profile" });
+}
+
+const renderEditProfile = (req, res) => {
+    res.status(200).render('edit-profile', { title : "Edit Profile" });
+}
+
+const renderPrivacySettings = (req, res) => {
+    res.status(200).render('privacy-settings', { title : "Privacy Settings" });
+}
+
+const showProfile = async (req, res) => {
     try {
         const { universityId } = req.params;
         
@@ -42,5 +53,8 @@ const showProfile = async(req,res) => {
 }
 
 export default {
+    renderViewProfile,
+    renderEditProfile,
+    renderPrivacySettings,
     showProfile
 };
