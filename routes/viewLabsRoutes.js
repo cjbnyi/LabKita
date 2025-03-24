@@ -1,29 +1,35 @@
 import express from 'express';
+
 import {
-    labController,
     seatController,
     viewLabsController
 } from '../controllers/controllers.js';
 
+import {
+    checkValidation
+} from '../middleware/validationMiddleware.js';
+
 const router = express.Router();
 
-router.get('/view-labs', async (req, res) => {
-    const response = await fetch('http://localhost:3000/api/labs');
-    const labs = await response.json();
-    const buildings = [...new Set(labs.map(lab => lab.building))];
+router.get('/view-labs',
+    checkValidation,
+    viewLabsController.getViewLabsPage
+);
 
-    res.render('view-labs', { title: "View Labs", labs, buildings });
-});
+router.get('/view-labs/form',
+    checkValidation,
+    viewLabsController.getAvailableSeatsForm
+);
 
-router.get('/view-labs/form', async (req, res) => {
-    const response = await fetch('http://localhost:3000/api/labs');
-    const labs = await response.json();
+router.post('/view-labs/form',
+    checkValidation,
+    seatController.getSeats
+);
 
-    res.render('view-seats', { title: "View Labs", labs });
-});
-
-router.post('/view-labs/form', seatController.getSeats);
-
-router.get('/view-labs/available-seats', viewLabsController.getAvailableSeatsPage);
+// TODO: Is this still a valid route?
+router.get('/view-labs/available-seats',
+    checkValidation,
+    viewLabsController.getAvailableSeatsPage
+);
 
 export default router;

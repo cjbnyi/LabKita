@@ -10,7 +10,7 @@ export const checkValidation = (req, res, next) => {
             errors: errors.array()
         });
     }
-    next(); // Continue to the next middleware/controller
+    next();
 };
 
 // Validate Mongo Id
