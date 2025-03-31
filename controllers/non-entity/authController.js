@@ -27,13 +27,14 @@ const signup = async (req, res) => {
 
         // Check if universityID is already taken
         const existingID = await Student.findOne({ universityID });
-        if (existingID){
+        if (existingID) {
             return res.status(400).json({ error: 'Student ID already in use' });
         }
 
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // TODO: Actualize this.
         // Create new student
         const newStudent = await Student.create({
             universityID,
@@ -50,6 +51,14 @@ const signup = async (req, res) => {
         const accessToken = generateAccessToken(newStudent);
         const refreshToken = generateRefreshToken(newStudent);
 
+        // Store access token in an httpOnly cookie
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+            maxAge: 15 * 60 * 1000 // 15 minutes
+        });
+
         // Store refresh token in an httpOnly cookie
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
@@ -58,7 +67,7 @@ const signup = async (req, res) => {
             maxAge: 21 * 24 * 60 * 60 * 1000 // 21 days
         });
 
-        res.status(201).json({ accessToken, message: 'User registered successfully' });
+        res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
         console.error('Signup error:', error);
         res.status(500).json({ error: 'Error registering user', details: error.message });
@@ -94,6 +103,14 @@ const login = async (req, res) => {
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
 
+        // Store access token in an httpOnly cookie
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+            maxAge: 15 * 60 * 1000 // 15 minutes
+        });
+
         // Store refresh token in an httpOnly cookie
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
@@ -102,7 +119,7 @@ const login = async (req, res) => {
             maxAge: 21 * 24 * 60 * 60 * 1000 // 21 days
         });
 
-        return res.status(200).json({ accessToken, userType: user.role, message: "Login successful!" });
+        return res.status(200).json({ userType: user.role, message: "Login successful!" });
     } catch (error) {
         console.error("Login Error:", error);
         res.status(500).json({ error: "Internal server error" });
@@ -111,6 +128,13 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
     try {
+        const refreshToken = req.cookies.refreshToken;
+
+        if (!refreshToken) {
+            return res.status(400).json({ error: 'No refresh token found' });
+        }
+
+        res.clearCookie('accessToken');
         res.clearCookie('refreshToken');
         res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {
