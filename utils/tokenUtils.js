@@ -2,12 +2,20 @@ import jwt from 'jsonwebtoken';
 
 // Generate access token
 const generateAccessToken = (user) => {
-    return jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_EXPIRATION });
+    return jwt.sign(
+        { id: user._id, role: user.role },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: process.env.ACCESS_EXPIRATION }
+    );
 };
 
 // Generate refresh token
 const generateRefreshToken = (user) => {
-    return jwt.sign({ id: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_EXPIRATION });
+    return jwt.sign(
+        { id: user._id, role: user.role },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: process.env.REFRESH_EXPIRATION }
+    );
 };
 
 // Verify and refresh access token
@@ -19,7 +27,7 @@ const refreshAccessToken = async (req, res) => {
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
             if (err) return res.status(403).json({ error: 'Forbidden' });
 
-            const accessToken = generateAccessToken({ id: user.id });
+            const accessToken = generateAccessToken({ id: user.id, role: user.role });
             res.json({ accessToken });
         });
     } catch (error) {

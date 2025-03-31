@@ -4,13 +4,13 @@ export async function getUserByEmail(email) {
     try {
         console.log("Searching for user with email:", email);
 
-        let user = await Admin.model.findOne({ email }).lean();
+        let user = await Admin.model.findOne({ email }).lean().select("+password");
         if (user) {
             console.log("Admin found:", user);
             return user; 
         }
 
-        user = await Student.model.findOne({ email }).lean();
+        user = await Student.model.findOne({ email }).lean().select("+password");
         if (user) {
             console.log("Student found:", user);
             return user;  
