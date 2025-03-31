@@ -17,12 +17,11 @@
                 <table class="table table-bordered table-hover">
                     <thead class="table-primary">
                         <tr>
-                            <th>Reservation ID</th>
-                            <th>Lab</th>
+                            <th>Building</th>
+                            <th>Room</th>
                             <th>Seats</th>
                             <th>Start Date & Time</th>
                             <th>End Date & Time</th>
-                            <th>Requesting Student</th>
                             <th>Credited Students</th>
                             <th>Purpose</th>
                             <th>Status</th>
@@ -32,12 +31,11 @@
                     <tbody id="upcomingReservationsBody">
                         {{#each upcomingReservations}}
                             <tr data-id="{{this.id}}">
-                                <td>{{this.id}}</td>
-                                <td>{{this.lab_name}}</td>
+                                <td>{{this.building}}</td>
+                                <td>{{this.room}}</td>
                                 <td>{{this.slots}}</td>
                                 <td>{{this.start_datetime}}</td>
                                 <td>{{this.end_datetime}}</td>
-                                <td>{{this.requester_name}}</td>
                                 <td>{{this.reservers}}</td>
                                 <td>{{this.purpose}}</td>
                                 <td><span class="badge bg-success">Reserved</span></td>
@@ -81,7 +79,6 @@
                                 <td>{{this.slots}}</td>
                                 <td>{{this.start_datetime}}</td>
                                 <td>{{this.end_datetime}}</td>
-                                <td>{{this.requester_name}}</td>
                                 <td>{{this.reservers}}</td>
                                 <td>{{this.purpose}}</td>
                                 <td>
