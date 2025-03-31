@@ -1,9 +1,12 @@
 import bcrypt from 'bcryptjs';
+import moment from 'moment-timezone';
 import mongoose from 'mongoose';
 import { Admin, Lab, Seat, Student, Reservation } from './models/models.js';
 
+
 const SEATS_PER_LAB = 20;
 const RESERVATION_SETS = 10;
+const timezone = 'Asia/Manila';     // Set to local timezone
 
 const seedAdmins = async () => {
     try {
@@ -119,11 +122,36 @@ const seedStudents = async () => {
 const seedLabs = async () => {
     try {
         const labs = [
-            { building: 'AG', room: '601', daysOpen: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], openingTime: new Date('2025-01-01T07:00:00Z'), closingTime: new Date('2025-01-01T19:00:00Z'), status: 'Open' },
-            { building: 'GK', room: '602', daysOpen: ['Tue', 'Wed', 'Thu', 'Fri'], openingTime: new Date('2025-01-01T08:00:00Z'), closingTime: new Date('2025-01-01T20:00:00Z'), status: 'Open' },
-            { building: 'LS', room: '603', daysOpen: ['Wed', 'Thu', 'Fri'], openingTime: new Date('2025-01-01T09:00:00Z'), closingTime: new Date('2025-01-01T21:00:00Z'), status: 'Open' },
-            { building: 'SJ', room: '604', daysOpen: ['Thu', 'Fri', 'Sat', 'Sun'], openingTime: new Date('2025-01-01T10:00:00Z'), closingTime: new Date('2025-01-01T22:00:00Z'), status: 'Open' },
-            { building: 'VL', room: '605', daysOpen: ['Fri', 'Sat', 'Sun', 'Mon', 'Tue'], openingTime: new Date('2025-01-01T11:00:00Z'), closingTime: new Date('2025-01-01T23:00:00Z'), status: 'Open' }
+            { 
+                building: 'AG', room: '601', daysOpen: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], 
+                openingTime: moment.tz('2025-01-01 07:00', timezone).toDate(), 
+                closingTime: moment.tz('2025-01-01 19:00', timezone).toDate(), 
+                status: 'Open' 
+            },
+            { 
+                building: 'GK', room: '602', daysOpen: ['Tue', 'Wed', 'Thu', 'Fri'], 
+                openingTime: moment.tz('2025-01-01 08:00', timezone).toDate(), 
+                closingTime: moment.tz('2025-01-01 20:00', timezone).toDate(), 
+                status: 'Open' 
+            },
+            { 
+                building: 'LS', room: '603', daysOpen: ['Wed', 'Thu', 'Fri'], 
+                openingTime: moment.tz('2025-01-01 09:00', timezone).toDate(), 
+                closingTime: moment.tz('2025-01-01 21:00', timezone).toDate(), 
+                status: 'Open' 
+            },
+            { 
+                building: 'SJ', room: '604', daysOpen: ['Thu', 'Fri', 'Sat', 'Sun'], 
+                openingTime: moment.tz('2025-01-01 10:00', timezone).toDate(), 
+                closingTime: moment.tz('2025-01-01 22:00', timezone).toDate(), 
+                status: 'Open' 
+            },
+            { 
+                building: 'VL', room: '605', daysOpen: ['Fri', 'Sat', 'Sun', 'Mon', 'Tue'], 
+                openingTime: moment.tz('2025-01-01 11:00', timezone).toDate(), 
+                closingTime: moment.tz('2025-01-01 23:00', timezone).toDate(), 
+                status: 'Open' 
+            }
         ];
 
         return await Promise.all(labs.map(async (lab) => {
@@ -162,40 +190,42 @@ const seedSeats = async (labs) => {
 const seedReservations = async (students, labs, seats) => {
     try {
         const reservationData = [
-            { students: [students[0], students[1]], labIndex: 0, time: '2025-04-02T12:00:00Z', purpose: 'venti appreciation', isAnonymous: false },
-            { students: [students[1], students[2]], labIndex: 1, time: '2025-04-02T13:00:00Z', purpose: 'raiden ei appreciation', isAnonymous: true },
-            { students: [students[2], students[3]], labIndex: 2, time: '2025-04-02T14:00:00Z', purpose: 'nahida appreciation', isAnonymous: false },
-            { students: [students[3], students[4]], labIndex: 3, time: '2025-04-03T15:00:00Z', purpose: 'furina appreciation', isAnonymous: true },
-            { students: [students[4], students[0]], labIndex: 4, time: '2025-04-04T16:00:00Z', purpose: 'mavuika appreciation', isAnonymous: false }
+            { students: [students[0], students[1]], labIndex: 0, time: moment.tz('2025-04-02 12:00', timezone).toDate(), purpose: 'venti appreciation', isAnonymous: false },
+            { students: [students[1], students[2]], labIndex: 1, time: moment.tz('2025-04-02 13:00', timezone).toDate(), purpose: 'raiden ei appreciation', isAnonymous: true },
+            { students: [students[2], students[3]], labIndex: 2, time: moment.tz('2025-04-02 14:00', timezone).toDate(), purpose: 'nahida appreciation', isAnonymous: false },
+            { students: [students[3], students[4]], labIndex: 3, time: moment.tz('2025-04-02 15:00', timezone).toDate(), purpose: 'furina appreciation', isAnonymous: true },
+            { students: [students[4], students[0]], labIndex: 4, time: moment.tz('2025-04-02 16:00', timezone).toDate(), purpose: 'mavuika appreciation', isAnonymous: false }
         ];
 
         let reservations = [];
         for (let i = 0; i < RESERVATION_SETS; i++) {
             for (const data of reservationData) {
-                const startDateTime = new Date(data.time);
-                startDateTime.setDate(startDateTime.getDate() + i * 7);
-                const endDateTime = new Date(startDateTime);
-                endDateTime.setHours(endDateTime.getHours() + 1);
-                
+                // Directly set the time in Manila and add the 7-day offset per iteration
+                let startDateTime = moment.tz(data.time, 'Asia/Manila').add(i * 7, 'days');
+                let endDateTime = startDateTime.clone().add(1, 'hour');
+
+                // Filter seats and assign students to the reservation
                 const labSeats = seats.filter(seat => seat.labID.equals(labs[data.labIndex]._id)).slice(0, 2);
-                
                 const seatIDs = labSeats.map(seat => seat._id);
                 const creditedStudentIDs = data.students.map(student => student._id);
-                
+
+                // Create the reservation in the database
                 const reservation = await Reservation.model.create({
                     seatIDs: seatIDs,
-                    startDateTime: startDateTime,
-                    endDateTime: endDateTime,
+                    startDateTime: startDateTime.toDate(),
+                    endDateTime: endDateTime.toDate(),
                     creditedStudentIDs: creditedStudentIDs,
                     purpose: data.purpose,
                     status: 'Reserved',
                     isAnonymous: data.isAnonymous
                 });
+
                 reservations.push(reservation);
             }
         }
         return reservations;
     } catch (error) {
+        console.error('Error seeding reservations:', error);
         return [];
     }
 };
