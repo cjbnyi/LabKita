@@ -11,7 +11,7 @@
         <form id="signupForm">
             <div class="student-id">
                 <label for="universityID">Student ID</label>
-                <input type="text" id="universityID" required>
+                <input type="text" id="universityID" pattern="\d+" title="Enter numbers only" required>
             </div><br>
             <div class="email">
                 <label for="email">DLSU Email</label>
@@ -27,7 +27,9 @@
             </div><br><br>
 
             <button type="submit" class="button">Sign Up</button> 
-            <p id="errorMessage" style="color: red; display: none;"></p>
+            <div id="errorContainer">
+                <p id="errorMessage" style="color: red; display: none;"></p>
+            </div>
         </form><br>
         <p class="login">Have an account? <a href="/login" style="color:#F49CBB;">Login</a></p>
 
