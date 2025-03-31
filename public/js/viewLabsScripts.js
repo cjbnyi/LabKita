@@ -6,15 +6,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Fetch labs from a global variable injected by the backend
     const labs = window.labsData || [];
+    console.log("Labs data:", labs);
 
     buildingSelect.addEventListener("change", function () {
         const selectedBuilding = this.value;
+        console.log("Selected building:", selectedBuilding);
         roomSelect.innerHTML = `<option value="" selected disabled>Choose a room</option>`;
 
         if (selectedBuilding) {
             const rooms = labs
                 .filter(lab => lab.building === selectedBuilding)
                 .map(lab => lab.room);
+            console.log("Filtered rooms:", rooms);
 
             rooms.forEach(room => {
                 const option = document.createElement("option");
@@ -31,17 +34,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     roomSelect.addEventListener("change", function () {
         viewReservationsBtn.disabled = !this.value;
+        console.log("Selected room:", this.value);
     });
 
     viewReservationsBtn.addEventListener("click", async function () {
         const selectedBuilding = buildingSelect.value;
         const selectedRoom = roomSelect.value;
+        console.log("Fetching reservations for:", selectedBuilding, selectedRoom);
 
         if (selectedBuilding && selectedRoom) {
             try {
                 // Fetch the Lab based on building and room
                 const labResponse = await fetch(`/api/labs?building=${selectedBuilding}&room=${selectedRoom}`);
                 const labs = await labResponse.json();
+                console.log("Lab response:", labs);
 
                 if (!labs.length) {
                     reservationsContainer.innerHTML = `<p class="text-center text-danger">No lab found for the selected building and room.</p>`;
@@ -49,10 +55,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 const labID = labs[0]._id;
+                console.log("Lab ID:", labID);
 
-                // Fetch reservations (which now include populated seat and student data)
-                const reservationsResponse = await fetch(`/api/reservations?labID=${labID}`);
+                // Fetch seats for the lab
+                const seatsResponse = await fetch(`/api/seats?labID=${labID}`);
+                const seats = await seatsResponse.json();
+                console.log("Seats response:", seats);
+                const seatIDs = seats.map(seat => seat._id);
+
+                if (!seatIDs.length) {
+                    reservationsContainer.innerHTML = `<p class="text-center text-warning">No seats found for this lab.</p>`;
+                    return;
+                }
+
+                console.log("Seat IDs:", seatIDs);
+                
+                // Fetch reservations for these seat IDs
+                const reservationsResponse = await fetch(`/api/reservations?seatIDs=${seatIDs.join(",")}`);
                 const reservations = await reservationsResponse.json();
+                console.log("Reservations response:", reservations);
 
                 // Construct Table
                 let tableHtml = `
@@ -63,7 +84,6 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <th>Seats</th>
                                 <th>Start Date & Time</th>
                                 <th>End Date & Time</th>
-                                <th>Requesting Student</th>
                                 <th>Credited Students</th>
                                 <th>Purpose</th>
                                 <th>Status</th>
@@ -76,13 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         const seatNumbers = reservation.seatIDs
                             .map(seat => seat.seatNumber || "Unknown")
                             .join(", ");
-
-                        const requestingStudent = reservation.isAnonymous
-                            ? "Anonymous"
-                            : reservation.requestingStudentID
-                                ? `${reservation.requestingStudentID.firstName} ${reservation.requestingStudentID.lastName}`
-                                : "Unknown";
-
+                        
                         const creditedStudents = reservation.isAnonymous
                             ? "Anonymous"
                             : reservation.creditedStudentIDs.length
@@ -91,12 +105,20 @@ document.addEventListener("DOMContentLoaded", function () {
                                     .join(", ")
                                 : "None";
 
+                        console.log("Processed reservation:", {
+                            seatNumbers,
+                            creditedStudents,
+                            startDateTime: reservation.startDateTime,
+                            endDateTime: reservation.endDateTime,
+                            purpose: reservation.purpose,
+                            status: reservation.status
+                        });
+
                         tableHtml += `
                             <tr>
                                 <td>${seatNumbers}</td>
                                 <td>${reservation.startDateTime}</td>
                                 <td>${reservation.endDateTime}</td>
-                                <td>${requestingStudent}</td>
                                 <td>${creditedStudents}</td>
                                 <td>${reservation.purpose}</td>
                                 <td><span class="badge bg-${reservation.status === 'Reserved' ? 'success' : 'danger'}">${reservation.status}</span></td>
