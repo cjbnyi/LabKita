@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log('Checking to see if this gets triggered.'); // DEBUGGING
     const searchForm = document.querySelector("form[role='search']");
     const searchInput = searchForm.querySelector("input[type='search']");
 

@@ -24,4 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('Student:', window.isLoggedInAsStudent);
     console.log('Admin:', window.isLoggedInAsAdmin);
+
+    // Access token is now stored in cookies
+    console.warn('Access token is now stored in cookies. Ensure your backend extracts it from req.cookies.');
 });

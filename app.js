@@ -39,7 +39,7 @@ const __dirname = dirname(__filename);
 // Configure rate limiting
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 100,
+    max: 500,
     message: "Too many requests from this IP, please try again later.",
     standardHeaders: true,
     legacyHeaders: false,
@@ -49,8 +49,8 @@ const limiter = rateLimit({
 const app = express();
 
 // Enhance security
-app.use(limiter);
-app.use(helmet());
+// app.use(limiter);
+// app.use(helmet());
 
 // Enable cookie reading
 app.use(cookieParser());
