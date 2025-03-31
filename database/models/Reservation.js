@@ -5,20 +5,6 @@ const ReservationSchema = new Schema({
         type: Schema.Types.ObjectId, 
         ref: 'Seat', 
         required: true,
-        validate: [
-            {
-                validator: function (value) {
-                    return Array.isArray(value) && value.length > 0;
-                },
-                message: 'At least one seat ID must be provided.'
-            },
-            {
-                validator: function (value) {
-                    return new Set(value.map(String)).size === value.length;
-                },
-                message: 'Seat IDs must be unique.'
-            }
-        ]
     }],
     startDateTime: { 
         type: Date, 
@@ -43,25 +29,30 @@ const ReservationSchema = new Schema({
     creditedStudentIDs: [{ 
         type: Schema.Types.ObjectId, 
         ref: 'Student',
-        validate: [
-            {
-                validator: function (value) {
-                    return Array.isArray(value) && value.length > 0;
-                },
-                message: 'At least one credited student ID must be provided.'
-            },
-            {
-                validator: function (value) {
-                    return new Set(value.map(String)).size === value.length;
-                },
-                message: 'Credited student IDs must be unique.'
-            }
-        ]
+        required: true,
     }],
     purpose: { type: String, maxlength: 200 },
     status: { type: String, enum: ['Reserved', 'Cancelled', 'Completed'], default: 'Reserved' },
     isAnonymous: { type: Boolean, default: false },
 }, { timestamps: true });
+
+// Ensure arrays are non-empty
+ReservationSchema.path('seatIDs').validate(function (value) {
+    return Array.isArray(value) && value.length > 0;
+}, 'At least one seat ID must be provided.');
+
+ReservationSchema.path('creditedStudentIDs').validate(function (value) {
+    return Array.isArray(value) && value.length > 0;
+}, 'At least one credited student ID must be provided.');
+
+// Ensure uniqueness of seatIDs and creditedStudentIDs
+ReservationSchema.path('seatIDs').validate(function (value) {
+    return new Set(value.map(String)).size === value.length;
+}, 'Seat IDs must be unique.');
+
+ReservationSchema.path('creditedStudentIDs').validate(function (value) {
+    return new Set(value.map(String)).size === value.length;
+}, 'Credited student IDs must be unique.');
 
 // Ensure number of seatIDs equals number of creditedStudentIDs
 ReservationSchema.pre('validate', function (next) {
