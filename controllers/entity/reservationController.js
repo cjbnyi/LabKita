@@ -5,11 +5,28 @@ import { Reservation } from '../../database/models/models.js';
 /* =============================== */
 const getReservations = async (req, res) => {
     try {
-        const filter = req.query || {};
-        const reservations = await Reservation.getReservations(filter);
-        res.status(200).json(reservations);
+        let { seatIDs } = req.query;
+
+        if (!seatIDs) {
+            return res.status(400).json({ error: "seatIDs query parameter is required" });
+        }
+
+        seatIDs = Array.isArray(seatIDs) ? seatIDs : seatIDs.split(",");
+
+        // Fetch reservations that include any of the specified seat IDs
+        const reservations = await Reservation.model.find({ seatIDs: { $in: seatIDs } })
+            .populate("seatIDs")
+            .populate("creditedStudentIDs");
+
+        const formattedReservations = reservations.map(reservation => ({
+            ...reservation.toObject(),
+            startDateTime: new Date(reservation.startDateTime).toLocaleString(), // Format to local date and time
+            endDateTime: new Date(reservation.endDateTime).toLocaleString()      // Format to local date and time
+        }));
+
+        res.status(200).json(formattedReservations);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching reservations', details: error.message });
+        res.status(500).json({ error: "Error fetching reservations", details: error.message });
     }
 };
 
