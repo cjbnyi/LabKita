@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { formatDate } from '../../utils/generalUtils.js';
 
 const ReservationSchema = new Schema({
     seatIDs: [{ 
@@ -70,16 +71,22 @@ export default class Reservation {
 
     static async getReservations(filter = {}) {
         try {
-            return await this.model.find(filter)
+            const reservations = await this.model.find(filter)
                 .populate('seatIDs')
                 .populate('creditedStudentIDs')
                 .sort({ startDateTime: 1 })
                 .lean();
+    
+            return reservations.map(reservation => ({
+                ...reservation,
+                startDateTime: formatDate(reservation.startDateTime),
+                endDateTime: formatDate(reservation.endDateTime)
+            }));
         } catch (error) {
             console.error("Error fetching Reservation documents:", error);
             throw new Error(`Error fetching reservations: ${error.message}`);
         }
-    }
+    }    
 
     static async createReservation(reservationData) {
         try {

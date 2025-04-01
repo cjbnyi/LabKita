@@ -11,6 +11,12 @@ router.get('/manage-reservations',
     manageReservationController.getManageReservations
 );
 
+router.get('/manage-reservations/live-update',
+    authenticateToken,
+    checkValidation,
+    manageReservationController.getLiveReservations
+);
+
 router.get('/manage-reservations/edit/:reservationId',
     authenticateToken,
     validateMongoId('reservationId'),
