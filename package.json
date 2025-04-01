@@ -4,9 +4,9 @@
   "description": "A lab reservation system web application. Created for CCAPDEV (Web Application Development).",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "seed": "node scripts/seedRunner.js"
   },
   "repository": {
     "type": "git",
