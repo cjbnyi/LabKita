@@ -8,10 +8,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const labs = window.labsData || [];
     console.log("Labs data:", labs);
 
+    // Reset dropdowns to default state on page refresh
+    buildingSelect.value = ""; // Reset to default (empty)
+    roomSelect.innerHTML = `<option value="" selected disabled>Choose a room</option>`; // Clear room options
+    roomSelect.disabled = true; // Disable the room dropdown initially
+    viewReservationsBtn.disabled = true; // Disable the 'view reservations' button initially
+
+    // Reset the reservations container
+    reservationsContainer.innerHTML = ""; // Clear any previous reservations data
+
     buildingSelect.addEventListener("change", function () {
         const selectedBuilding = this.value;
         console.log("Selected building:", selectedBuilding);
-        roomSelect.innerHTML = `<option value="" selected disabled>Choose a room</option>`;
+        roomSelect.innerHTML = `<option value="" selected disabled>Choose a room</option>`; // Reset room options
 
         if (selectedBuilding) {
             const rooms = labs
@@ -44,7 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (selectedBuilding && selectedRoom) {
             try {
-                // Fetch the Lab based on building and room
                 const labResponse = await fetch(`/api/labs?building=${selectedBuilding}&room=${selectedRoom}`);
                 const labs = await labResponse.json();
                 console.log("Lab response:", labs);

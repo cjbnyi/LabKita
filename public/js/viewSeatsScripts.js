@@ -411,4 +411,22 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Error fetching reservations:", error));
 
     });
+
+    // Reset the form to default values on page refresh
+    function resetPage() {
+        buildingSelect.value = "";
+        roomSelect.value = "";
+        roomSelect.disabled = true;
+        dateSelect.value = "";
+        startTimeSelect.innerHTML = '<option value="" selected disabled>Select a start time</option>';
+        startTimeSelect.disabled = true;
+        endTimeSelect.innerHTML = '<option value="" selected disabled>Select an end time</option>';
+        endTimeSelect.disabled = true;
+        viewSeatsBtn.disabled = true;
+        seatSelectionDiv.style.display = "none";
+        seatTimesDiv.style.display = "none";
+        seatSelect.innerHTML = '<option value="" selected disabled>Select a seat</option>';
+    }
+
+    resetPage();
 });
