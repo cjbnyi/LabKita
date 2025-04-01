@@ -20,17 +20,22 @@ const authenticateToken = (req, res, next) => {
 
     if (!token) {
         console.warn("No access token found.");
+        res.locals.isLoggedInAsStudent = false;
+        res.locals.isLoggedInAsAdmin = false;
         return res.status(401).json({ message: 'Access denied' });
     }
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) {
             console.error("Token verification failed:", err);
+            res.locals.isLoggedInAsStudent = false;
+            res.locals.isLoggedInAsAdmin = false;
             return res.status(403).json({ message: 'Invalid token' });
         }
 
         console.log("Token verified successfully. User data:", user);
         req.user = user;
+
         next();
     });
 };

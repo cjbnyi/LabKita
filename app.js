@@ -80,7 +80,8 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 app.use((req, res, next) => {
-    res.locals.isLoggedIn = req.session?.userType === "student" || req.session?.userType === "admin";
+    res.locals.isLoggedInAsStudent = req.session?.userType === "student";
+    res.locals.isLoggedInAsAdmin = req.session?.userType === "admin";
     res.locals.user = req.session?.user || null;
     next();
 });

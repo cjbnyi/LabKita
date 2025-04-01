@@ -2,7 +2,10 @@ import { Reservation } from '../../database/models/models.js';
 import { getStudentByID } from "../../utils/userUtils.js";
 
 const renderViewProfile = (req, res) => {
-    res.status(200).render('view-profile', { title : "Profile" });
+    res.status(200).render('view-profile', { 
+        title : "Profile",
+        user: res.locals.user
+    });
 }
 
 const renderEditProfile = (req, res) => {
