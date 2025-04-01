@@ -109,18 +109,10 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal server error' });
 });
 
-// CLI flags
-const shouldSeed = process.argv.includes('--seed');
-
 // Database initialization & server start
 const startServer = async () => {
     try {
         await connectToMongo();
-
-        if (shouldSeed) {
-            console.log('Starting database seeding...');
-            await seedDatabase();
-        }
 
         const PORT = process.env.WEB_PORT || 3000;
         app.listen(PORT, () => {

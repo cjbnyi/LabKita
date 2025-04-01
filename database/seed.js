@@ -204,21 +204,27 @@ const seedReservations = async (students, labs, seats) => {
                 let startDateTime = moment.tz(data.time, 'Asia/Manila').add(i * 7, 'days');
                 let endDateTime = startDateTime.clone().add(1, 'hour');
 
-                // Filter seats and assign students to the reservation
                 const labSeats = seats.filter(seat => seat.labID.equals(labs[data.labIndex]._id)).slice(0, 2);
                 const seatIDs = labSeats.map(seat => seat._id);
                 const creditedStudentIDs = data.students.map(student => student._id);
 
-                // Create the reservation in the database
-                const reservation = await Reservation.model.create({
-                    seatIDs: seatIDs,
-                    startDateTime: startDateTime.toDate(),
-                    endDateTime: endDateTime.toDate(),
-                    creditedStudentIDs: creditedStudentIDs,
-                    purpose: data.purpose,
-                    status: 'Reserved',
-                    isAnonymous: data.isAnonymous
-                });
+                const reservation = await Reservation.model.findOneAndUpdate(
+                    {
+                        seatIDs: { $in: seatIDs },  // Check if any of the seat IDs already exist
+                        startDateTime: startDateTime.toDate(),
+                        endDateTime: endDateTime.toDate()
+                    },
+                    {
+                        seatIDs: seatIDs,
+                        startDateTime: startDateTime.toDate(),
+                        endDateTime: endDateTime.toDate(),
+                        creditedStudentIDs: creditedStudentIDs,
+                        purpose: data.purpose,
+                        status: 'Reserved',
+                        isAnonymous: data.isAnonymous
+                    },
+                    { upsert: true, new: true }
+                );
 
                 reservations.push(reservation);
             }
@@ -233,7 +239,7 @@ const seedReservations = async (students, labs, seats) => {
 export const seedDatabase = async () => {
     console.log('\n====================');
     console.log('Seeding database...');
-    console.log('====================\n');
+    console.log('====================');
     
     console.log('\n--- Seeding Admins ---\n');
     const admins = await seedAdmins();

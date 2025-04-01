@@ -1,9 +1,10 @@
+import 'dotenv/config';
 import mongoose from 'mongoose';
 import { Lab } from '../database/models/models.js';
 
 const mongoDbURI = process.env.MONGODB_URI;
 if (!mongoDbURI) {
-    console.error("MONGO_URI is not defined in .env");
+    console.error("MONGODB_URI is not defined in .env");
     process.exit(1);
 }
 
