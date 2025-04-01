@@ -134,10 +134,14 @@ const logout = async (req, res) => {
             return res.status(400).json({ error: 'No refresh token found' });
         }
 
+        console.log("Logout request received"); // DEBUGGING
+
         res.clearCookie('accessToken');
         res.clearCookie('refreshToken');
+
         res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {
+        console.error("Error logging out:", error);
         res.status(500).json({ error: 'Error logging out' });
     }
 };
@@ -146,6 +150,7 @@ const refreshToken = async (req, res) => {
     try {
         refreshAccessToken(req, res);
     } catch (error) {
+        console.error("Error refreshing token:", error);
         res.status(500).json({ error: 'Error refreshing token' });
     }
 };
