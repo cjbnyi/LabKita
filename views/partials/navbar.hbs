@@ -31,8 +31,16 @@
                     </div>
                 </a>
             </li>
+            <li class="nav-item text-center me-3">
+                <a class="nav-link text-light" href="/api/manage-reservations">
+                    <div class="d-flex flex-column">
+                        <i class="fas fa-calendar-check mb-1"></i>
+                        <span class="fs-6">Manage Reservations</span>
+                    </div>
+                </a>
+            </li>
 
-            {{!-- {{#if isLoggedIn}} --}}
+            {{!-- {{#if isLoggedInAsAdmin}}
                 <li class="nav-item text-center me-3">
                     <a class="nav-link text-light" href="/api/manage-reservations">
                         <div class="d-flex flex-column">
@@ -49,6 +57,7 @@
                         </div>
                     </a>
                 </li>
+            {{#/if}} --}}
             
             {{!-- {{else}}
                 <li class="nav-item text-center me-3">
@@ -62,9 +71,10 @@
             {{/if}} --}}
         </ul>
 
+
         <!-- Right: Authentication and User Controls -->
         <ul class="navbar-nav ms-auto align-items-center">
-            {{!-- {{#if isLoggedIn}} --}}
+            {{#if isLoggedInAsStudent}}
                 <!-- Search Form -->
                 <form class="d-flex me-3" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search users..." aria-label="Search">
@@ -79,10 +89,15 @@
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
                             <a href="/api/profile/me" class="dropdown-item d-flex align-items-center">
-                                <img src="/public/img/camellya.jpeg" alt="Profile Picture" class="rounded-circle" width="40" height="40">
+                                <img src="{{user.profilePicture}}" 
+                                    alt="User Profile" 
+                                    class="rounded-circle" 
+                                    width="40" 
+                                    height="40"
+                                    onerror="this.onerror=null; this.src='/public/img/default-profile.png';">
                                 <div class="ms-2">
-                                    <strong class="d-block" style="color: black;">defaultUser</strong>
-                                    <span style="font-size: 0.85rem; color: grey;">12345678</span>
+                                    <strong class="d-block" style="color: black;">{{user.firstName}}, {{user.firstName}}</strong>
+                                    <span style="font-size: 0.85rem; color: grey;">{{user.universityID}}</span>
                                 </div>
                             </a>
                         </li>
@@ -91,7 +106,8 @@
                         <li><button id="logoutButton" class="dropdown-item">Logout</button></li>
                     </ul>
                 </li>
-            {{!-- {{else}} --}}
+            {{else}}
+
                 <!-- User is NOT logged in: Show Login Button -->
                 <li class="nav-item">
                     <a class="nav-link" href="/api/auth/login">
@@ -103,7 +119,7 @@
                         <button type="button" class="btn btn-outline-light me-1">Signup</button>
                     </a>
                 </li>
-            {{!-- {{/if}} --}}
+            {{/if}}
         </ul>
     </div>
 </nav>
