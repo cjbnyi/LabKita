@@ -89,12 +89,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Seats</th>
-                                <th>Start Date & Time</th>
-                                <th>End Date & Time</th>
-                                <th>Credited Students</th>
-                                <th>Purpose</th>
-                                <th>Status</th>
+                                <th style="width: 10%;">Seats</th>
+                                <th style="width: 15%;">Start Date & Time</th>
+                                <th style="width: 15%;">End Date & Time</th>
+                                <th style="width: 25%;">Credited Students</th>
+                                <th style="width: 20%;">Purpose</th>
+                                <th style="width: 15%;">Status</th>
                             </tr>
                         </thead>
                         <tbody>`;
@@ -109,24 +109,36 @@ document.addEventListener("DOMContentLoaded", function () {
                             ? "Anonymous"
                             : reservation.creditedStudentIDs.length
                                 ? reservation.creditedStudentIDs
-                                    .map(student => `${student.firstName} ${student.lastName}`)
-                                    .join(", ")
-                                : "None";
+                                    .map(student => 
+                                        `<a href="/api/profile/${student.universityID}">${student.firstName} ${student.lastName}</a>`
+                                    ).join(", ")
+                                : "None";                        
 
+                        const formatDate = (date) => {
+                            return new Date(date).toLocaleString('en-US', {
+                                month: 'numeric',
+                                day: 'numeric',
+                                year: 'numeric',
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true
+                            });
+                        };
+                        
                         console.log("Processed reservation:", {
                             seatNumbers,
                             creditedStudents,
-                            startDateTime: reservation.startDateTime,
-                            endDateTime: reservation.endDateTime,
+                            startDateTime: formatDate(reservation.startDateTime),
+                            endDateTime: formatDate(reservation.endDateTime),
                             purpose: reservation.purpose,
                             status: reservation.status
                         });
-
+                        
                         tableHtml += `
                             <tr>
                                 <td>${seatNumbers}</td>
-                                <td>${reservation.startDateTime}</td>
-                                <td>${reservation.endDateTime}</td>
+                                <td>${formatDate(reservation.startDateTime)}</td>
+                                <td>${formatDate(reservation.endDateTime)}</td>
                                 <td>${creditedStudents}</td>
                                 <td>${reservation.purpose}</td>
                                 <td><span class="badge bg-${reservation.status === 'Reserved' ? 'success' : 'danger'}">${reservation.status}</span></td>

@@ -14,18 +14,18 @@
         <div class="tab-content mt-3">
             <!-- Upcoming Reservations -->
             <div class="tab-pane fade show active" id="upcoming">
-                <table class="table table-bordered table-hover">
+                <table class="table table-bordered table-hover" style="table-layout: fixed; width: 100%;">
                     <thead class="table-primary">
                         <tr>
-                            <th>Building</th>
-                            <th>Room</th>
-                            <th>Seats</th>
-                            <th>Start Date & Time</th>
-                            <th>End Date & Time</th>
-                            <th>Credited Students</th>
-                            <th>Purpose</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th style="width: 10%;">Building</th>
+                            <th style="width: 10%;">Room</th>
+                            <th style="width: 10%;">Seats</th>
+                            <th style="width: 15%;">Start Date & Time</th>
+                            <th style="width: 15%;">End Date & Time</th>
+                            <th style="width: 20%;">Credited Students</th>
+                            <th style="width: 15%;">Purpose</th>
+                            <th style="width: 10%;">Status</th>
+                            <th style="width: 10%;">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="upcomingReservationsBody">
@@ -33,10 +33,18 @@
                             <tr data-id="{{this.id}}">
                                 <td>{{this.building}}</td>
                                 <td>{{this.room}}</td>
-                                <td>{{this.slots}}</td>
+                                <td>{{this.seats}}</td>
                                 <td>{{this.start_datetime}}</td>
                                 <td>{{this.end_datetime}}</td>
-                                <td>{{this.reservers}}</td>
+                                <td>
+                                    {{#if this.isAnonymous}}
+                                        Anonymous
+                                    {{else}}
+                                        {{#each this.creditedStudents}}
+                                            <a href="/profile/{{this.universityID}}">{{this.fullName}}</a>{{#unless @last}}, {{/unless}}
+                                        {{/each}}
+                                    {{/if}}
+                                </td>
                                 <td>{{this.purpose}}</td>
                                 <td><span class="badge bg-success">Reserved</span></td>
                                 <td>
@@ -48,7 +56,7 @@
                             </tr>
                         {{else}}
                             <tr>
-                                <td colspan="10" class="text-center">No upcoming reservations found.</td>
+                                <td colspan="9" class="text-center">No upcoming reservations found.</td>
                             </tr>
                         {{/each}}
                     </tbody>
@@ -57,29 +65,36 @@
 
             <!-- Past Reservations -->
             <div class="tab-pane fade" id="past">
-                <table class="table table-bordered table-hover">
+                <table class="table table-bordered table-hover" style="table-layout: fixed; width: 100%;">
                     <thead class="table-secondary">
-                    <tr>
-                        <th>Reservation ID</th>
-                        <th>Lab Name</th>
-                        <th>Lab Slot/s</th>
-                        <th>Start Date & Time</th>
-                        <th>End Date & Time</th>
-                        <th>Requester’s Name</th>
-                        <th>Reservers’ Names</th>
-                        <th>Purpose</th>
-                        <th>Status</th>
-                    </tr>
+                        <tr>
+                            <th style="width: 10%;">Building</th>
+                            <th style="width: 10%;">Room</th>
+                            <th style="width: 10%;">Seats</th>
+                            <th style="width: 15%;">Start Date & Time</th>
+                            <th style="width: 15%;">End Date & Time</th>
+                            <th style="width: 20%;">Credited Students</th>
+                            <th style="width: 15%;">Purpose</th>
+                            <th style="width: 10%;">Status</th>
+                        </tr>
                     </thead>
                     <tbody id="pastReservationsBody">
                         {{#each pastReservations}}
                             <tr data-id="{{this.id}}">
-                                <td>{{this.id}}</td>
-                                <td>{{this.lab_name}}</td>
-                                <td>{{this.slots}}</td>
+                                <td>{{this.building}}</td>
+                                <td>{{this.room}}</td>
+                                <td>{{this.seats}}</td>
                                 <td>{{this.start_datetime}}</td>
                                 <td>{{this.end_datetime}}</td>
-                                <td>{{this.reservers}}</td>
+                                <td>
+                                    {{#if this.isAnonymous}}
+                                        Anonymous
+                                    {{else}}
+                                        {{#each this.creditedStudents}}
+                                            <a href="/profile/{{this.universityID}}">{{this.fullName}}</a>{{#unless @last}}, {{/unless}}
+                                        {{/each}}
+                                    {{/if}}
+                                </td>
                                 <td>{{this.purpose}}</td>
                                 <td>
                                     <span class="badge {{#if (eq this.status 'Cancelled')}}bg-danger{{else}}bg-secondary{{/if}}">
@@ -89,7 +104,7 @@
                             </tr>
                         {{else}}
                             <tr>
-                                <td colspan="9" class="text-center">No past reservations found.</td>
+                                <td colspan="8" class="text-center">No past reservations found.</td>
                             </tr>
                         {{/each}}
                     </tbody>
@@ -99,7 +114,7 @@
             <!-- Reserve Lab Button -->
             <div class="text-center mt-4">
                 <a href="manage-reservations/create" class="btn btn-primary btn-lg">
-                    📅 Make a Reservation
+                    Make a Reservation
                 </a>
             </div>
         </div>

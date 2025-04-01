@@ -30,6 +30,25 @@ const getReservations = async (req, res) => {
     }
 };
 
+const getReservation = async (req, res) => {
+    const { reservationId } = req.params;  // Extract reservation ID from the URL parameters
+    try {
+        // Fetch the reservation from the database using the reservation ID
+        const reservation = await Reservation.model.findById(reservationId)
+            .populate("seatIDs")
+            .populate("creditedStudentIDs");
+
+        if (!reservation) {
+            return res.status(404).json({ error: 'Reservation not found' });
+        }
+
+        // Return the reservation data
+        res.status(200).json(reservation);
+    } catch (error) {
+        res.status(500).json({ error: "Error fetching reservation", details: error.message });
+    }
+};
+
 /* =============================== */
 /* CREATE */
 /* =============================== */
@@ -52,7 +71,7 @@ const updateReservation = async (req, res) => {
         if (!updatedReservation) {
             return res.status(404).json({ error: 'Reservation not found' });
         }
-        res.status(200).json(updatedReservation);
+        res.status(200).json({ success: true, updatedReservation });
     } catch (error) {
         res.status(500).json({ error: 'Error updating reservation', details: error.message });
     }
@@ -76,6 +95,7 @@ const deleteReservation = async (req, res) => {
 
 export default {
     getReservations,
+    getReservation,
     createReservation,
     updateReservation,
     deleteReservation

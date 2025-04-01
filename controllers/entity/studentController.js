@@ -58,9 +58,56 @@ const deleteStudent = async (req, res) => {
     }
 };
 
+/* =============================== */
+/* VALIDATE */
+/* =============================== */
+const validateStudents = async (req, res) => {
+    try {
+        const { studentNames } = req.body;
+        console.log("Received student names for validation:", studentNames);
+
+        if (!Array.isArray(studentNames) || studentNames.length === 0) {
+            console.log("Invalid input: studentNames is not an array or is empty.");
+            return res.status(400).json({ message: "Invalid input. Provide an array of student names." });
+        }
+
+        // Convert names into query format
+        const queryConditions = studentNames.map(name => {
+            const nameParts = name.trim().split(" ");
+            const firstName = nameParts.slice(0, nameParts.length - 1).join(" "); // Everything except the last part is the first name
+            const lastName = nameParts[nameParts.length - 1]; // The last part is the last name
+            return { firstName, lastName };
+        });
+
+        console.log("Query conditions for MongoDB:", JSON.stringify(queryConditions, null, 2));
+
+        // Fetch students matching the provided names
+        const students = await Student.model.find({
+            $or: queryConditions
+        });
+
+        console.log("Students found in database:", students);
+
+        // Extract valid names
+        const validStudents = students.map(student => `${student.firstName} ${student.lastName}`);
+        console.log("Validated student names:", validStudents);
+
+        // Find any invalid students
+        const invalidStudents = studentNames.filter(name => !validStudents.includes(name));
+        console.log("Invalid student names:", invalidStudents);
+
+        res.json({ validStudents, invalidStudents });
+
+    } catch (error) {
+        console.error("Error validating students:", error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
+
 export default {
     getStudents,
     createStudent,
     updateStudent,
-    deleteStudent
+    deleteStudent,
+    validateStudents
 };

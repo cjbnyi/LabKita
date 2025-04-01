@@ -63,6 +63,12 @@ router.post('/students',
     studentController.createStudent
 );
 
+router.post('/students/validate',
+    authenticateToken,
+    checkValidation,
+    studentController.validateStudents
+);
+
 router.put('/students/:studentId',
     authenticateToken,
     validateMongoId('studentId'),
@@ -140,6 +146,11 @@ router.delete('/seats/:seatId',
 router.get('/reservations',
     checkValidation,
     reservationController.getReservations
+);
+
+router.get('/reservations/:reservationId',
+    checkValidation,
+    reservationController.getReservation
 );
 
 router.post('/reservations',

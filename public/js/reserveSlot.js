@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let labs = window.labsData || [];
     console.log("Labs data loaded:", labs);
 
+    resetForm();
+
     // Load buildings
     const buildings = [...new Set(labs.map(lab => lab.building))];
     buildingSelect.innerHTML = '<option value="" disabled selected>Select a building</option>';
@@ -26,6 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedBuilding = this.value;
         roomSelect.innerHTML = '<option value="" disabled selected>Select a room</option>';
         roomSelect.disabled = !selectedBuilding;
+        seatSelect.disabled = true;  // Disable seat selection until the other fields are chosen
+        resetTimeSlots();
+
+        console.log("Building selected:", selectedBuilding);
 
         if (selectedBuilding) {
             const rooms = labs.filter(lab => lab.building === selectedBuilding);
@@ -40,46 +46,76 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Load seats and time slots when room is selected
     roomSelect.addEventListener("change", function () {
-        const selectedRoom = this.value;
-        const selectedLab = labs.find(lab => lab.room === selectedRoom);
-        if (selectedLab) {
-            populateTimeSlots(selectedLab.openingTime, selectedLab.closingTime);
-            populateSeats(selectedLab.seatIds);
+        if (areRequiredFieldsSelected()) {
+            const selectedRoom = this.value;
+            const selectedLab = labs.find(lab => lab.room === selectedRoom);
+            console.log("Room selected:", selectedRoom);
+
+            if (selectedLab) {
+                console.log("Lab found:", selectedLab);
+                populateTimeSlots(selectedLab.openingTime, selectedLab.closingTime);
+                populateSeats(selectedLab.seatIds);
+            }
+        } else {
+            seatSelect.disabled = true;  // Disable seat select if required fields are not selected
         }
     });
 
+    // Check if all required fields are selected
+    function areRequiredFieldsSelected() {
+        const isSelected = buildingSelect.value && roomSelect.value && dateInput.value && startTimeSelect.value && endTimeSelect.value;
+        console.log("Are all required fields selected?", isSelected);
+        return isSelected;
+    }
+
     function populateSeats(seats) {
+        console.log("Populating seats with data:", seats);
         seatSelect.innerHTML = '<option value="" disabled selected>Select an available seat</option>';
         seats.forEach(seat => {
             const option = document.createElement("option");
-            option.value = seat._id; // Use MongoDB ObjectId, not seatNumber
+            option.value = seat._id; // MongoDB ObjectId for seat
             option.textContent = `${seat.seatNumber}`;
             seatSelect.appendChild(option);
         });
+        seatSelect.disabled = false;  // Enable seat selection when rooms and times are selected
     }
 
     function populateTimeSlots(startTime, endTime) {
+        console.log("Populating time slots with start:", startTime, "and end:", endTime);
+
         startTimeSelect.innerHTML = '<option value="" disabled selected>Select a start time</option>';
         endTimeSelect.innerHTML = '<option value="" disabled selected>Select an end time</option>';
 
         let startHour = parseInt(startTime.split(":")[0]);
         let endHour = parseInt(endTime.split(":")[0]);
 
+        console.log("Start hour:", startHour, "End hour:", endHour);
+
         for (let hour = startHour; hour < endHour; hour++) {
             let timeString = `${String(hour).padStart(2, "0")}:00`;
             startTimeSelect.appendChild(new Option(timeString, timeString));
         }
+
+        // Ensure the end time is locked initially
+        endTimeSelect.disabled = true;
     }
 
     startTimeSelect.addEventListener("change", function () {
         const selectedStartTime = this.value;
+        console.log("Start time selected:", selectedStartTime);
+
         endTimeSelect.innerHTML = '<option value="" disabled selected>Select an end time</option>';
         let startHour = parseInt(selectedStartTime.split(":")[0]);
+
+        console.log("Populating end time options from start hour:", startHour);
 
         for (let hour = startHour + 1; hour <= 22; hour++) {
             let timeString = `${String(hour).padStart(2, "0")}:00`;
             endTimeSelect.appendChild(new Option(timeString, timeString));
         }
+
+        // Enable the end time once a start time is selected
+        endTimeSelect.disabled = false;
     });
 
     reserveButton.addEventListener("click", function () {
@@ -111,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
             startDateTime: startDateTime,
             endDateTime: endDateTime,
             requestingStudentID: "", // Replace with the actual student ID
-            creditedStudentIDs: [], // Optional
+            creditedStudentIDs: [], // Optional, can be populated based on logged-in student
             purpose: "Lab reservation", // Optional, adjust as needed
             status: "Reserved",
             isAnonymous: anonymousCheck.checked,
@@ -133,9 +169,29 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
             console.log("Server response:", data);
             alert("Reservation successful!");
+
+            resetForm();
         })
         .catch(error => {
             console.error("Error making reservation:", error);
         });
     });
+
+    function resetForm() {
+        buildingSelect.value = "";
+        roomSelect.innerHTML = '<option value="" disabled selected>Select a building first</option>';
+        roomSelect.disabled = true;
+        seatSelect.innerHTML = '<option value="" disabled selected>Loading seats...</option>';
+        seatSelect.disabled = true;
+        dateInput.value = "";
+        startTimeSelect.innerHTML = '<option value="" disabled selected>Select start time</option>';
+        endTimeSelect.innerHTML = '<option value="" disabled selected>Select end time</option>';
+        endTimeSelect.disabled = true; // Keep end time disabled until start time is selected
+        anonymousCheck.checked = false;
+    }
+
+    function resetTimeSlots() {
+        startTimeSelect.innerHTML = '<option value="" disabled selected>Select start time</option>';
+        endTimeSelect.innerHTML = '<option value="" disabled selected>Select end time</option>';
+    }
 });

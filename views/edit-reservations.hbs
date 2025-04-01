@@ -1,35 +1,37 @@
-{{> navbar}} <!-- Include the navbar partial -->
+{{> navbar}}
 
 <div class="content-area-manage-reservations">
     <div class="container mt-5">
         <h2 class="text-center mb-4">Edit Reservation</h2>
 
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover" style="table-layout: fixed; width: 100%;">
             <thead class="table-primary">
                 <tr>
-                    <th>Reservation ID</th>
-                    <th>Lab Name</th>
-                    <th>Seats</th>
-                    <th>Start Date & Time</th>
-                    <th>End Date & Time</th>
-                    <th>Requesting Student</th>
-                    <th>Credited Students</th>
-                    <th>Purpose</th>
-                    <th>Status</th>
-                    <th>Anonymous</th>
+                    <th style="width: 10%;">Building</th>
+                    <th style="width: 10%;">Room</th>
+                    <th style="width: 10%;">Seats</th>
+                    <th style="width: 15%;">Start Date & Time</th>
+                    <th style="width: 15%;">End Date & Time</th>
+                    <th style="width: 20%;">Credited Students</th>
+                    <th style="width: 15%;">Purpose</th>
+                    <th style="width: 10%;">Status</th>
+                    <th style="width: 10%;">Anonymous</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>{{reservation._id}}</td>
-                    <td>{{reservation.lab_name}}</td> <!-- Not editable -->
-                    <td>{{reservation.seats}}</td> <!-- Not editable -->
-                    <td>{{reservation.start_datetime}}</td> <!-- Not editable -->
-                    <td>{{reservation.end_datetime}}</td> <!-- Not editable -->
-                    <td><span class="editable" contenteditable="true">{{reservation.requester_name}}</span></td>
-                    <td><span class="editable" contenteditable="true">{{reservation.credited_names}}</span></td>
+                <tr id="reservation-row" data-reservation-id="{{reservation._id}}">
+                    <td>{{reservation.building}}</td>
+                    <td>{{reservation.room}}</td>
+                    <td>{{reservation.seats}}</td>
+                    <td>{{reservation.start_datetime}}</td>
+                    <td>{{reservation.end_datetime}}</td>
+                    <td>
+                        {{#each reservation.credited_students}}
+                            <a href="/api/profile/{{this.universityID}}">{{this.fullName}}</a>{{#unless @last}}, {{/unless}}
+                        {{/each}}
+                    </td>
                     <td><span class="editable" contenteditable="true">{{reservation.purpose}}</span></td>
-                    <td><span>{{reservation.status}}</span></td> <!-- Now non-editable -->
+                    <td>{{reservation.status}}</td>
                     <td>
                         <input type="checkbox" id="isAnonymous" {{#if reservation.isAnonymous}}checked{{/if}}>
                     </td>
@@ -38,43 +40,44 @@
         </table>
 
         <div class="text-center mt-4">
-            <button id="saveButton" class="btn btn-primary btn-lg">💾 Save Changes</button>
+            <button id="saveButton" class="btn btn-primary btn-lg" data-reservation-id="{{reservation._id}}">Save Changes</button>
         </div>
     </div>
 </div>
 
 <script>
     document.getElementById('saveButton').addEventListener('click', async () => {
-        let row = document.querySelector("tbody tr");
-        let cells = row.querySelectorAll(".editable");
+        console.log("Save button clicked.");
 
-        let reservationId = row.children[0].innerText; // Extract reservation ID
-
-        let data = {
-            requester_name: cells[0].innerText, 
-            credited_names: cells[1].innerText,
-            purpose: cells[2].innerText,
-            isAnonymous: document.getElementById('isAnonymous').checked
-        };
+        const reservationId = document.getElementById('saveButton').getAttribute('data-reservation-id');
+        console.log('Reservation ID:', reservationId);
 
         try {
-            let response = await fetch(`/api/reservations/${reservationId}`, {
+            let purposeInputElem = document.querySelector(".editable[contenteditable='true']");
+            if (!purposeInputElem) {
+                alert("Error: Editable field for purpose not found.");
+                return;
+            }
+
+            const purpose = purposeInputElem.innerText.trim();
+            const isAnonymous = document.getElementById('isAnonymous').checked;
+
+            let updateResponse = await fetch(`/api/reservations/${reservationId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify({ purpose, isAnonymous })
             });
 
-            if (response.ok) {
+            if (updateResponse.ok) {
                 alert('Reservation updated successfully!');
-                window.location.href = "/api/manage-reservations"; // Redirect after saving
+                window.location.href = "/api/manage-reservations";
             } else {
-                let errorData = await response.json();
-                alert('Error updating reservation: ' + (errorData.message || 'Unknown error'));
+                let updateError = await updateResponse.json();
+                alert('Error updating reservation: ' + (updateError.message || 'Unknown error'));
             }
         } catch (error) {
-            console.error("Update Error:", error);
-            alert('Failed to update reservation.');
+            console.error("Error updating reservation:", error);
+            alert('An unexpected error occurred while updating the reservation.');
         }
     });
 </script>
-

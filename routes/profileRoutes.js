@@ -43,7 +43,6 @@ router.delete('/profile/me/privacy',
 
 router.get("/profile/:universityId",
     authenticateToken,
-    validateMongoId('universityId'),
     checkValidation,
     profileController.showProfile
 );
