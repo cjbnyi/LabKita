@@ -9,7 +9,10 @@ const renderViewProfile = (req, res) => {
 }
 
 const renderEditProfile = (req, res) => {
-    res.status(200).render('edit-profile', { title : "Edit Profile" });
+    res.status(200).render('edit-profile', { 
+        title : "Edit Profile",
+        user : res.locals.user
+    });
 }
 
 const renderPrivacySettings = (req, res) => {

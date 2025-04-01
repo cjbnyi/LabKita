@@ -22,24 +22,18 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label fw-bold text-start d-block">First Name</label>
-                            <input type="text" id="firstName" name="first_name" class="form-control" value="{{profile.first_name}}">
+                            <input type="text" id="firstName" name="first_name" class="form-control" value="{{user.firstName}}">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold text-start d-block">Last Name</label>
-                            <input type="text" id="lastName" name="last_name" class="form-control" value="{{profile.last_name}}">
+                            <input type="text" id="lastName" name="last_name" class="form-control" value="{{user.lastName}}">
                         </div>
-                    </div>
-
-                    <!-- Department -->
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-start d-block">College Department</label>
-                        <input type="text" id="department" name="department" class="form-control" value="{{profile.department}}">
                     </div>
 
                     <!-- Bio -->
                     <div class="mb-3">
                         <label class="form-label fw-bold text-start d-block">Bio</label>
-                        <textarea id="bio" name="bio" class="form-control" rows="3">{{profile.bio}}</textarea>
+                        <textarea id="bio" name="bio" class="form-control" rows="3">{{user.bio}}</textarea>
                     </div>
 
                     <hr>

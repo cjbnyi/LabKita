@@ -35,6 +35,8 @@ const authenticateToken = (req, res, next) => {
 
         console.log("Token verified successfully. User data:", user);
         req.user = user;
+        res.locals.isLoggedInAsStudent = user.role === "student";
+        res.locals.isLoggedInAsAdmin = user.role === "admin";
 
         next();
     });

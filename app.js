@@ -29,6 +29,8 @@ import {
     viewLabsRoutes
 } from './routes/routes.js';
 
+import { setAuthLocals } from './middleware/setAuthLocals.js';
+
 // Run jobs
 updateExpiredReservations();
 
@@ -55,6 +57,9 @@ const app = express();
 // Enable cookie reading
 app.use(cookieParser());
 
+// meow
+app.use(setAuthLocals);
+
 // Request logging (writes to access.log)
 const accessLogStream = fs.createWriteStream(path.join(process.cwd(), 'access.log'), { flags: 'a' });
 app.use(morgan('combined', { stream: accessLogStream }));
@@ -79,12 +84,12 @@ const hbs = create({
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
-app.use((req, res, next) => {
-    res.locals.isLoggedInAsStudent = req.session?.userType === "student";
-    res.locals.isLoggedInAsAdmin = req.session?.userType === "admin";
-    res.locals.user = req.session?.user || null;
-    next();
-});
+// app.use((req, res, next) => {
+//     res.locals.isLoggedInAsStudent = req.session?.userType === "student";
+//     res.locals.isLoggedInAsAdmin = req.session?.userType === "admin";
+//     res.locals.user = req.session?.user || null;
+//     next();
+// });
 
 // Serve static files properly
 app.use("/public", express.static(path.join(__dirname, 'public')));
