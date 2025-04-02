@@ -13,7 +13,7 @@ export function initializeLogForms() {
                 data: JSON.stringify({ email, password }),
                 xhrFields: { withCredentials: true },
                 success: function (data) {
-                    localStorage.setItem('userType', data.userType);
+                    // localStorage.setItem('userType', data.userType);
                     window.location.href = '/'; 
                 },
                 error: function (xhr) {

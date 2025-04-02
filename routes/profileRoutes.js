@@ -1,15 +1,21 @@
 import express from 'express';
 import { authenticateToken } from '../middleware/authMiddleware.js';
 import { profileController, studentController } from '../controllers/controllers.js';
-import { checkValidation, validateMongoId } from '../middleware/validationMiddleware.js';
+import { checkValidation } from '../middleware/validationMiddleware.js';
 
 const router = express.Router();
 
 router.get('/profile/me',
     authenticateToken,
     checkValidation,
-    profileController.renderViewProfile
-)
+    profileController.renderProfile
+);
+
+router.get("/profile/:universityId",
+    authenticateToken,
+    checkValidation,
+    profileController.renderProfile
+);
 
 router.get('/profile/me/update',
     authenticateToken,
@@ -39,12 +45,6 @@ router.delete('/profile/me/privacy',
     authenticateToken,
     checkValidation,
     studentController.deleteStudent
-);
-
-router.get("/profile/:universityId",
-    authenticateToken,
-    checkValidation,
-    profileController.showProfile
 );
 
 export default router;
