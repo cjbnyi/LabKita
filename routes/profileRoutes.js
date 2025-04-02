@@ -4,13 +4,20 @@ import { profileController, studentController } from '../controllers/controllers
 import { checkValidation, validateMongoId } from '../middleware/validationMiddleware.js';
 import { upload } from '../middleware/uploadMiddleware.js'
 
+
 const router = express.Router();
 
 router.get('/profile/me',
     authenticateToken,
     checkValidation,
-    profileController.renderViewProfile
-)
+    profileController.renderProfile
+);
+
+router.get("/profile/:universityId",
+    authenticateToken,
+    checkValidation,
+    profileController.renderProfile
+);
 
 router.get('/profile/me/update',
     authenticateToken,
@@ -41,12 +48,6 @@ router.delete('/profile/me/privacy',
     authenticateToken,
     checkValidation,
     studentController.deleteStudent
-);
-
-router.get("/profile/:universityId",
-    authenticateToken,
-    checkValidation,
-    profileController.showProfile
 );
 
 export default router;

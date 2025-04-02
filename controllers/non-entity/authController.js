@@ -56,7 +56,7 @@ const signup = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Strict',
-            maxAge: 15 * 60 * 1000 // 15 minutes
+            maxAge: 15 * 60 * 1000 * 1000 // TODO: Revert later to actual value
         });
 
         // Store refresh token in an httpOnly cookie
@@ -108,7 +108,7 @@ const login = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Lax',
-            maxAge: 15 * 60 * 1000 // 15 minutes
+            maxAge: 15 * 60 * 1000 * 1000 // TODO: Revert later to actual value
         });
 
         // Store refresh token in an httpOnly cookie
