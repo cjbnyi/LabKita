@@ -44,29 +44,43 @@ const createStudent = async (req, res) => {
 export const updateStudent = async (req, res) => {
     try {
         const { first_name, last_name, bio } = req.body;
-        const userId = req.user._id;
+        const userId = req.user.id;
 
         let updateData = {
-            first_name,
-            last_name,
-            bio
-        };
+            firstName: first_name,
+            lastName: last_name,  
+            bio: bio
+        };        
 
         // If profile picture is uploaded, update it
         if (req.file) {
-            updateData.profile_pic = `/uploads/profile_pics/${req.file.filename}`;
+            updateData.profilePicture = `/public/uploads/profile_pics/${req.file.filename}`;
         }
 
-        const updatedStudent = await Student.findByIdAndUpdate(userId, updateData, { new: true });
+        console.log("DEBUG - Uploaded File:", req.file);
+
+        const updatedStudent = await Student.model.findByIdAndUpdate(userId, updateData, { new: true });
+        console.log("DEBUG - Update Data:", updateData);
 
         if (!updatedStudent) {
             return res.status(404).json({ error: 'Student not found' });
         }
+        console.log("DEBUG - Updated Student:", updatedStudent);
 
-        res.json({ message: 'Profile updated successfully', user: updatedStudent });
+        req.user = updatedStudent.toObject();  // Update the session's user object
+        res.locals.user = req.user;            // Update the `res.locals.user` for current request
+
+        // Update res.locals.user with the new data
+        res.locals.user = updatedStudent;
+
+        // Optionally, you could also send a response with the updated user object
+        res.status(200).json({
+            message: "Profile updated successfully",
+            user: updatedStudent,
+        });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: 'Error updating user profile' });
     }
 };
 

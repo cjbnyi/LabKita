@@ -1,6 +1,19 @@
 import jwt from 'jsonwebtoken';
+import { getStudentByID } from "../utils/userUtils.js"; // Function to fetch user from DB
 
-const setAuthLocals = (req, res, next) => {
+const verifyToken = (token) => {
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(decoded);
+            }
+        });
+    });
+};
+
+const setAuthLocals = async (req, res, next) => {
     const token = req.cookies.accessToken;
 
     res.locals.isLoggedInAsStudent = false;
@@ -12,24 +25,25 @@ const setAuthLocals = (req, res, next) => {
         return next(); 
     }
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) {
-            console.error("JWT verification failed:", err.message);
-            return next(); 
+    try {
+        const decoded = await verifyToken(token); // Now this works with await!
+
+        // Fetch updated user data from DB
+        const freshUser = await getStudentByID(decoded.universityID);
+        if (!freshUser) {
+            return next();
         }
 
-        console.log("Decoded User from Token:", user); 
-
-        req.user = user;
-        res.locals.isLoggedInAsStudent = user.role === "student";
-        res.locals.isLoggedInAsAdmin = user.role === "admin";
-        res.locals.user = user;
+        req.user = freshUser;
+        res.locals.isLoggedInAsStudent = freshUser.role === "student";
+        res.locals.isLoggedInAsAdmin = freshUser.role === "admin";
+        res.locals.user = freshUser;
 
         next();
-    });
+    } catch (error) {
+        console.error("JWT verification failed:", error.message);
+        return next();
+    }
 };
 
-
-export {
-    setAuthLocals
-};
+export { setAuthLocals };
