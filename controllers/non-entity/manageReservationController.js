@@ -91,17 +91,23 @@ const renderCreateReservation = async (req, res) => {
 
 const getManageReservations = async (req, res) => {
     try {
-        console.log("Fetching reservations...");
-        
-        // Fetch upcoming reservations (status: Reserved)
-        let upcomingReservations = await Reservation.model.find({ status: "Reserved" })
-            .populate({ path: "seatIDs", populate: { path: "labID" } })
-            .populate("creditedStudentIDs");
+        console.log("Fetching reservations for user:", req.user.id);
 
-        // Fetch past reservations (status: Completed or Cancelled)
-        let pastReservations = await Reservation.model.find({ status: { $in: ["Completed", "Cancelled"] } })
-            .populate({ path: "seatIDs", populate: { path: "labID" } })
-            .populate("creditedStudentIDs");
+        // Fetch upcoming reservations (status: Reserved) belonging to the user (unless admin)
+        let upcomingReservations = await Reservation.model.find({ 
+            status: "Reserved", 
+            ...(req.user.role !== "admin" && { creditedStudentIDs: req.user.id }) 
+        })
+        .populate({ path: "seatIDs", populate: { path: "labID" } })
+        .populate("creditedStudentIDs");
+
+        // Fetch past reservations (status: Completed or Cancelled) belonging to the user (unless admin)
+        let pastReservations = await Reservation.model.find({ 
+            status: { $in: ["Completed", "Cancelled"] }, 
+            ...(req.user.role !== "admin" && { creditedStudentIDs: req.user.id }) 
+        })
+        .populate({ path: "seatIDs", populate: { path: "labID" } })
+        .populate("creditedStudentIDs");
 
         console.log("Fetched Upcoming Reservations:", upcomingReservations.length);
         console.log("Fetched Past Reservations:", pastReservations.length);
@@ -140,14 +146,28 @@ const getManageReservations = async (req, res) => {
 
 const getLiveReservations = async (req, res) => {
     try {
-        const upcomingReservations = await Reservation.model.find({ status: "Reserved" })
-            .populate({ path: "seatIDs", populate: { path: "labID" } })
-            .populate("creditedStudentIDs");
+        console.log("Fetching live reservations for user:", req.user.id);
 
-        const pastReservations = await Reservation.model.find({ status: { $in: ["Completed", "Cancelled"] } })
-            .populate({ path: "seatIDs", populate: { path: "labID" } })
-            .populate("creditedStudentIDs");
+        // Fetch upcoming reservations (status: Reserved) belonging to the user (unless admin)
+        let upcomingReservations = await Reservation.model.find({ 
+            status: "Reserved", 
+            ...(req.user.role !== "admin" && { creditedStudentIDs: req.user.id }) 
+        })
+        .populate({ path: "seatIDs", populate: { path: "labID" } })
+        .populate("creditedStudentIDs");
 
+        // Fetch past reservations (status: Completed or Cancelled) belonging to the user (unless admin)
+        let pastReservations = await Reservation.model.find({ 
+            status: { $in: ["Completed", "Cancelled"] }, 
+            ...(req.user.role !== "admin" && { creditedStudentIDs: req.user.id }) 
+        })
+        .populate({ path: "seatIDs", populate: { path: "labID" } })
+        .populate("creditedStudentIDs");
+
+        console.log("Fetched Upcoming Reservations:", upcomingReservations.length);
+        console.log("Fetched Past Reservations:", pastReservations.length);
+
+        // Helper function to format reservation data
         const formatReservation = (reservation) => {
             const firstSeat = reservation.seatIDs[0];
             const lab = firstSeat?.labID;
