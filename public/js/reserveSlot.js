@@ -255,8 +255,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return [];
         }
     }
-
-    // TODO: Revise!
+    
     function populateSeats(seats) {
         console.log("Populating seats with data:", seats);
         seatSelectionDiv.innerHTML = '';
@@ -273,52 +272,74 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Selected start time:", selectedStartTime);
         console.log("Selected end time:", selectedEndTime);
     
-        // Convert start and end times to Date objects for comparison
+        // Convert start and end times to Date objects for comparison (in local time)
         const [startHour, startMinute] = selectedStartTime.split(":");
         const [endHour, endMinute] = selectedEndTime.split(":");
-    
+
         const startDate = new Date(selectedDate);
         startDate.setHours(parseInt(startHour), parseInt(startMinute), 0, 0);
-    
         const endDate = new Date(selectedDate);
         endDate.setHours(parseInt(endHour), parseInt(endMinute), 0, 0);
-    
-        console.log("Computed Start Date:", startDate);
-        console.log("Computed End Date:", endDate);
-    
+
+        console.log("Computed Start Date (local time):", startDate.toLocaleString());
+        console.log("Computed End Date (local time):", endDate.toLocaleString());
+
         // Fetch reservations for the selected building, room, and date range
         fetchReservations(selectedBuilding, selectedRoom, startDate, endDate)
             .then(reservations => {
                 console.log("Fetched reservations:", reservations);
-    
+
                 // Filter seats that are available during the selected time period
                 const availableSeats = seats.filter(seat => {
-                    const isReserved = reservations.some(reservation => 
-                        reservation.seatIDs.includes(seat._id) &&
-                        reservation.startDateTime < endDate &&  // Reservation starts before selected end time
-                        reservation.endDateTime > startDate    // Reservation ends after selected start time
-                    );
-    
-                    console.log(`Seat ${seat.seatNumber} (${seat._id}) is ${isReserved ? "RESERVED" : "AVAILABLE"}`);
+                    const isReserved = reservations.some(reservation => {
+                        // Reservation times are in UTC, just create Date objects (JS auto-converts to local time)
+                        const reservationStartLocal = new Date(reservation.startDateTime);
+                        const reservationEndLocal = new Date(reservation.endDateTime);
+
+                        console.log(`Seat ${seat.seatNumber} (${seat._id}) reservation check:`, {
+                            seatID: seat._id,
+                            reservationSeatIDs: reservation.seatIDs,
+                            reservationStartLocal: reservationStartLocal.toLocaleString(),
+                            reservationEndLocal: reservationEndLocal.toLocaleString(),
+                            selectedStart: startDate.toLocaleString(),
+                            selectedEnd: endDate.toLocaleString(),
+                            condition1: reservation.seatIDs.some(s => s._id === seat._id),
+                            condition2: reservationStartLocal < endDate,
+                            condition3: reservationEndLocal > startDate
+                        });
+
+                        // Check if the seat is reserved
+                        return (
+                            reservation.seatIDs.some(s => s._id === seat._id) &&
+                            reservationStartLocal < endDate &&
+                            reservationEndLocal > startDate
+                        );
+                    });
+
                     return !isReserved;
                 });
-    
+
+                // Process the available seats (populate them, etc.)
                 console.log("Available seats:", availableSeats);
-    
-                // Populate available seats
+
+                // Clear the previous list
+                seatSelectionDiv.innerHTML = '';
+
+                if (availableSeats.length === 0) {
+                    seatSelectionDiv.innerHTML = '<p>No available seats for the selected time.</p>';
+                    return;
+                }
+
+                // Create checkboxes for each available seat
                 availableSeats.forEach(seat => {
-                    const label = document.createElement("label");
-                    label.classList.add('form-check-label');
-                    label.innerHTML = `
-                        <input type="checkbox" class="form-check-input" value="${seat._id}" />
+                    const seatLabel = document.createElement('label');
+                    seatLabel.innerHTML = `
+                        <input type="checkbox" name="seats" value="${seat._id}">
                         Seat ${seat.seatNumber}
                     `;
-                    seatSelectionDiv.appendChild(label);
-                    seatSelectionDiv.appendChild(document.createElement('br'));
+                    seatSelectionDiv.appendChild(seatLabel);
+                    seatSelectionDiv.appendChild(document.createElement('br')); // Line break for readability
                 });
-    
-                confirmSeatsButton.disabled = availableSeats.length === 0;  // Disable button if no available seats
-                console.log("Seat population complete. Confirm button enabled:", !confirmSeatsButton.disabled);
             })
             .catch(error => {
                 console.error("Error fetching reservations:", error);
@@ -339,6 +360,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return [];
         }
     }
+
+
 
     function resetForm() {
         buildingSelect.value = "";
