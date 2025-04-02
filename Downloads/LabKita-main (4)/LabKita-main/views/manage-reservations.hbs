@@ -1,0 +1,123 @@
+<section id="get-started" class="content-section flex-grow-1 d-flex flex-column justify-content-center">
+    <div class="container mt-3">
+        <!-- Tabs -->
+        <ul class="nav nav-tabs" id="reservationTabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#upcoming">Upcoming Reservations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#past">Past Reservations</a>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content mt-3">
+            <!-- Upcoming Reservations -->
+            <div class="tab-pane fade show active" id="upcoming">
+                <table class="table table-bordered table-hover" style="table-layout: fixed; width: 100%;">
+                    <thead class="table-primary">
+                        <tr>
+                            <th style="width: 10%;">Building</th>
+                            <th style="width: 10%;">Room</th>
+                            <th style="width: 10%;">Seats</th>
+                            <th style="width: 15%;">Start Date & Time</th>
+                            <th style="width: 15%;">End Date & Time</th>
+                            <th style="width: 20%;">Credited Students</th>
+                            <th style="width: 15%;">Purpose</th>
+                            <th style="width: 10%;">Status</th>
+                            <th style="width: 10%;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="upcomingReservationsBody">
+                        {{#each upcomingReservations}}
+                            <tr data-id="{{this.id}}">
+                                <td>{{this.building}}</td>
+                                <td>{{this.room}}</td>
+                                <td>{{this.seats}}</td>
+                                <td>{{this.start_datetime}}</td>
+                                <td>{{this.end_datetime}}</td>
+                                <td>
+                                    {{#if this.isAnonymous}}
+                                        Anonymous
+                                    {{else}}
+                                        {{#each this.creditedStudents}}
+                                            <a href="/profile/{{this.universityID}}">{{this.fullName}}</a>{{#unless @last}}, {{/unless}}
+                                        {{/each}}
+                                    {{/if}}
+                                </td>
+                                <td>{{this.purpose}}</td>
+                                <td><span class="badge bg-success">Reserved</span></td>
+                                <td>
+                                    <a href="/api/manage-reservations/edit/{{this.id}}">
+                                        <button class="btn btn-warning btn-sm">Edit</button>
+                                    </a>
+                                    <button class="btn btn-danger btn-sm cancel-btn" onclick="cancelReservation('{{this.id}}')">Cancel</button>
+                                </td>
+                            </tr>
+                        {{else}}
+                            <tr>
+                                <td colspan="9" class="text-center">No upcoming reservations found.</td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Past Reservations -->
+            <div class="tab-pane fade" id="past">
+                <table class="table table-bordered table-hover" style="table-layout: fixed; width: 100%;">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th style="width: 10%;">Building</th>
+                            <th style="width: 10%;">Room</th>
+                            <th style="width: 10%;">Seats</th>
+                            <th style="width: 15%;">Start Date & Time</th>
+                            <th style="width: 15%;">End Date & Time</th>
+                            <th style="width: 20%;">Credited Students</th>
+                            <th style="width: 15%;">Purpose</th>
+                            <th style="width: 10%;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pastReservationsBody">
+                        {{#each pastReservations}}
+                            <tr data-id="{{this.id}}">
+                                <td>{{this.building}}</td>
+                                <td>{{this.room}}</td>
+                                <td>{{this.seats}}</td>
+                                <td>{{this.start_datetime}}</td>
+                                <td>{{this.end_datetime}}</td>
+                                <td>
+                                    {{#if this.isAnonymous}}
+                                        Anonymous
+                                    {{else}}
+                                        {{#each this.creditedStudents}}
+                                            <a href="/profile/{{this.universityID}}">{{this.fullName}}</a>{{#unless @last}}, {{/unless}}
+                                        {{/each}}
+                                    {{/if}}
+                                </td>
+                                <td>{{this.purpose}}</td>
+                                <td>
+                                    <span class="badge {{#if (eq this.status 'Cancelled')}}bg-danger{{else}}bg-secondary{{/if}}">
+                                        {{this.status}}
+                                    </span>
+                                </td>
+                            </tr>
+                        {{else}}
+                            <tr>
+                                <td colspan="8" class="text-center">No past reservations found.</td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Reserve Lab Button -->
+            <div class="text-center mt-4">
+                <a href="manage-reservations/create" class="btn btn-primary btn-lg">
+                    Make a Reservation
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../public/js/manageReservationsScripts.js"></script>

@@ -1,0 +1,409 @@
+<div class="content-area-admin">
+            <div class="container mt-5">
+                <!-- Filtering Options -->
+                <div class="card p-3 mb-3">
+                    <h5>Filter Reservations</h5>
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <label class="form-label">Lab</label>
+                            <div id="filterLab">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="labAll" value="All">
+                                    <label class="form-check-label" for="labAll">All</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="labAG601" value="AG601">
+                                    <label class="form-check-label" for="labAG601">AG601</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="labGK602" value="GK602">
+                                    <label class="form-check-label" for="labGK602">GK602</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="labSJ603" value="SJ603">
+                                    <label class="form-check-label" for="labSJ603">SJ603</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="labVL604" value="VL604">
+                                    <label class="form-check-label" for="labVL604">VL604</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="labY605" value="Y605">
+                                    <label class="form-check-label" for="labY605">Y605</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label class="form-label">Status</label>
+                            <div id="filterStatus">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="statusAll" value="All">
+                                    <label class="form-check-label" for="statusAll">All</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="statusReserved" value="Reserved">
+                                    <label class="form-check-label" for="statusReserved">Reserved</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="statusCanceled" value="Canceled">
+                                    <label class="form-check-label" for="statusCanceled">Canceled</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="statusCompleted" value="Completed">
+                                    <label class="form-check-label" for="statusCompleted">Completed</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="filterStartDate" class="form-label">Start Date & Time</label>
+                            <input type="datetime-local" id="filterStartDate" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filterEndDate" class="form-label">End Date & Time</label>
+                            <input type="datetime-local" id="filterEndDate" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filterRequester" class="form-label">Requester’s Name</label>
+                            <input type="text" id="filterRequester" class="form-control" placeholder="Enter name">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filterCredited" class="form-label">Reservers</label>
+                            <input type="text" id="filterCredited" class="form-control" placeholder="Enter names (comma-separated)">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filterPurpose" class="form-label">Purpose</label>
+                            <input type="text" id="filterPurpose" class="form-control" placeholder="e.g., nahida appreciation">
+                        </div>
+                        <div class="col-md-3 align-self-end">
+                        <button id="applyFiltersBtn" class="btn btn-primary w-100">Apply Filters</button>
+                    </div>
+
+                    </div>
+                </div>
+
+
+                
+                <!-- Tabs for Reservation Categories -->
+            <ul class="nav nav-tabs" id="adminReservationTabs">
+                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#all-reservations">All Reservations</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#upcoming-reservations">Upcoming Reservations</a></li>
+                {{!-- <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#manage-labs">Manage Labs</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#manage-seats">Manage Seats</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#view-labs-seats">View Labs & Seats</a></li> --}}
+               
+                
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content mt-3">
+                <!-- All Reservations -->
+                <div class="tab-pane fade show active" id="all-reservations">
+                    <table id="reservation-table" class="table table-bordered table-hover">
+
+                        <thead class="table-primary">
+                         <tr>
+                                <th>Reservation ID</th>
+                                <th>Lab</th>
+                                <th>Lab Slot/s</th>
+                                <th>
+                                    Start Date & Time
+                                    {{!-- <select class="form-select form-select-sm" id="start-time-filter" onchange="applySorting('start_datetime', this.value)">
+                                        <option value="earliest">Earliest First</option>
+                                        <option value="latest">Latest First</option>
+                                    </select> --}}
+                                </th>
+                                <th>
+                                    End Date & Time
+                                    {{!-- <select class="form-select form-select-sm" id="end-time-filter" onchange="applySorting('end_datetime', this.value)">
+                                        <option value="earliest">Earliest First</option>
+                                        <option value="latest">Latest First</option>
+                                    </select> --}}
+                                </th>
+                                <th>
+                                    Requester’s Name
+                                    {{!-- <select class="form-select form-select-sm" id="requester-filter" onchange="applySorting('requester_name', this.value)">
+                                        <option value="A-Z">A-Z</option>
+                                        <option value="Z-A">Z-A</option>
+                                    </select> --}}
+                                </th>
+
+                                <th>Reservers</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each allReservations}}
+                            <tr>
+                                <td>{{this.id}}</td>
+                                <td>{{this.lab_name}}</td>
+                                <td>{{this.slots}}</td>
+                                <td>{{this.start_datetime}}</td>
+                                <td>{{this.end_datetime}}</td>
+                                <td>{{this.requester_name}}</td>
+                                <td>{{this.reservers}}</td>
+                                <td>{{this.purpose}}</td>
+                                <td><span class="badge {{#if (eq this.status 'Reserved')}}bg-success{{else}}bg-danger{{/if}}">{{this.status}}</span></td>
+                                <td>
+                                    <a href="/api/manage-reservations/edit/{{this.id}}">
+                                        <button class="btn btn-warning btn-sm">Edit</button>
+                                    </a>
+                                    <button class="btn btn-danger btn-sm cancel-btn" onclick="cancelReservation('{{this.id}}')">Cancel</button>
+                                </td>
+                            </tr>
+                            {{else}}
+                            <tr>
+                                <td colspan="10" class="text-center">No upcoming reservations found.</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Upcoming Reservations -->
+                <div class="tab-pane fade" id="upcoming-reservations">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>Reservation ID</th>
+                                <th>Lab</th>
+                                <th>Lab Slot/s</th>
+                                <th>Start Date & Time</th>
+                                <th>End Date & Time</th>
+                                <th>Requester’s Name</th>
+                                <th>Reservers</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each upcomingReservations}}
+                            <tr data-id="{{this.id}}">
+                                <td>{{this.id}}</td>
+                                <td>{{this.lab_name}}</td>
+                                <td>{{this.slots}}</td>
+                                <td>{{this.start_datetime}}</td>
+                                <td>{{this.end_datetime}}</td>
+                                <td>{{this.requester_name}}</td>
+                                <td>{{this.reservers}}</td>
+                                <td>{{this.purpose}}</td>
+                                <td><span class="badge bg-success">Reserved</span></td>
+                                <td>
+                                    <a href="/api/manage-reservations/edit/{{this.id}}">
+                                        <button class="btn btn-warning btn-sm">Edit</button>
+                                    </a>
+                                    <button class="btn btn-danger btn-sm cancel-btn" onclick="cancelReservation('{{this.id}}')">Cancel</button>
+                                </td>
+                            </tr>
+                            {{else}}
+                            <tr>
+                                <td colspan="10" class="text-center">No upcoming reservations found.</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Tab Content for Managing Labs -->
+{{!-- <div class="tab-content mt-3">
+    <div class="tab-pane fade" id="manage-labs">
+    <div class="container mt-4">
+        <h3>Manage Labs</h3>
+        <form id="createLabForm">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="labBuilding" class="form-label">Building</label>
+                    <input type="text" class="form-control" id="labBuilding" name="building" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="labRoom" class="form-label">Room</label>
+                    <input type="text" class="form-control" id="labRoom" name="room" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="labDaysOpen" class="form-label">Days Open</label>
+                    <input type="text" class="form-control" id="labDaysOpen" name="daysOpen" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="labOpeningTime" class="form-label">Opening Time</label>
+                    <input type="time" class="form-control" id="labOpeningTime" name="openingTime" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="labClosingTime" class="form-label">Closing Time</label>
+                    <input type="time" class="form-control" id="labClosingTime" name="closingTime" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="labStatus" class="form-label">Status</label>
+                    <select class="form-select" id="labStatus" name="status">
+                        <option value="Open">Open</option>
+                        <option value="Closed">Closed</option>
+                        <option value="Under Maintenance">Under Maintenance</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Create Lab</button>
+        </form>
+
+        <hr>
+
+        <h3>Existing Labs</h3>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Building</th>
+                    <th>Room</th>
+                    <th>Days Open</th>
+                    <th>Opening Time</th>
+                    <th>Closing Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each labs}}
+                <tr>
+                    <td>{{this.building}}</td>
+                    <td>{{this.room}}</td>
+                    <td>{{this.daysOpen}}</td>
+                    <td>{{this.openingTime}}</td>
+                    <td>{{this.closingTime}}</td>
+                    <td>{{this.status}}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm">Edit</button>
+                        <button class="btn btn-danger btn-sm delete-lab" data-id="{{this._id}}">Delete</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+    <!-- Tab Content for Managing Seats -->
+    <div class="tab-pane fade" id="manage-seats">
+        <div class="container mt-4">
+            <h3>Manage Seats</h3>
+            <form id="createSeatForm">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="seatLabID" class="form-label">Lab</label>
+                        <select class="form-select" id="seatLabID" name="LabID" required>
+                            {{#each labs}}
+                            <option value="{{this._id}}">{{this.building}} - {{this.room}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="seatNumber" class="form-label">Seat Number</label>
+                        <input type="number" class="form-control" id="seatNumber" name="seatNumber" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="seatStatus" class="form-label">Status</label>
+                        <select class="form-select" id="seatStatus" name="status">
+                            <option value="Available">Available</option>
+                            <option value="Unavailable">Unavailable</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Add Seat</button>
+            </form>
+
+            <hr>
+            <h3>Existing Seats</h3>
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>Lab</th>
+                        <th>Seat Number</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each seats}}
+                    <tr>
+                        <td>{{this.LabID.building}} - {{this.LabID.room}}</td>
+                        <td>{{this.seatNumber}}</td>
+                        <td>{{this.status}}</td>
+                        <td>{{this.createdAt}}</td>
+                        <td>{{this.updatedAt}}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm">Edit</button>
+                            <button class="btn btn-danger btn-sm delete-seat" data-id="{{this._id}}">Delete</button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Tab Content for Viewing Labs & Seats -->
+    <div class="tab-pane fade" id="view-labs-seats">
+        <div class="container mt-4">
+            <h3>Current Labs</h3>
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>Building</th>
+                        <th>Room</th>
+                        <th>Days Open</th>
+                        <th>Opening Time</th>
+                        <th>Closing Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each labs}}
+                    <tr>
+                        <td>{{this.building}}</td>
+                        <td>{{this.room}}</td>
+                        <td>{{this.daysOpen}}</td>
+                        <td>{{this.openingTime}}</td>
+                        <td>{{this.closingTime}}</td>
+                        <td>{{this.status}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <hr>
+            <h3>Current Seats</h3>
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>Lab</th>
+                        <th>Seat Number</th>
+                        <th>Status</th>
+                        <th>Reservations</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each seats}}
+                    <tr>
+                        <td>{{this.LabID.building}} - {{this.LabID.room}}</td>
+                        <td>{{this.seatNumber}}</td>
+                        <td>{{this.status}}</td>
+                        <td>{{this.reservations.length}}</td>
+                        <td>{{this.createdAt}}</td>
+                        <td>{{this.updatedAt}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div> --}}
+</div>
+</div>
+</div>
+
+<script src="/public/js/admin.js"></script>

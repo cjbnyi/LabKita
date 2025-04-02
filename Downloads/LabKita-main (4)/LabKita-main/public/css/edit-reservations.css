@@ -1,0 +1,10 @@
+.editable {
+    cursor: pointer;
+    border: 1px dashed #ccc;
+    padding: 5px;
+}
+
+.editable:focus {
+    border: 1px solid #007bff;
+    outline: none;
+}

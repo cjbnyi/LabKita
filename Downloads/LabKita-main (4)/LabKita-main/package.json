@@ -1,0 +1,45 @@
+{
+  "name": "labkita",
+  "version": "1.0.0",
+  "description": "A lab reservation system web application. Created for CCAPDEV (Web Application Development).",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "seed": "node scripts/seedRunner.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cjbnyi/CCAPDEV-MCO.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/cjbnyi/CCAPDEV-MCO/issues"
+  },
+  "homepage": "https://github.com/cjbnyi/CCAPDEV-MCO#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-fileupload": "^1.5.1",
+    "express-handlebars": "^8.0.1",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.18.1",
+    "express-validator": "^7.2.1",
+    "hbs": "^4.2.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "moment-timezone": "^0.5.48",
+    "mongodb": "^6.14.2",
+    "mongoose": "^8.12.1",
+    "morgan": "^1.10.0",
+    "node-cron": "^3.0.3",
+    "path": "^0.12.7",
+    "validator": "^13.12.0"
+  }
+}

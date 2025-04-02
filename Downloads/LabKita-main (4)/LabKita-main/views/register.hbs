@@ -1,0 +1,40 @@
+<body>
+    <div class="arrow-container">
+        <a href="/"> <!-- Replace "index.html" with the link you want the arrow to navigate to -->
+            <img src="/public/img/arrow.png" class="arrow">
+        </a>
+    </div>
+
+    <div id="bg">
+        <h2>Sign Up</h2>
+        <p style="color:#F49CBB; align-items: center;">Register using your DLSU email</p>
+        <form id="signupForm">
+            <div class="student-id">
+                <label for="universityID">Student ID</label>
+                <input type="text" id="universityID" pattern="\d+" title="Enter numbers only" required>
+            </div><br>
+            <div class="email">
+                <label for="email">DLSU Email</label>
+                <input type="email" id="email" name="email" required>
+            </div> <br>
+            <div class="pw">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div><br>
+            <div class="pw">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirmPassword" required>
+            </div><br><br>
+
+            <button type="submit" class="button">Sign Up</button> 
+            <div id="errorContainer">
+                <p id="errorMessage" style="color: red; display: none;"></p>
+            </div>
+        </form><br>
+        <p class="login">Have an account? <a href="/login" style="color:#F49CBB;">Login</a></p>
+
+    </div>
+
+    <img class="computer-picture" src="/public/img/computer.png" alt="Profile Picture"/>
+
+</body>

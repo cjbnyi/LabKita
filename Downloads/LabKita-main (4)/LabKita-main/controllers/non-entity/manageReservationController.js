@@ -1,0 +1,188 @@
+import { Reservation } from '../../database/models/models.js';
+import { formatDate } from '../../utils/generalUtils.js';
+
+const getEditReservationPage = async (req, res) => {
+    try {
+        const { reservationId } = req.params;
+        console.log("Fetching reservation with ID:", reservationId);
+
+        const reservation = await Reservation.model.findById(reservationId)
+            .populate({
+                path: "seatIDs",
+                populate: { path: "labID" }
+            })
+            .populate("creditedStudentIDs");
+
+        if (!reservation) {
+            console.error("Reservation not found for ID:", reservationId);
+            return res.status(404).json({ error: 'Reservation not found' });
+        }
+
+        console.log("Fetched Reservation:", reservation);
+
+        // Get building and room from the first seat
+        const firstSeat = reservation.seatIDs.length > 0 ? reservation.seatIDs[0] : null;
+        const building = firstSeat?.labID?.building || "N/A";
+        const room = firstSeat?.labID?.room || "N/A";
+
+        // Format seat numbers
+        const seatNumbers = reservation.seatIDs.map(seat => seat.seatNumber).join(', ') || "N/A";
+
+        // Create an array of credited student names (with ids) instead of a concatenated string
+        const creditedStudents = reservation.creditedStudentIDs.length > 0 
+            ? reservation.creditedStudentIDs.map(student => ({
+                universityID: student.universityID,
+                fullName: `${student.firstName} ${student.lastName}`
+            }))
+            : [];
+
+        console.log("Processed Reservation Data:", {
+            _id: reservation._id,
+            building,
+            room,
+            seats: seatNumbers,
+            start_datetime: formatDate(reservation.startDateTime),
+            end_datetime: formatDate(reservation.endDateTime),
+            credited_students: creditedStudents,
+            purpose: reservation.purpose,
+            status: reservation.status,
+            isAnonymous: reservation.isAnonymous
+        });
+
+        res.render('edit-reservations', {
+            pageCSS: '/public/css/edit-reservations.css',
+            reservation: {
+                _id: reservation._id,
+                building,
+                room,
+                seats: seatNumbers,
+                start_datetime: formatDate(reservation.startDateTime),
+                end_datetime: formatDate(reservation.endDateTime),
+                credited_students: creditedStudents,  // Pass the array of students with id and full name
+                purpose: reservation.purpose,
+                status: reservation.status,
+                isAnonymous: reservation.isAnonymous
+            }
+        });
+
+    } catch (error) {
+        console.error("Error fetching reservation:", error);
+        res.status(500).json({ error: 'Error loading edit reservation page', details: error.message });
+    }
+};
+
+const renderCreateReservation = async (req, res) => {
+    try {
+        const response = await fetch('http://localhost:3000/api/labs');
+        const labs = await response.json();
+
+        res.render('reserve-slot', { 
+            title: "Reserve Slot",
+            labsData: JSON.stringify(labs)
+        });
+    } catch (error) {
+        console.error("Error fetching labs:", error);
+        res.render('reserve-slot', { 
+            title: "Reserve Slot",
+            labsData: "[]"
+        });
+    }
+};
+
+const getManageReservations = async (req, res) => {
+    try {
+        console.log("Fetching reservations...");
+        
+        // Fetch upcoming reservations (status: Reserved)
+        let upcomingReservations = await Reservation.model.find({ status: "Reserved" })
+            .populate({ path: "seatIDs", populate: { path: "labID" } })
+            .populate("creditedStudentIDs");
+
+        // Fetch past reservations (status: Completed or Cancelled)
+        let pastReservations = await Reservation.model.find({ status: { $in: ["Completed", "Cancelled"] } })
+            .populate({ path: "seatIDs", populate: { path: "labID" } })
+            .populate("creditedStudentIDs");
+
+        console.log("Fetched Upcoming Reservations:", upcomingReservations.length);
+        console.log("Fetched Past Reservations:", pastReservations.length);
+
+        // Helper function to format reservation data
+        const formatReservation = (reservation) => {
+            const firstSeat = reservation.seatIDs[0];
+            const lab = firstSeat?.labID;
+
+            return {
+                id: reservation._id.toString(),
+                building: lab?.building || "N/A",
+                room: lab?.room || "N/A",
+                seats: reservation.seatIDs.map(seat => seat.seatNumber).join(", "),
+                start_datetime: formatDate(reservation.startDateTime),
+                end_datetime: formatDate(reservation.endDateTime),
+                creditedStudents: reservation.creditedStudentIDs.map((r) => ({
+                    universityID: r.universityID,
+                    fullName: `${r.firstName} ${r.lastName}`
+                })),
+                purpose: reservation.purpose || "N/A",
+                status: reservation.status || "N/A",
+                isAnonymous: reservation.isAnonymous
+            };
+        };
+
+        res.render("manage-reservations", {
+            upcomingReservations: upcomingReservations.map(formatReservation),
+            pastReservations: pastReservations.map(formatReservation),
+        });
+    } catch (error) {
+        console.error("Error fetching reservations:", error);
+        res.status(500).json({ error: "Error fetching reservations", details: error.message });
+    }
+};
+
+const getLiveReservations = async (req, res) => {
+    try {
+        const upcomingReservations = await Reservation.model.find({ status: "Reserved" })
+            .populate({ path: "seatIDs", populate: { path: "labID" } })
+            .populate("creditedStudentIDs");
+
+        const pastReservations = await Reservation.model.find({ status: { $in: ["Completed", "Cancelled"] } })
+            .populate({ path: "seatIDs", populate: { path: "labID" } })
+            .populate("creditedStudentIDs");
+
+        const formatReservation = (reservation) => {
+            const firstSeat = reservation.seatIDs[0];
+            const lab = firstSeat?.labID;
+
+            return {
+                id: reservation._id.toString(),
+                building: lab?.building || "N/A",
+                room: lab?.room || "N/A",
+                seats: reservation.seatIDs.map(seat => seat.seatNumber).join(", "),
+                start_datetime: formatDate(reservation.startDateTime),
+                end_datetime: formatDate(reservation.endDateTime),
+                creditedStudents: reservation.creditedStudentIDs.map((r) => ({
+                    universityID: r.universityID,
+                    fullName: `${r.firstName} ${r.lastName}`
+                })),
+                purpose: reservation.purpose || "N/A",
+                status: reservation.status || "N/A",
+                isAnonymous: reservation.isAnonymous
+            };
+        };
+
+        res.json({
+            success: true,
+            upcomingReservations: upcomingReservations.map(formatReservation),
+            pastReservations: pastReservations.map(formatReservation),
+        });
+    } catch (error) {
+        console.error("Error fetching live reservations:", error);
+        res.status(500).json({ success: false, error: "Failed to fetch reservations" });
+    }
+};
+
+export default {
+    getEditReservationPage,
+    renderCreateReservation,
+    getManageReservations,
+    getLiveReservations
+};

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit Reservations - LabKita!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/styles.css">
+    <style>
+        .editable {
+            cursor: pointer;
+            border: 1px dashed #ccc;
+            padding: 5px;
+        }
+        .editable:focus {
+            border: 1px solid #007bff;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    {{> navbar}} <!-- Include the navbar partial -->
+
+    <div class="content-area-manage-reservations">
+        <div class="container mt-5">
+            <h2 class="text-center mb-4">Edit Reservations</h2>
+            
+            <table class="table table-bordered table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Reservation ID</th>
+                        <th>Lab Name</th>
+                        <th>Lab Slot/s</th>
+                        <th>Start Date & Time</th>
+                        <th>End Date & Time</th>
+                        <th>Requester’s Name</th>
+                        <th>Reservers’ Names</th>
+                        <th>Purpose</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+        <td>{{reservation.id}}</td>
+        <td><span class="editable" contenteditable="true">{{reservation.lab_name}}</span></td>
+        <td><span class="editable" contenteditable="true">{{reservation.slots}}</span></td>
+        <td><span class="editable" contenteditable="true">{{reservation.start_datetime}}</span></td>
+        <td><span class="editable" contenteditable="true">{{reservation.end_datetime}}</span></td>
+        <td><span class="editable" contenteditable="true">{{reservation.requester_name}}</span></td>
+        <td><span class="editable" contenteditable="true">{{reservation.reservers}}</span></td>
+        <td><span class="editable" contenteditable="true">{{reservation.purpose}}</span></td>
+        <td><span class="badge bg-success">{{reservation.status}}</span></td>
+                        </tr>
+                </tbody>
+
+            </table>
+            
+            <div class="text-center mt-4">
+                <button id="saveButton" class="btn btn-primary btn-lg">💾 Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.getElementById('saveButton').addEventListener('click', async () => {
+    let row = document.querySelector("tbody tr");
+    let cells = row.querySelectorAll(".editable");
+
+    let data = {
+        id: row.children[0].innerText,
+        lab_name: cells[0].innerText,
+        slots: cells[1].innerText,
+        start_datetime: cells[2].innerText,
+        end_datetime: cells[3].innerText,
+        requester_name: cells[4].innerText,
+        reservers: cells[5].innerText,
+        purpose: cells[6].innerText,
+        status: row.children[8].innerText.trim()
+    };
+
+    let response = await fetch('/api/reservations/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reservation: data })
+    });
+
+    if (response.ok) {
+        alert('Reservation updated successfully!');
+        window.location.href = "/manage-reservations"; // Redirect after saving
+    } else {
+        alert('Error updating reservation.');
+    }
+});
+
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

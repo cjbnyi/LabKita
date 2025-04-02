@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #DD2D4A, #F49CBB );
+}
+  
+.containers {
+  background: #CBEEF3;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 600px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 20px;
+  color:black;
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin: 10px 0 5px;
+  font-size: 14px;
+  color: black;
+}
+
+select, input[type="date"], button.reserve {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+button {
+  background: #DD2D4A;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #F26A8D;
+  transition: background 0.3s;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+}

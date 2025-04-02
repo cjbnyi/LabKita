@@ -1,0 +1,69 @@
+<div class="content-area-view-labs">
+    <div class="container mt-4">
+        <!-- Lab Overview Table -->
+        <h2 class="mb-3">Lab Overview</h2>
+        <table class="table table-bordered table-hover">
+            <thead class="table-primary">
+                <tr>
+                    <th>Building</th>
+                    <th>Room</th>
+                    <th>Days Open</th>
+                    <th>Opening Time</th>
+                    <th>Closing Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each labs}}
+                <tr>
+                    <td>{{building}}</td>
+                    <td>{{room}}</td>
+                    <td>{{joinArray daysOpen ", "}}</td>
+                    <td>{{openingTime}}</td>
+                    <td>{{closingTime}}</td>
+                    <td>
+                        {{#if (eq status "Open")}}
+                            <span class="badge bg-success">Available</span>
+                        {{else if (eq status "Under Maintenance")}}
+                            <span class="badge bg-warning">Under Maintenance</span>
+                        {{else}}
+                            <span class="badge bg-danger">Closed</span>
+                        {{/if}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        <div class="text-center mt-4">
+            <a href="/api/view-labs/form" class="btn btn-primary btn-lg">
+                View Available Lab Seats
+            </a>
+        </div>
+
+        <div class="mb-3 mt-4">
+            <label for="buildingSelect" class="form-label">Select Building</label>
+            <select id="buildingSelect" class="form-select">
+                <option value="" selected disabled>Choose a building</option>
+                {{#each buildings}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="roomSelect" class="form-label">Select Room</label>
+            <select id="roomSelect" class="form-select" disabled>
+                <option value="" selected disabled>Choose a room</option>
+            </select>
+        </div>
+
+        <button id="viewReservationsBtn" class="btn btn-primary" disabled>View Reservations</button>
+
+        <div id="reservationsContainer" class="mt-4"></div>
+    </div>            
+</div>
+<script>
+    window.labsData = {{{ json labs }}};
+</script>
+<script src="/public/js/viewLabsScripts.js"></script>

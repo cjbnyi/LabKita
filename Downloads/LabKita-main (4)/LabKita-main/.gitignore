@@ -1,0 +1,30 @@
+# === General Files ===
+.DS_Store
+Thumbs.db
+*.log
+*.env
+
+# === Node.js (for backend & frontend) ===
+node_modules/
+npm-debug.log
+yarn.lock
+pnpm-lock.yaml
+
+# === Build & Output Directories ===
+dist/
+build/
+public/build/
+out/
+.cache/
+.next/
+
+# === MongoDB ===
+*.mongodb
+dump/
+
+# === VS Code & JetBrains IDEs ===
+.vscode/
+.idea/
+
+# === Personal reference files ===
+tasks/TODO-cj.md
