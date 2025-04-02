@@ -12,7 +12,7 @@
                         <label class="form-label fw-bold text-start d-block">Profile Picture</label>
                         <div class="d-flex flex-column align-items-center">
                             <label for="profilePicInput" class="d-block">
-                                <img id="profilePic" src="{{profile.profile_pic}}" alt="Profile Picture" class="rounded-circle mb-2" width="100" height="100" style="cursor: pointer;">
+                                <img id="profilePic" src="{{user.profile_pic}}" alt="Profile Picture" class="rounded-circle mb-2" width="100" height="100" style="cursor: pointer;">
                             </label>
                             <input type="file" id="profilePicInput" name="profile_pic" class="form-control w-50">
                         </div>
@@ -57,21 +57,55 @@
     });
 
     document.getElementById('editProfileForm').addEventListener('submit', async (event) => {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
 
-        let formData = new FormData(event.target); // Create form data
-        let response = await fetch('/api/profile/update', {
-            method: 'POST',
-            body: formData // Send form data including image file
+        let formData = new FormData();
+        let profilePicInput = document.getElementById("profilePicInput").files[0];
+
+        if (profilePicInput) {
+            let imageFormData = new FormData();
+            imageFormData.append("profile_pic", profilePicInput);
+
+            let uploadResponse = await fetch('/api/profile/uploadProfilePic', {
+                method: 'POST',
+                body: imageFormData
+            });
+
+            if (uploadResponse.ok) {
+                let uploadResult = await uploadResponse.json();
+                formData.append("profile_pic", uploadResult.imageUrl);
+            } else {
+                alert('Error uploading profile picture.');
+                return;
+            }
+        } else {
+            formData.append("profile_pic", "{{user.profile_pic}}"); // Keep existing pic if no new one is uploaded
+        }
+
+        // Add other fields
+        formData.append("first_name", document.getElementById("firstName").value);
+        formData.append("last_name", document.getElementById("lastName").value);
+        formData.append("bio", document.getElementById("bio").value);
+
+        let updateResponse = await fetch('/api/profile/updateProfilePic', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: "{{user._id}}",
+                imageUrl: formData.get("profile_pic"),
+                firstName: formData.get("first_name"),
+                lastName: formData.get("last_name"),
+                bio: formData.get("bio")
+            })
         });
 
-        if (response.ok) {
-            let result = await response.json();
+        if (updateResponse.ok) {
             alert('Profile updated successfully!');
-            document.getElementById("profilePic").src = result.profile.profile_pic; // Update image preview
+            location.reload();
         } else {
             alert('Error updating profile.');
         }
     });
     </script>
+
 </body>

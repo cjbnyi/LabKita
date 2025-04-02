@@ -27,19 +27,49 @@ const createStudent = async (req, res) => {
 /* =============================== */
 /* UPDATE */
 /* =============================== */
-const updateStudent = async (req, res) => {
-    const { studentId } = req.params;
+// const updateStudent = async (req, res) => {
+//     const { studentId } = req.params;
 
+//     try {
+//         const updatedStudent = await Student.updateStudent(studentId, req.body);
+//         if (!updatedStudent) {
+//             return res.status(404).json({ error: 'Student not found' });
+//         }
+//         res.status(200).json(updatedStudent);
+//     } catch (error) {
+//         res.status(500).json({ error: 'Error updating student', details: error.message });
+//     }
+// };
+
+export const updateStudent = async (req, res) => {
     try {
-        const updatedStudent = await Student.updateStudent(studentId, req.body);
+        const { first_name, last_name, bio } = req.body;
+        const userId = req.user._id;
+
+        let updateData = {
+            first_name,
+            last_name,
+            bio
+        };
+
+        // If profile picture is uploaded, update it
+        if (req.file) {
+            updateData.profile_pic = `/uploads/profile_pics/${req.file.filename}`;
+        }
+
+        const updatedStudent = await Student.findByIdAndUpdate(userId, updateData, { new: true });
+
         if (!updatedStudent) {
             return res.status(404).json({ error: 'Student not found' });
         }
-        res.status(200).json(updatedStudent);
+
+        res.json({ message: 'Profile updated successfully', user: updatedStudent });
     } catch (error) {
-        res.status(500).json({ error: 'Error updating student', details: error.message });
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
     }
 };
+
 
 /* =============================== */
 /* DELETE */
