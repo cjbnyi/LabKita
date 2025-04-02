@@ -49,6 +49,7 @@ function cancelReservation(reservationId) {
     }
 }
 
+/*
 function updateReservations() {
     console.log("Fetching latest reservation data...");
 
@@ -136,3 +137,4 @@ setInterval(updateReservations, 60000);
 
 // Fetch immediately on page load
 updateReservations();
+*/

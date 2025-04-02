@@ -54,10 +54,7 @@ const app = express();
 // app.use(limiter);
 // app.use(helmet());
 
-// Enable cookie reading
 app.use(cookieParser());
-
-// meow
 app.use(setAuthLocals);
 
 // Request logging (writes to access.log)
@@ -75,9 +72,25 @@ const hbs = create({
     layoutsDir: path.join(__dirname, 'views/layouts'),
     partialsDir: path.join(__dirname, 'views/partials'),
     helpers: {
-        eq: (a, b) => a === b, // Checks if two values are equal
-        joinArray: (arr, separator = ', ') => Array.isArray(arr) ? arr.join(separator) : '', // Joins an array into a string
-        json: context => JSON.stringify(context)
+        eq: (a, b) => a === b,
+        joinArray: (arr, separator = ', ') => Array.isArray(arr) ? arr.join(separator) : '',
+        json: context => JSON.stringify(context),
+        or: (a, b) => a || b,
+
+        // Helper to check if an admin can cancel (only within 10 minutes after start time)
+        adminCanCancel: (startDatetime) => {
+            const now = new Date();
+            const startTime = new Date(startDatetime);
+            
+            // Log for debugging purposes
+            console.log('Current time:', now);
+            console.log('Start time:', startTime);
+            const diffMinutes = (startTime - now) / (1000 * 60);
+            console.log('Time difference in minutes:', diffMinutes);
+        
+            // console.log('Admin can cancel:', diffMinutes >= 0 && diffMinutes <= 10);
+            return diffMinutes >= 0 && diffMinutes <= 10;
+        }        
     }
 });
 

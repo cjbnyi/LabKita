@@ -1,5 +1,20 @@
 import { Admin, Student } from '../database/models/models.js';
 
+export async function getUserById(userId) {
+    try {
+        let user = await Admin.model.findById(userId).lean();
+        if (user) return user;
+
+        user = await Student.model.findById(userId).lean();
+        if (user) return user;
+
+        return null;
+    } catch (error) {
+        console.error("Error fetching user by ID:", error);
+        throw new Error("Error fetching user");
+    }
+}
+
 export async function getUserByEmail(email) {
     try {
         console.log("Searching for user with email:", email);
