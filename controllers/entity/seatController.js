@@ -1,4 +1,4 @@
-import { Seat } from '../../database/models/models.js';
+import { Lab, Seat } from '../../database/models/models.js';
 
 /* =============================== */
 /* READ */
@@ -10,6 +10,36 @@ const getSeats = async (req, res) => {
         res.status(200).json(seats);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching seats', details: error.message });
+    }
+};
+
+// TODO: Confirm!
+const getLabSeats = async (req, res) => {
+    try {
+        const { labID } = req.query;
+
+        if (!labID) {
+            return res.status(400).json({ error: "Lab ID is required" });
+        }
+
+        console.log("Fetching seats for Lab ID:", labID);
+
+        // Find the lab by its ID
+        const lab = await Lab.model.findById(labID).exec();
+        if (!lab) {
+            return res.status(404).json({ error: "Lab not found" });
+        }
+
+        console.log("Found lab:", lab._id);
+
+        // Find all seats belonging to the lab
+        const seats = await Seat.model.find({ labID: lab._id }).exec();
+
+        console.log("Seats found:", seats.length);
+        res.status(200).json(seats);
+    } catch (error) {
+        console.error("Error fetching seats:", error);
+        res.status(500).json({ error: "Error fetching seats", details: error.message });
     }
 };
 
@@ -59,6 +89,7 @@ const deleteSeat = async (req, res) => {
 
 export default {
     getSeats,
+    getLabSeats,
     createSeat,
     updateSeat,
     deleteSeat

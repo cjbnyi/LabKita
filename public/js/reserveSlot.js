@@ -72,24 +72,25 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to populate available dates based on room's schedule
     function populateDates(selectedLab) {
         const availableDays = selectedLab.daysOpen || [];
+        const NUM_DAYS = 14;
 
         const today = new Date();
-        const next7Days = [];
+        const nextDays = [];
 
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < NUM_DAYS; i++) {
             let futureDate = new Date(today);
             futureDate.setDate(today.getDate() + i);
             const dayOfWeek = futureDate.toLocaleString("en-US", { weekday: "short" });
 
             // If the lab is open on that day, add to the list of available dates
             if (availableDays.includes(dayOfWeek)) {
-                next7Days.push(futureDate.toISOString().split("T")[0]);
+                nextDays.push(futureDate.toISOString().split("T")[0]);
             }
         }
 
         // Populate the date dropdown with the next 7 available dates
         dateInput.innerHTML = '<option value="" disabled selected>Select a date</option>';
-        next7Days.forEach(date => {
+        nextDays.forEach(date => {
             const option = document.createElement("option");
             option.value = date;
             option.textContent = date;
@@ -99,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Enable date input after room is selected
         dateInput.disabled = false;
 
-        console.log("Available dates populated:", next7Days);
+        console.log("Available dates populated:", nextDays);
     }
 
     function convertTo24HourFormat(time) {
@@ -204,18 +205,17 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("End time options populated.");
     });
 
-    // Check if all required fields are selected
-    function areRequiredFieldsSelected() {
-        const isSelected = buildingSelect.value && roomSelect.value && dateInput.value && startTimeSelect.value && endTimeSelect.value;
-        console.log("Are all required fields selected?", isSelected);
-        return isSelected;
-    }
-
-    // Event listener for when the end time is selected
-    endTimeSelect.addEventListener("change", function () {
+    endTimeSelect.addEventListener("change", async function () {
         console.log("End time selected:", this.value);
+        await checkRequiredFields();
+    });
 
-        // Check if all required fields are selected
+    dateInput.addEventListener("change", async function () {
+        console.log("Date selected:", this.value);
+        await checkRequiredFields();
+    });
+
+    async function checkRequiredFields() {
         if (areRequiredFieldsSelected()) {
             console.log("All required fields are selected. Populating seats...");
 
@@ -224,25 +224,42 @@ document.addEventListener("DOMContentLoaded", function () {
             const selectedRoom = roomSelect.value;
             const selectedDate = dateInput.value;
             const selectedStartTime = startTimeSelect.value;
-            const selectedEndTime = this.value;
+            const selectedEndTime = endTimeSelect.value;
 
             // Get the lab that matches the selected building and room
             const selectedLab = labs.find(lab => lab.building === selectedBuilding && lab.room === selectedRoom);
 
             if (selectedLab) {
-                // Populate available seats for the selected lab and time range
-                populateSeats(selectedLab.seatIds);
+                const seats = await fetchLabSeats(selectedLab._id);
+                populateSeats(seats);
             } else {
                 console.error("Lab not found.");
             }
         }
-    });
-    
-    /*
-    // TODO: Modify to use routes instead of models.
+    }
+
+    function areRequiredFieldsSelected() {
+        const isSelected = buildingSelect.value && roomSelect.value && dateInput.value && startTimeSelect.value && endTimeSelect.value;
+        console.log("Are all required fields selected?", isSelected);
+        return isSelected;
+    }
+
+    async function fetchLabSeats(labID) {
+        try {
+            const response = await fetch(`/api/seats-by-lab?labID=${labID}`);
+            const seats = await response.json();
+            console.log("Fetched seats:", seats);
+            return seats;
+        } catch (error) {
+            console.error("Error fetching seats:", error);
+            return [];
+        }
+    }
+
+    // TODO: Revise!
     function populateSeats(seats) {
         console.log("Populating seats with data:", seats);
-        seatSelectionDiv.innerHTML = '';  // Clear previous selections
+        seatSelectionDiv.innerHTML = '';
     
         const selectedBuilding = buildingSelect.value;
         const selectedRoom = roomSelect.value;
@@ -307,30 +324,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error("Error fetching reservations:", error);
             });
     }
-    
+
     async function fetchReservations(building, room, startDate, endDate) {
         try {
             console.log("Fetching reservations for:", { building, room, startDate, endDate });
     
-            // Find the lab that matches the selected building and room
-            const lab = await Lab.model.findOne({ building, room }).exec();
-            if (!lab) {
-                console.error("Lab not found for the given building and room.");
-                return [];
-            }
-    
-            console.log("Found lab:", lab);
-    
-            // Find seat IDs for the lab
-            const seatIDs = await Seat.model.find({ labID: lab._id }).distinct('_id');
-            console.log("Lab seat IDs:", seatIDs);
-    
-            // Find reservations for seats in this lab that overlap with the selected time period
-            const reservations = await Reservation.model.find({
-                seatIDs: { $in: seatIDs },
-                startDateTime: { $lt: endDate },  // Reservation starts before selected end time
-                endDateTime: { $gt: startDate }   // Reservation ends after selected start time
-            }).populate("seatIDs").exec();
+            const response = await fetch(`/api/manage-reservations/reservations?building=${building}&room=${room}&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
+            const reservations = await response.json();
     
             console.log("Reservations fetched:", reservations);
             return reservations;
@@ -339,9 +339,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return [];
         }
     }
-    */
-    
-
 
     function resetForm() {
         buildingSelect.value = "";

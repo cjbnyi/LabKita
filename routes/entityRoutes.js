@@ -116,8 +116,15 @@ router.delete('/labs/:labId',
 /* SEAT */
 /* =============================== */
 router.get('/seats',
+    authenticateToken,
     checkValidation,
     seatController.getSeats
+);
+
+router.get('/seats-by-lab',
+    authenticateToken,
+    checkValidation,
+    seatController.getLabSeats
 );
 
 router.post('/seats',

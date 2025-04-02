@@ -1,4 +1,4 @@
-import { Reservation } from '../../database/models/models.js';
+import { Lab, Seat, Reservation } from '../../database/models/models.js';
 import { formatDate } from '../../utils/generalUtils.js';
 
 const getEditReservationPage = async (req, res) => {
@@ -201,9 +201,45 @@ const getLiveReservations = async (req, res) => {
     }
 };
 
+// TODO: Confirm! End!
+const getSpecificReservations = async (req, res) => {
+    try {
+        const { building, room, startDate, endDate } = req.query;
+
+        console.log("API Request - Fetching specific reservations:", { building, room, startDate, endDate });
+
+        // Find the lab that matches the selected building and room
+        const lab = await Lab.model.findOne({ building, room }).exec();
+        if (!lab) {
+            return res.status(404).json({ message: "Lab not found" });
+        }
+
+        console.log("Found lab:", lab);
+
+        // Find seat IDs for the lab
+        const seatIDs = await Seat.model.find({ labID: lab._id }).distinct('_id');
+
+        console.log("Lab seat IDs:", seatIDs);
+
+        // Find reservations for seats in this lab that overlap with the selected time period
+        const reservations = await Reservation.model.find({
+            seatIDs: { $in: seatIDs },
+            startDateTime: { $lt: new Date(endDate) },  
+            endDateTime: { $gt: new Date(startDate) }   
+        }).populate("seatIDs").exec();
+
+        console.log("Reservations fetched:", reservations);
+        res.json(reservations);
+    } catch (error) {
+        console.error("Error fetching specific reservations:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
 export default {
     getEditReservationPage,
     renderCreateReservation,
     getManageReservations,
-    getLiveReservations
+    getLiveReservations,
+    getSpecificReservations
 };
