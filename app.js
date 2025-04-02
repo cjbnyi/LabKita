@@ -9,6 +9,7 @@ import morgan from 'morgan';
 import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import multer from 'multer'
 
 // Import jobs
 import { updateExpiredReservations } from './jobs/updateReservations.js';

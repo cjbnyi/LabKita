@@ -1,7 +1,9 @@
 import express from 'express';
 import { authenticateToken } from '../middleware/authMiddleware.js';
 import { profileController, studentController } from '../controllers/controllers.js';
-import { checkValidation } from '../middleware/validationMiddleware.js';
+import { checkValidation, validateMongoId } from '../middleware/validationMiddleware.js';
+import { upload } from '../middleware/uploadMiddleware.js'
+
 
 const router = express.Router();
 
@@ -25,6 +27,7 @@ router.get('/profile/me/update',
 
 router.put('/profile/me/update',
     authenticateToken,
+    upload.single('profile_pic'),
     checkValidation,
     studentController.updateStudent
 );
