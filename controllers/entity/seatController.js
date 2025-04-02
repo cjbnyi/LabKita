@@ -13,7 +13,6 @@ const getSeats = async (req, res) => {
     }
 };
 
-// TODO: Confirm!
 const getLabSeats = async (req, res) => {
     try {
         const { labID } = req.query;

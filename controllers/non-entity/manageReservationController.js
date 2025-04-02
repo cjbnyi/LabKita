@@ -201,7 +201,6 @@ const getLiveReservations = async (req, res) => {
     }
 };
 
-// TODO: Confirm! End!
 const getSpecificReservations = async (req, res) => {
     try {
         const { building, room, startDate, endDate } = req.query;

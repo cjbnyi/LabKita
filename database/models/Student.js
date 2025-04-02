@@ -2,7 +2,14 @@ import bcrypt from 'bcryptjs';
 import { Schema, model } from 'mongoose';
 
 const StudentSchema = new Schema({
-    universityID: { type: String, required: true, unique: true, trim: true, index: true},
+    universityID: { 
+        type: String, 
+        required: true, 
+        unique: true, 
+        trim: true, 
+        index: true,
+        match: [/^\d{8}$/, "University ID must be exactly 8 digits"]
+    },
     firstName: { type: String, required: true, trim: true },
     lastName: { type: String, required: true, trim: true },
     email: { 

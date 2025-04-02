@@ -30,7 +30,6 @@ router.get('/manage-reservations/create',
     manageReservationController.renderCreateReservation
 );
 
-// TODO: Confirm!
 router.get('/manage-reservations/reservations',
     authenticateToken,
     checkValidation,

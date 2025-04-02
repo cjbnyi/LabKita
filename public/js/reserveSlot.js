@@ -361,13 +361,46 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    seatSelectionDiv.addEventListener("change", () => {
+        const selectedSeats = document.querySelectorAll('input[name="seats"]:checked');
+        confirmSeatsButton.disabled = selectedSeats.length === 0;
+    });
 
+    function generateStudentFields(numberOfSeats) {
+        console.log("Generating student input fields for:", numberOfSeats, "seats");
+    
+        creditedStudentFields.innerHTML = '';
+    
+        const studentInputs = [];
+        
+        for (let i = 0; i < numberOfSeats; i++) {
+            const input = document.createElement("input");
+            input.type = "text";
+            input.classList.add("form-control", "mb-2");
+            input.placeholder = `Enter university ID of student #${i + 1}`;
+            
+            // Store reference for validation
+            studentInputs.push(input);
+            creditedStudentFields.appendChild(input);
+        }
+    
+        function validateInputs() {
+            const ids = studentInputs.map(input => input.value.trim());
+            const allValid = ids.every(id => id.length === 8 && /^\d+$/.test(id)); // Example: 8-digit numeric ID
+            const unique = new Set(ids).size === ids.length; // Ensure uniqueness
+            
+            reserveButton.disabled = !(allValid && unique);
+        }
+    
+        studentInputs.forEach(input => input.addEventListener("input", validateInputs));
+    
+        console.log("Student input fields generated.");
+    }    
 
     function resetForm() {
         buildingSelect.value = "";
         roomSelect.innerHTML = '<option value="" disabled selected>Select a building first</option>';
         roomSelect.disabled = true;
-        seatSelectionDiv.innerHTML = '<option value="" disabled selected>Loading seats...</option>';
         dateInput.value = "";
         startTimeSelect.innerHTML = '<option value="" disabled selected>Select start time</option>';
         endTimeSelect.innerHTML = '<option value="" disabled selected>Select end time</option>';
@@ -382,8 +415,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    // EVERYTHING BELOW ISN'T FINALIZED
-
+    // EVERYTHING ABOVE IS FINALIZED
 
 
 
@@ -401,24 +433,7 @@ document.addEventListener("DOMContentLoaded", function () {
         studentsSection.style.display = 'block';  // Show students input section
         generateStudentFields(selectedSeats.length);
     });
-
-    function generateStudentFields(numberOfSeats) {
-        console.log("Generating student input fields for:", numberOfSeats, "seats");
-
-        creditedStudentFields.innerHTML = '';  // Clear previous fields
-
-        for (let i = 0; i < numberOfSeats; i++) {
-            const input = document.createElement("input");
-            input.type = "text";
-            input.classList.add("form-control", "mb-2");
-            input.placeholder = `Enter name of student #${i + 1}`;
-            creditedStudentFields.appendChild(input);
-        }
-
-        // Enable the reserve button once students are entered
-        reserveButton.disabled = false;
-        console.log("Student input fields generated.");
-    }
+    
 
     reserveButton.addEventListener("click", function () {
         const selectedRoom = roomSelect.value;
@@ -470,6 +485,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Error making reservation:", error);
         });
     });
+
 
 
 });
