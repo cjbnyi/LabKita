@@ -4,8 +4,7 @@ import Student from '../../database/models/Student.js'
 
 import {
     generateAccessToken,
-    generateRefreshToken,
-    refreshAccessToken
+    generateRefreshToken
 } from '../../utils/tokenUtils.js';
 
 const renderSignup = (req, res) => {
@@ -15,6 +14,7 @@ const renderSignup = (req, res) => {
     })
 }
 
+// TODO: Finalize this
 const signup = async (req, res) => {
     const { universityID, email, password } = req.body;
 
@@ -34,7 +34,7 @@ const signup = async (req, res) => {
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // TODO: Actualize this.
+        // TODO: Finalize this.
         // Create new student
         const newStudent = await Student.create({
             universityID,
@@ -108,7 +108,7 @@ const login = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Lax',
-            maxAge: 15 * 60 * 1000 * 1000 // TODO: Revert later to actual value
+            maxAge: 15 * 60 * 1000 // 15 minutes
         });
 
         // Store refresh token in an httpOnly cookie
@@ -146,9 +146,32 @@ const logout = async (req, res) => {
     }
 };
 
-const refreshToken = async (req, res) => {
+const refreshAccessToken = async (req, res) => {
     try {
-        refreshAccessToken(req, res);
+        const refreshToken = req.cookies.refreshToken;
+
+        if (!refreshToken) {
+            return res.status(401).json({ message: 'No refresh token provided' });
+        }
+
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+            if (err) {
+                return res.status(403).json({ message: 'Invalid refresh token' });
+            }
+
+            // Generate a new access token
+            const newAccessToken = generateAccessToken(user);
+
+            // Set new access token in cookies
+            res.cookie('accessToken', newAccessToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'Lax',
+                maxAge: 15 * 60 * 1000 // 15 minutes
+            });
+
+            return res.status(200).json({ message: "Access token refreshed" });
+        });
     } catch (error) {
         console.error("Error refreshing token:", error);
         res.status(500).json({ error: 'Error refreshing token' });
@@ -161,5 +184,5 @@ export default {
     renderLogin,
     login,
     logout,
-    refreshToken
+    refreshAccessToken
 };

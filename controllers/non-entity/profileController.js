@@ -8,6 +8,7 @@ const renderProfile = async (req, res) => {
         const isUser = !req.params.universityId;
         
         if (isUser) {
+            console.log("res.locals.user:", res.locals.user);
             // If no universityId in params, use the current user's info from res.locals.user
             student = await getStudentByID(res.locals.user.universityID);
         } else {

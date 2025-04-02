@@ -41,7 +41,7 @@
                                         Anonymous
                                     {{else}}
                                         {{#each this.creditedStudents}}
-                                            <a href="/profile/{{this.universityID}}">{{this.fullName}}</a>{{#unless @last}}, {{/unless}}
+                                            <a href="/api/profile/{{this.universityID}}">{{this.fullName}}</a>{{#unless @last}}, {{/unless}}
                                         {{/each}}
                                     {{/if}}
                                 </td>

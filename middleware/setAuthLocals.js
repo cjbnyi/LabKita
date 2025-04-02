@@ -32,4 +32,4 @@ const setAuthLocals = (req, res, next) => {
 
 export {
     setAuthLocals
-} ;
+};

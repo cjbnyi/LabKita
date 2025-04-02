@@ -27,25 +27,7 @@ const generateRefreshToken = (user) => {
     );
 };
 
-// Verify and refresh access token
-const refreshAccessToken = async (req, res) => {
-    try {
-        const refreshToken = req.cookies.refreshToken;
-        if (!refreshToken) return res.status(401).json({ error: 'Unauthorized' });
-
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-            if (err) return res.status(403).json({ error: 'Forbidden' });
-
-            const accessToken = generateAccessToken({ id: user.id, role: user.role });
-            res.json({ accessToken });
-        });
-    } catch (error) {
-        res.status(500).json({ error: 'Error refreshing token' });
-    }
-};
-
 export {
     generateAccessToken,
     generateRefreshToken,
-    refreshAccessToken
 };
