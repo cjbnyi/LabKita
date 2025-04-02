@@ -191,6 +191,7 @@ const getLiveReservations = async (req, res) => {
 
         res.json({
             success: true,
+            isAdmin: req.user.role === 'admin',
             upcomingReservations: upcomingReservations.map(formatReservation),
             pastReservations: pastReservations.map(formatReservation),
         });

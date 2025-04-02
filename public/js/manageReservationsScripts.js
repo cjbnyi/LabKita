@@ -62,6 +62,8 @@ function updateReservations() {
                 $("#upcomingReservationsBody").empty();
                 $("#pastReservationsBody").empty();
 
+                const isAdmin = data.isAdmin;
+
                 // Update upcoming reservations
                 if (data.upcomingReservations.length > 0) {
                     data.upcomingReservations.forEach(reservation => {
@@ -70,6 +72,15 @@ function updateReservations() {
                             reservation.creditedStudents.map(student => 
                                 `<a href="/api/profile/${student.universityID}">${student.fullName}</a>`
                             ).join(", ");
+
+                        const startTime = new Date(reservation.start_datetime);
+                        const now = new Date();
+                        const diffMinutes = (startTime - now) / (1000 * 60); // Convert to minutes
+
+                        const showCancel = isAdmin ? diffMinutes <= 10 : true;
+                        const cancelButton = showCancel ? 
+                            `<button class="btn btn-danger btn-sm cancel-btn" onclick="cancelReservation('${reservation.id}')">Cancel</button>` 
+                            : '';
 
                         $("#upcomingReservationsBody").append(`
                             <tr data-id="${reservation.id}">
@@ -85,7 +96,7 @@ function updateReservations() {
                                     <a href="/api/manage-reservations/edit/${reservation.id}">
                                         <button class="btn btn-warning btn-sm">Edit</button>
                                     </a>
-                                    <button class="btn btn-danger btn-sm cancel-btn" onclick="cancelReservation('${reservation.id}')">Cancel</button>
+                                    ${cancelButton}
                                 </td>
                             </tr>
                         `);
