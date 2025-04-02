@@ -21,7 +21,10 @@
         <!-- Date Selection -->
         <div class="mb-3">
             <label for="date" class="form-label d-block text-start">Select a Date:</label>
-            <input type="date" id="date" class="form-control w-100">
+            <select id="date" class="form-select w-100">
+                <option value="" disabled selected>Select a date</option>
+                <!-- Dynamically populated next 7 available days -->
+            </select>
         </div>
 
         <!-- Time Selection -->
@@ -41,10 +44,23 @@
 
         <!-- Seat Selection -->
         <div class="mb-3">
-            <label for="seat" class="form-label d-block text-start">Select an Available Seat:</label>
-            <select id="seat" class="form-select w-100">
-                <option value="" disabled selected>Loading seats...</option>
-            </select>
+            <label for="seats" class="form-label d-block text-start">Select Available Seats:</label>
+            <div id="seat-selection" class="d-flex flex-column">
+                <!-- Dynamically populated checkboxes for seat selection -->
+            </div>
+        </div>
+
+        <!-- Confirm Seat Selection -->
+        <div class="mb-3 text-center">
+            <button class="btn btn-secondary w-100" id="confirmSeatsButton" disabled>Confirm Seat Selection</button>
+        </div>
+
+        <!-- Credited Students Section -->
+        <div id="students-section" class="mb-3" style="display:none;">
+            <label for="credited-students" class="form-label d-block text-start">Enter Credited Students:</label>
+            <div id="credited-student-fields" class="d-flex flex-column">
+                <!-- Dynamically populated input fields for credited students -->
+            </div>
         </div>
 
         <!-- Anonymous Option -->
@@ -55,12 +71,14 @@
 
         <!-- Reserve Button -->
         <div class="text-center">
-            <button class="btn btn-primary btn-lg w-100" id="reserveButton">Reserve</button>
+            <button class="btn btn-primary btn-lg w-100" id="reserveButton" disabled>Reserve</button>
         </div>
     </div>
 </section>
+
 <script>
     window.labsData = {{{labsData}}};
     console.log("Labs Data in Client:", window.labsData);
 </script>
+
 <script src="/public/js/reserveSlot.js"></script>
