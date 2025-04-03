@@ -69,13 +69,12 @@ The following students of De La Salle University - Manila, Philippines collabora
 
 ---
 
-## Tech Stack  
+## Tech Stack
 
-List of technologies and frameworks used in the project:
+The following web technologies and frameworks were used for this project:
 
 - **Backend**: Node.js, Express.js, MongoDB
 - **Frontend**: Bootstrap, Handlebars, JavaScript
-- **Authentication**: JWT (has yet to be implemented in Phase 3 of our MCO)  
 
 ---
 
@@ -83,40 +82,39 @@ List of technologies and frameworks used in the project:
 
 ### NPM packages
 
-The following NPM packages are used in this project:
+### Dependencies
 
-| Package | Description |
-|---------|-------------|
-| **bcryptjs** | Password hashing library for authentication. |
-| **cookie-parser** | Middleware to parse cookies in requests. |
-| **dotenv** | Loads environment variables from a `.env` file. |
-| **express** | Fast, minimalist web framework for Node.js. |
-| **express-fileupload**| Simple middleware for handling file uploads. |
-| **express-handlebars**| Handlebars templating engine for Express. |
-| **express-session** | Session middleware for Express. |
-| **express-validator** | Middleware for validating request data. |
-| **hbs** | Handlebars view engine for Express. |
-| **jsonwebtoken** | Library for generating and verifying JWTs. |
-| **lodash** | Utility library for working with objects, arrays, and functions. |
-| **mongodb** | Official MongoDB driver for Node.js. |
-| **mongoose** | MongoDB object modeling tool. |
-| **morgan** | HTTP request logger middleware for Node.js. |
-| **node-cron** | Task scheduler for Node.js. |
-| **path** | Utility for handling and transforming file paths. |
-| **validator** | Library for string validation and sanitization. |
-
+| Package                  | Description                                                   |
+|--------------------------|---------------------------------------------------------------|
+| **bcryptjs**              | Password hashing library for authentication.                  |
+| **cookie-parser**         | Middleware to parse cookies in requests.                       |
+| **dotenv**                | Loads environment variables from a `.env` file.                |
+| **express**               | Fast, minimalist web framework for Node.js.                    |
+| **express-fileupload**    | Simple middleware for handling file uploads.                  |
+| **express-handlebars**    | Handlebars templating engine for Express.                      |
+| **express-rate-limit**    | Middleware to limit repeated requests to protect against DoS attacks. |
+| **express-session**       | Session middleware for Express.                                |
+| **express-validator**     | Middleware for validating request data.                        |
+| **hbs**                   | Handlebars view engine for Express.                            |
+| **jsonwebtoken**          | Library for generating and verifying JWTs.                     |
+| **lodash**                | Utility library for working with objects, arrays, and functions. |
+| **moment-timezone**       | Library for working with timezones in JavaScript.              |
+| **mongodb**               | Official MongoDB driver for Node.js.                           |
+| **mongoose**              | MongoDB object modeling tool.                                  |
+| **morgan**                | HTTP request logger middleware for Node.js.                    |
+| **multer**                | Middleware for handling `multipart/form-data` (file uploads).   |
+| **node-cron**             | Task scheduler for Node.js.                                    |
+| **path**                  | Utility for handling and transforming file paths.              |
+| **validator**             | Library for string validation and sanitization.                |
+| **helmet**                | Helps secure Express apps by setting various HTTP headers.     |
 
 ### Third-party libraries
-
-The following third-party libraries are used in this project:
 
 | Library | Description |
 |---------|-------------|
 | **Bootstrap** | Frontend framework for responsive UI design. |
 | **Font Awesome** |	Icon library for adding scalable vector icons. |
 | **jQuery** | JavaScript library for DOM manipulation and AJAX requests. |
-
-These libraries are included via a CDN.
 
 ---
 
@@ -159,12 +157,21 @@ Ensure you have the following installed in your system:
     node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
     ```
     
-    to generate a JWT secret token. It will be used for user authentication and
-    authorization.  
+    to generate distinct secrets for the JWT access token and the refresh token. They will be used for user authentication and authorization.  
     
     Feel free to modify the environment variables as needed.
 
-4. **Run the server:**  
+4. **Seed the database (optional):**
+
+    Optionally, you can seed the database by running the command
+
+    ```
+    npm run populate
+    ```
+
+    which ensures that the application has sample data ready for testing.
+
+5. **Run the server:**  
 
     ```
     node app.js
@@ -194,15 +201,3 @@ Notably, the collaboration served as a good learning opportunity for the develop
 new or confusing programming concepts and syntax.  
 
 ---
-
-## Limitations and Possible Errors
-
-1. The Web App assumes that the user is
-    - automatically logged in,
-    - and is BOTH a user and an admin
-    hence why a student account (Enzo Rafael Chan) has admin privileges. This is to simply show features that the admin can access.
-
-2. The Web App also has not implemented the log-out feature. However, in the foreseeable future, features such as Managing Reservations and Edit Profile will be locked if logged out.
-
-3. That's all (for now).
-
