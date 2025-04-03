@@ -16,7 +16,8 @@ const getReservations = async (req, res) => {
         // Fetch reservations that include any of the specified seat IDs
         const reservations = await Reservation.model.find({ seatIDs: { $in: seatIDs } })
             .populate("seatIDs")
-            .populate("creditedStudentIDs");
+            .populate("creditedStudentIDs")
+            .sort({ startDateTime: 1 });
 
         const formattedReservations = reservations.map(reservation => ({
             ...reservation.toObject(),

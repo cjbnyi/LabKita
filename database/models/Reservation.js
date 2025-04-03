@@ -27,7 +27,7 @@ const ReservationSchema = new Schema({
             message: 'End time must be later than start time.'
         }
     },
-    creditedStudentIDs: [{ 
+    creditedStudentIDs: [{
         type: Schema.Types.ObjectId, 
         ref: 'Student',
         required: true,

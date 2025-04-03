@@ -63,11 +63,20 @@ router.post('/students',
     studentController.createStudent
 );
 
+router.post('/students/validate-university-ids',
+    authenticateToken,
+    checkValidation,
+    studentController.validateUniversityIDs
+);
+
+// Removed due to edit reservation complication
+/*
 router.post('/students/validate',
     authenticateToken,
     checkValidation,
     studentController.validateStudents
 );
+*/
 
 router.put('/students/:studentId',
     authenticateToken,

@@ -105,6 +105,50 @@ const deleteStudent = async (req, res) => {
 /* =============================== */
 /* VALIDATE */
 /* =============================== */
+const validateUniversityIDs = async (req, res) => {
+    try {
+        const { universityIDs } = req.body;
+
+        if (!Array.isArray(universityIDs) || universityIDs.length === 0) {
+            return res.status(400).json({ error: "No university IDs provided." });
+        }
+
+        // Find students with the provided university IDs
+        const foundStudents = await Student.model.find({ universityID: { $in: universityIDs } });
+
+        // Extract found university IDs and their corresponding object IDs
+        const foundStudentsData = foundStudents.map(student => ({
+            universityID: student.universityID,
+            objectID: student._id.toString()  // Convert ObjectId to string for easier handling in frontend
+        }));
+
+        // Extract found university IDs
+        const foundIDs = foundStudents.map(student => student.universityID);
+
+        // Identify missing university IDs
+        const missingIDs = universityIDs.filter(id => !foundIDs.includes(id));
+
+        if (missingIDs.length > 0) {
+            return res.status(400).json({ 
+                error: "Some university IDs are invalid.", 
+                missingIDs,
+                foundStudentsData  // Return found students' object IDs
+            });
+        }
+
+        // If all IDs are valid, return found students' object IDs
+        return res.json({ 
+            message: "All university IDs are valid.", 
+            foundStudentsData 
+        });
+
+    } catch (error) {
+        console.error("Error validating university IDs:", error);
+        return res.status(500).json({ error: "Internal server error." });
+    }
+};
+
+/*
 const validateStudents = async (req, res) => {
     try {
         const { studentNames } = req.body;
@@ -147,11 +191,12 @@ const validateStudents = async (req, res) => {
         res.status(500).json({ message: "Internal server error." });
     }
 };
+*/
 
 export default {
     getStudents,
     createStudent,
     updateStudent,
     deleteStudent,
-    validateStudents
+    validateUniversityIDs
 };

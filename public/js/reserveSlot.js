@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const confirmSeatsButton = document.getElementById("confirmSeatsButton");
     const studentsSection = document.getElementById("students-section");
     const creditedStudentFields = document.getElementById("credited-student-fields");
+    const purposeInput = document.getElementById("reservation-purpose");
+    const remainingCharacters = document.getElementById("remaining-characters");
 
     let labs = window.labsData || [];
     console.log("Labs data loaded:", labs);
@@ -72,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to populate available dates based on room's schedule
     function populateDates(selectedLab) {
         const availableDays = selectedLab.daysOpen || [];
-        const NUM_DAYS = 14;
+        const NUM_DAYS = 7;
 
         const today = new Date();
         const nextDays = [];
@@ -366,6 +368,25 @@ document.addEventListener("DOMContentLoaded", function () {
         confirmSeatsButton.disabled = selectedSeats.length === 0;
     });
 
+    confirmSeatsButton.addEventListener("click", function () {
+        const selectedSeats = Array.from(seatSelectionDiv.querySelectorAll("input[type='checkbox']:checked"))
+            .map(checkbox => checkbox.value);
+    
+        console.log("Selected seats:", selectedSeats);
+    
+        if (selectedSeats.length === 0) {
+            alert("Please select at least one seat.");
+            return;
+        }
+    
+        studentsSection.style.display = 'block'; 
+        generateStudentFields(selectedSeats.length);
+
+        document.getElementById("purpose-section").style.display = 'block';
+        document.getElementById("anonymous-section").style.display = 'block';
+        document.getElementById("reserveButton").style.display = 'block';
+    });     
+
     function generateStudentFields(numberOfSeats) {
         console.log("Generating student input fields for:", numberOfSeats, "seats");
     
@@ -386,8 +407,8 @@ document.addEventListener("DOMContentLoaded", function () {
     
         function validateInputs() {
             const ids = studentInputs.map(input => input.value.trim());
-            const allValid = ids.every(id => id.length === 8 && /^\d+$/.test(id)); // Example: 8-digit numeric ID
-            const unique = new Set(ids).size === ids.length; // Ensure uniqueness
+            const allValid = ids.every(id => id.length === 8 && /^\d+$/.test(id));
+            const unique = new Set(ids).size === ids.length;
             
             reserveButton.disabled = !(allValid && unique);
         }
@@ -396,6 +417,94 @@ document.addEventListener("DOMContentLoaded", function () {
     
         console.log("Student input fields generated.");
     }    
+
+    purposeInput.addEventListener("input", function () {
+        const maxLength = 200;
+        const currentLength = this.value.length;
+        const remaining = maxLength - currentLength;
+
+        remainingCharacters.textContent = `${remaining} characters remaining`;
+
+        if (currentLength >= maxLength) {
+            this.value = this.value.slice(0, maxLength);
+        }
+    });
+
+    reserveButton.addEventListener("click", async function () {
+        const selectedBuilding = buildingSelect.value;
+        const selectedRoom = roomSelect.value;
+        const selectedLab = labs.find(lab => lab.building === selectedBuilding && lab.room === selectedRoom);
+        const selectedSeats = Array.from(seatSelectionDiv.querySelectorAll("input[type='checkbox']:checked"))
+            .map(checkbox => checkbox.value);
+        const selectedStudents = Array.from(creditedStudentFields.querySelectorAll("input"))
+            .map(input => input.value.trim())
+            .filter(value => value);
+        const purpose = purposeInput.value.trim();
+    
+        // Validation check for required fields
+        if (!selectedLab || selectedSeats.length === 0 || selectedStudents.length === 0) {
+            alert("Please ensure all required fields are filled out.");
+            return;
+        }
+    
+        try {
+            // Step 1: Validate university IDs
+            const validationResponse = await fetch(`/api/students/validate-university-ids`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ universityIDs: selectedStudents }),
+            });
+    
+            const validationData = await validationResponse.json();
+    
+            if (!validationResponse.ok) {
+                console.error("Validation failed:", validationData);
+                alert(`Invalid university IDs: ${validationData.missingIDs.join(", ")}`);
+                return;
+            }
+    
+            console.log("All university IDs validated successfully.");
+    
+            // Step 2: Extract student ObjectIDs for the valid students
+            const foundStudentsData = validationData.foundStudentsData;
+            const creditedStudentIDs = foundStudentsData.map(student => student.objectID);
+    
+            // Step 3: Create the reservation data
+            const reservationData = {
+                seatIDs: selectedSeats,
+                startDateTime: new Date(`${dateInput.value}T${startTimeSelect.value}:00.000`),
+                endDateTime: new Date(`${dateInput.value}T${endTimeSelect.value}:00.000`),
+                creditedStudentIDs: creditedStudentIDs,
+                purpose: purpose,
+                status: "Reserved",
+                isAnonymous: anonymousCheck.checked,
+            };
+    
+            console.log("Reservation data to be sent:", reservationData);
+    
+            // Step 4: API call
+            const reservationResponse = await fetch(`/api/reservations`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(reservationData),
+            });
+        
+            const reservationResult = await reservationResponse.json();
+        
+            if (!reservationResponse.ok) {
+                console.error("Reservation failed:", reservationResult);
+                alert("Reservation failed! Please try again.");
+                return;
+            }
+        
+            console.log("Reservation successful. Server response:", reservationResult);
+            resetForm();
+            alert("Reservation successful!");
+        } catch (error) {
+            console.error("Error making reservation:", error);
+            alert("An error occurred. Please try again.");
+        }
+    });
 
     function resetForm() {
         buildingSelect.value = "";
@@ -406,86 +515,24 @@ document.addEventListener("DOMContentLoaded", function () {
         endTimeSelect.innerHTML = '<option value="" disabled selected>Select end time</option>';
         endTimeSelect.disabled = true;
         confirmSeatsButton.disabled = true;
+        
+        // Hide seat selection, students section, purpose, and reserve anonymously checkbox
+        seatSelectionDiv.style.display = 'none';
         studentsSection.style.display = 'none';
+        document.getElementById("purpose-section").style.display = 'none';
+        document.getElementById("anonymous-section").style.display = 'none';
+        document.getElementById("reserveButton").style.display = 'none';
+        
+        // Clear students section and input fields
+        creditedStudentFields.innerHTML = '';
+        
+        // Reset purpose input field
+        purposeInput.value = '';
+        
+        // Reset reserve button
         reserveButton.disabled = true;
         anonymousCheck.checked = false;
-
+    
         console.log("Form reset.");
     }
-
-
-
-    // EVERYTHING ABOVE IS FINALIZED
-
-
-
-    confirmSeatsButton.addEventListener("click", function () {
-        const selectedSeats = Array.from(seatSelectionDiv.querySelectorAll("input[type='checkbox']:checked"))
-            .map(checkbox => checkbox.value);
-
-        console.log("Selected seats:", selectedSeats);
-
-        if (selectedSeats.length === 0) {
-            alert("Please select at least one seat.");
-            return;
-        }
-
-        studentsSection.style.display = 'block';  // Show students input section
-        generateStudentFields(selectedSeats.length);
-    });
-    
-
-    reserveButton.addEventListener("click", function () {
-        const selectedRoom = roomSelect.value;
-        const selectedLab = labs.find(lab => lab.room === selectedRoom);
-        const selectedSeats = Array.from(seatSelectionDiv.querySelectorAll("input[type='checkbox']:checked"))
-            .map(checkbox => checkbox.value);
-
-        const selectedStudents = Array.from(creditedStudentFields.querySelectorAll("input"))
-            .map(input => input.value.trim())
-            .filter(value => value);
-
-        console.log("Reservation details:");
-        console.log("Selected Room:", selectedRoom);
-        console.log("Selected Lab:", selectedLab);
-        console.log("Selected Seats:", selectedSeats);
-        console.log("Selected Students:", selectedStudents);
-
-        if (!selectedLab || selectedSeats.length === 0 || selectedStudents.length === 0) {
-            alert("Please ensure all required fields are filled out.");
-            return;
-        }
-
-        const reservationData = {
-            labID: selectedLab._id,
-            seatIDs: selectedSeats,
-            startDateTime: new Date(`${dateInput.value}T${startTimeSelect.value}:00.000Z`),
-            endDateTime: new Date(`${dateInput.value}T${endTimeSelect.value}:00.000Z`),
-            requestingStudentID: "",  // Replace with actual student ID
-            creditedStudentIDs: selectedStudents,  // Store credited students here
-            purpose: "Lab reservation",
-            status: "Reserved",
-            isAnonymous: anonymousCheck.checked,
-        };
-
-        console.log("Reservation data to be sent:", reservationData);
-
-        fetch(`/api/reservations`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(reservationData),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Reservation successful. Server response:", data);
-            alert("Reservation successful!");
-            resetForm();
-        })
-        .catch(error => {
-            console.error("Error making reservation:", error);
-        });
-    });
-
-
-
 });

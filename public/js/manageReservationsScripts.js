@@ -75,9 +75,9 @@ function updateReservations() {
 
                         const startTime = new Date(reservation.start_datetime);
                         const now = new Date();
-                        const diffMinutes = (startTime - now) / (1000 * 60); // Convert to minutes
+                        const diffMinutes = (now - startTime) / (1000 * 60); // Convert to minutes
 
-                        const showCancel = isAdmin ? diffMinutes <= 10 : true;
+                        const showCancel = isAdmin ? (diffMinutes >= 0 && diffMinutes <= 10) : true;
                         const cancelButton = showCancel ? 
                             `<button class="btn btn-danger btn-sm cancel-btn" onclick="cancelReservation('${reservation.id}')">Cancel</button>` 
                             : '';

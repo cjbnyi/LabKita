@@ -63,8 +63,15 @@
             </div>
         </div>
 
+        <!-- Reservation Purpose Section -->
+        <div id="purpose-section" class="mb-3" style="display:none;">
+            <label for="reservation-purpose" class="form-label d-block text-start">Purpose of Reservation:</label>
+            <textarea id="reservation-purpose" class="form-control" rows="3" placeholder="Enter the purpose of this reservation" maxlength="200"></textarea>
+            <small id="remaining-characters" class="form-text text-muted">200 characters remaining</small>
+        </div>
+
         <!-- Anonymous Option -->
-        <div class="form-check mb-3 text-start">
+        <div id="anonymous-section" class="form-check mb-3 text-start" style="display:none;">
             <input type="checkbox" class="form-check-input" id="anonymous">
             <label class="form-check-label" for="anonymous">Reserve Anonymously</label>
         </div>

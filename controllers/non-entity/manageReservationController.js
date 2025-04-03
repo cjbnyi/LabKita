@@ -99,7 +99,8 @@ const getManageReservations = async (req, res) => {
             ...(req.user.role !== "admin" && { creditedStudentIDs: req.user.id }) 
         })
         .populate({ path: "seatIDs", populate: { path: "labID" } })
-        .populate("creditedStudentIDs");
+        .populate("creditedStudentIDs")
+        .sort({ startDateTime: 1 });
 
         // Fetch past reservations (status: Completed or Cancelled) belonging to the user (unless admin)
         let pastReservations = await Reservation.model.find({ 
@@ -107,7 +108,8 @@ const getManageReservations = async (req, res) => {
             ...(req.user.role !== "admin" && { creditedStudentIDs: req.user.id }) 
         })
         .populate({ path: "seatIDs", populate: { path: "labID" } })
-        .populate("creditedStudentIDs");
+        .populate("creditedStudentIDs")
+        .sort({ startDateTime: 1 });
 
         console.log("Fetched Upcoming Reservations:", upcomingReservations.length);
         console.log("Fetched Past Reservations:", pastReservations.length);
@@ -154,7 +156,8 @@ const getLiveReservations = async (req, res) => {
             ...(req.user.role !== "admin" && { creditedStudentIDs: req.user.id }) 
         })
         .populate({ path: "seatIDs", populate: { path: "labID" } })
-        .populate("creditedStudentIDs");
+        .populate("creditedStudentIDs")
+        .sort({ startDateTime: 1 });
 
         // Fetch past reservations (status: Completed or Cancelled) belonging to the user (unless admin)
         let pastReservations = await Reservation.model.find({ 
@@ -162,7 +165,8 @@ const getLiveReservations = async (req, res) => {
             ...(req.user.role !== "admin" && { creditedStudentIDs: req.user.id }) 
         })
         .populate({ path: "seatIDs", populate: { path: "labID" } })
-        .populate("creditedStudentIDs");
+        .populate("creditedStudentIDs")
+        .sort({ startDateTime: 1 });
 
         console.log("Fetched Upcoming Reservations:", upcomingReservations.length);
         console.log("Fetched Past Reservations:", pastReservations.length);
