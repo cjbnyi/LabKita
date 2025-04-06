@@ -94,7 +94,7 @@
 
         if (updateResponse.ok) {
             alert('Profile updated successfully!');
-            location.reload();
+            window.location.href = '/api/profile/me'; 
         } else {
             alert('Error updating profile.');
         }
