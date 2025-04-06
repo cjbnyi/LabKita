@@ -14,32 +14,52 @@ const renderSignup = (req, res) => {
     })
 }
 
-// TODO: Finalize this
 const signup = async (req, res) => {
-    const { universityID, email, password } = req.body;
+    const { universityID, email, password, confirmPassword } = req.body;
+    console.log("DEBUG aC.js - Received data 1:", req.body); // Log the incoming data
+    console.log("DEBUG aC.js - Password:", password);
+    console.log("DEBUG aC.js - Confirm Password:", confirmPassword);
+
 
     try {
+        if (!password || !confirmPassword) {
+            return res.status(400).json({ error: 'Password and confirm password are required' });
+        }
+
+        // Check password length
+        if (password.length < 8) {
+            console.log("Password too short!");
+            return res.status(400).json({ error: 'Password must be at least 8 characters long' });
+        }
+
+        // Check if the passwords match
+        if (password !== confirmPassword) {
+            console.log("Passwords do not match!");
+            return res.status(400).json({ error: 'Passwords do not match' });
+            
+        }
+
         // Check if the user already exists
-        const existingUser = await Student.findOne({ email });
+        const existingUser = await Student.model.findOne({ email });
         if (existingUser) {
+            console.log("Email already in use");
             return res.status(400).json({ error: 'Email already in use' });
         }
 
         // Check if universityID is already taken
-        const existingID = await Student.findOne({ universityID });
+        const existingID = await Student.model.findOne({ universityID });
         if (existingID) {
+            console.log("Student ID already in use");
             return res.status(400).json({ error: 'Student ID already in use' });
         }
 
-        // Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // Hash password and create new student
+        console.log("DEBUG aC.js - Sending raw password to DB:", password);
 
-        // TODO: Finalize this.
-        // Create new student
-        const newStudent = await Student.create({
+        const newStudent = await Student.createStudent({
             universityID,
             email,
-            password: hashedPassword,
+            password: password,
             firstName: 'Green',
             lastName: 'Archer',
             college: 'DLSU',
@@ -51,20 +71,19 @@ const signup = async (req, res) => {
         const accessToken = generateAccessToken(newStudent);
         const refreshToken = generateRefreshToken(newStudent);
 
-        // Store access token in an httpOnly cookie
+        // Store tokens in cookies
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Strict',
-            maxAge: 15 * 60 * 1000 * 1000 // TODO: Revert later to actual value
+            maxAge: 15 * 60 * 1000 * 1000
         });
 
-        // Store refresh token in an httpOnly cookie
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Strict',
-            maxAge: 21 * 24 * 60 * 60 * 1000 // 21 days
+            maxAge: 21 * 24 * 60 * 60 * 1000
         });
 
         res.status(201).json({ message: 'User registered successfully' });
@@ -73,6 +92,8 @@ const signup = async (req, res) => {
         res.status(500).json({ error: 'Error registering user', details: error.message });
     }
 };
+
+
 
 const renderLogin = (req, res) => {
     res.status(200).render('login', { 
@@ -88,7 +109,7 @@ const login = async (req, res) => {
         console.log("Received Login Request:", email);
 
         // Find user
-        const user = await getUserByEmail(email);
+        const user = await Student.model.findOne({ email }).select('+password');
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }

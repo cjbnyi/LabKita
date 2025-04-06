@@ -33,6 +33,7 @@ const StudentSchema = new Schema({
 // Ensure passwords are hashed before saving
 StudentSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
+    console.log("DEBUG student.js - Password before hashing:", this.password);
     if (!this.password.startsWith('$2a$')) { // Prevent double hashing
         this.password = await bcrypt.hash(this.password, 10);
     }
@@ -56,6 +57,7 @@ export default class Student {
     static async createStudent(studentData) {
         try {
             const newStudent = await this.model.create(studentData);
+            console.log("DEBUG student.js - Stored Password in DB:", newStudent.password);
             return newStudent.toObject();
         } catch (error) {
             console.error("Error creating Student document:", error);

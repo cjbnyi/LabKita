@@ -38,3 +38,67 @@
     <img class="computer-picture" src="/public/img/computer.png" alt="Profile Picture"/>
 
 </body>
+
+<script>
+document.getElementById('signupForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    
+    const submitButton = document.querySelector('button[type="submit"]');
+    submitButton.disabled = true;  // Disable submit button to prevent multiple submissions
+
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+
+    console.log('DEBUG register.hbs - Password:', password);
+    console.log('DEBUG register.hbs - Confirm Password:', confirmPassword);
+
+    // Check passwords match
+    if (password !== confirmPassword) {
+        document.getElementById('errorMessage').textContent = 'Passwords do not match!';
+        document.getElementById('errorMessage').style.display = 'block';
+        submitButton.disabled = false;  // Enable submit button again if passwords don't match
+        return;
+    } else {
+        document.getElementById('errorMessage').style.display = 'none';
+    }
+
+    const formData = {
+        universityID: document.getElementById('universityID').value,
+        email: document.getElementById('email').value,
+        password: password,
+        confirmPassword: confirmPassword
+    };
+
+    console.log('DEBUG register.hbs - Form Data Sent:', formData);
+
+    // Send request to backend
+    try {
+        const response = await fetch('/api/auth/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        console.log('Response Data:', data); // Log the response data for further debugging
+
+        if (response.ok) {
+            alert(data.message);
+            window.location.href = '/api/profile/me/update'; 
+        } else {
+            document.getElementById('errorMessage').textContent = data.error || 'An error occurred';
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+    } catch (error) {
+        console.error(error);
+        document.getElementById('errorMessage').textContent = 'Error connecting to server.';
+        document.getElementById('errorMessage').style.display = 'block';
+    } finally {
+        submitButton.disabled = false;  // Re-enable submit button if there was an error or after completion
+    }
+});
+
+</script>
