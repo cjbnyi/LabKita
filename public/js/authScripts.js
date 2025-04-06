@@ -2,10 +2,13 @@ export function initializeLogForms() {
     $(document).ready(function () {
         $('#loginForm').submit(function (event) {
             event.preventDefault();
-        
+
             let email = $('input[name="email"]').val();
             let password = $('input[name="password"]').val();
-        
+
+            // Clear any previous error messages
+            $('#errorMessage').hide();
+
             $.ajax({
                 url: '/api/auth/login',
                 method: 'POST',
@@ -13,15 +16,15 @@ export function initializeLogForms() {
                 data: JSON.stringify({ email, password }),
                 xhrFields: { withCredentials: true },
                 success: function (data) {
-                    // localStorage.setItem('userType', data.userType);
-                    window.location.href = '/'; 
+                    window.location.href = '/';
                 },
                 error: function (xhr) {
-                    let errorMessage = xhr.responseJSON?.error || 'Invalid credentials';
-                    $('#errorMessage').text(errorMessage).show();
+                    let errorMessage = 'User not found. Make sure that email and password are correct.' +
+                        '                <a href="mailto:christian_bunyi@dlsu.edu.ph" class="admin-contact">Contact administrators</a> if you forgot your account details.';
+                    $('#errorMessage').html(errorMessage).show(); // Use html() to render the <br> tag
                 }
-            });            
-        });        
+            });
+        });
 
         $('#signupForm').submit(function (event) {
             event.preventDefault(); // Stop page reload

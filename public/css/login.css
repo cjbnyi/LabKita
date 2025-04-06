@@ -51,7 +51,7 @@ body {
 
 .form-container h1 {
   margin-bottom: 25px;
-  font-size: 28px;
+  font-size: 35px;
   text-align: center;
   font-weight: bold; /* Make text bold */
   text-transform: uppercase; /* Make text all caps */
@@ -121,4 +121,37 @@ body {
   max-width: 500px;
   height: auto;
   opacity: 0.9;
+}
+
+.error {
+  color: white;
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  line-height: 1.4;
+  width: 100%;
+}
+
+.admin-contact {
+  color: white;
+  text-decoration: underline;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.admin-contact:hover {
+  opacity: 0.8;
+}
+
+/* Responsive line breaks */
+.error br {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .error br {
+    display: inline;
+  }
 }
