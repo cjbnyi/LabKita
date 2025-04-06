@@ -5,10 +5,9 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: white; /* Keeps the body white */
+  background: white;
 }
 
-/* Section containing login elements with the background image */
 .login-section {
   flex: 1;
   display: flex;
@@ -16,35 +15,47 @@ body {
   align-items: center;
   background: url('/public/img/bg-img.jpg') no-repeat center center/cover;
   padding: 50px 0;
+  position: relative;
 }
 
-/* Ensures content expands and pushes the footer to the bottom */
-.content {
-  flex: 1;
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.back-icon {
+  width: 40px;
+  height: auto;
+  cursor: pointer;
+}
+
+.login-container {
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 20px;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 100px;
 }
 
-/* Login Box - Floating */
 .form-container {
-  background: rgba(123, 2, 23, 0.95); /* Semi-transparent */
+  background: rgba(123, 2, 23, 0.95);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   width: 400px;
   color: #fff;
-  text-align: center;
-  position: absolute;
-  top: 40%;
-  left: 30%;
-  transform: translate(-50%, -50%);
 }
 
 .form-container h1 {
-  margin-bottom: 15px;
+  margin-bottom: 25px;
   font-size: 28px;
+  text-align: center;
+  font-weight: bold; /* Make text bold */
+  text-transform: uppercase; /* Make text all caps */
+  letter-spacing: 1px; /* Improve all-caps appearance */
 }
 
 .form-container input {
@@ -56,13 +67,30 @@ body {
   outline: none;
 }
 
+.remember-me {
+  display: flex;
+  align-items: center;
+  margin: 8px 0 20px 0; /* 8px top (closer to fields), 20px bottom (further from button) */
+}
+
+.remember-me input {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+}
+
+.remember-me label {
+  white-space: nowrap;
+  font-size: 16px;
+}
+
 .form-container button {
   width: 100%;
   padding: 12px;
-  margin-top: 15px;
+  margin: 15px 0;
   border: none;
   border-radius: 5px;
-  background: #ff7f94;
+  background: #d32f2f; /* Red color */
   color: white;
   font-weight: bold;
   cursor: pointer;
@@ -70,25 +98,27 @@ body {
 }
 
 .form-container button:hover {
-  background: #ff4a6b;
+  background: #b71c1c; /* Darker red on hover */
 }
 
-/* Image stays properly aligned */
+.register-link {
+  margin-top: 20px;
+  text-align: center;
+  color: white;
+}
+
+.register-link a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
 .computer-picture {
   max-width: 500px;
   height: auto;
   opacity: 0.9;
-  position: absolute;
-  top: 40%;
-  right: 15%;
-  transform: translate(0, -50%);
-}
-
-/* Footer stays at the bottom */
-.footer {
-  background: white;
-  text-align: center;
-  padding: 15px 0;
-  width: 100%;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
