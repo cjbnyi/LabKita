@@ -31,14 +31,16 @@
                     </div>
                 </a>
             </li>
-            <li class="nav-item text-center me-3">
-                <a class="nav-link text-light" href="/api/manage-reservations">
-                    <div class="d-flex flex-column">
-                        <i class="fas fa-calendar-check mb-1"></i>
-                        <span class="fs-6">Manage Reservations</span>
-                    </div>
-                </a>
-            </li>
+            {{#if isLoggedInAsStudent}}
+                <li class="nav-item text-center me-3">
+                    <a class="nav-link text-light" href="/api/manage-reservations">
+                        <div class="d-flex flex-column">
+                            <i class="fas fa-calendar-check mb-1"></i>
+                            <span class="fs-6">Manage Reservations</span>
+                        </div>
+                    </a>
+                </li>
+            {{/if}}
 
             {{!-- {{#if isLoggedInAsAdmin}}
                 <li class="nav-item text-center me-3">
@@ -58,7 +60,7 @@
                     </a>
                 </li>
             {{#/if}} --}}
-            
+
             {{!-- {{else}}
                 <li class="nav-item text-center me-3">
                     <a class="nav-link text-light" href="/api/manage-reservations/create">
@@ -89,12 +91,12 @@
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
                             <a href="/api/profile/me" class="dropdown-item d-flex align-items-center">
-                                <img src="{{user.profilePicture}}" 
-                                    alt="User Profile" 
-                                    class="rounded-circle" 
-                                    width="40" 
-                                    height="40"
-                                    onerror="this.onerror=null; this.src='/public/img/default-profile.png';">
+                                <img src="{{user.profilePicture}}"
+                                     alt="User Profile"
+                                     class="rounded-circle"
+                                     width="40"
+                                     height="40"
+                                     onerror="this.onerror=null; this.src='/public/img/default-profile.png';">
                                 <div class="ms-2">
                                     <strong class="d-block" style="color: black;">{{user.firstName}} {{user.lastName}}</strong>
                                     <span style="font-size: 0.85rem; color: grey;">{{user.universityID}}</span>
