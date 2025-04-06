@@ -2,29 +2,40 @@ body {
     font-family: Arial, sans-serif;
     background: linear-gradient(to bottom, #DD2D4A, #F26A8D, #F49CBB);
     color: #CBEEF3;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    gap: 5rem;
+    padding: 1.5rem;
 }
 
 #bg {
     background-color: #880D1E;
-    padding: 25px;
+    padding: 2rem 1.8rem;
     border-radius: 15px;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 350px;
-    height: auto;
+    width: 580px;
+    height: 480px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 h2 {
-    margin-bottom: 15px;
+    margin-bottom: 1.5rem;
     color: white;
-    font-size: 24px;
+    font-size: 32px;
     font-weight: bold;
+    letter-spacing: 1px;
 }
 
 p {
@@ -36,30 +47,38 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    flex: 1;
 }
 
-form div {
-    margin-bottom: 12px;
+.form-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
     width: 100%;
+}
+
+.form-group {
+    flex: 1;
     text-align: left;
 }
 
 label {
     display: block;
-    font-size: 14px;
+    font-size: 15px;
     color: #FFF;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-weight: 500;
 }
 
-input[type="email"], input[type="password"], input[type="text"] {
-    width: calc(100% - 20px);
-    max-width: 300px;
-    padding: 10px;
-    margin: 0 auto;
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
     border: 1px solid #F49CBB;
     border-radius: 8px;
     background-color: #FFF0F5;
-    display: block;
     font-size: 14px;
     box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.1);
     transition: border 0.3s ease;
@@ -70,12 +89,16 @@ input:focus {
     outline: none;
 }
 
+.button-container {
+    width: 100%;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
 button, .button {
-    width: 80%;
-    max-width: 300px;
-    margin: 15px auto;
-    display: block;
-    background-color: #F9B9CA;
+    width: 200px;
+    margin: 0 auto;
+    background-color: #DD2D4A;
     color: white;
     border: none;
     padding: 12px;
@@ -83,17 +106,28 @@ button, .button {
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 button:hover, .button:hover {
-    background-color: #DD2D4A;
+    background-color: #F26A8D;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.computer-picture-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    margin-left: 2rem;
 }
 
 .computer-picture {
-    width: 180px;
-    height: 180px;
-    margin-top: 15px;
+    width: 425px;
+    height: 425px;
+    object-fit: contain;
 }
 
 .arrow-container {
@@ -112,4 +146,70 @@ button:hover, .button:hover {
 
 .arrow-container .arrow:hover {
     opacity: 0.7;
+}
+
+#errorContainer {
+    width: 100%;
+    position: absolute;
+    bottom: 3.5rem;
+    left: 0;
+    padding: 0 1.8rem;
+    box-sizing: border-box;
+}
+
+#errorMessage {
+    color: #FF6B6B;
+    font-size: 15px;
+    margin: 0;
+    font-weight: 500;
+}
+
+.login {
+    position: absolute;
+    bottom: 2rem;
+    left: 0;
+    width: 100%;
+    font-size: 16px;
+    color: white;
+    margin: 0;
+}
+
+.login a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.login a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+/* Footer styles - these will apply to the handlebar footer */
+footer {
+    background-color: #880D1E;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+footer p {
+    margin: 0;
+    font-size: 15.5px;
+    color: #FFF;
+}
+
+footer a {
+    color: #FFF;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #F49CBB;
+    text-decoration: underline;
 }

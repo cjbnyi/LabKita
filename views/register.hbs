@@ -1,104 +1,110 @@
 <body>
-    <div class="arrow-container">
-        <a href="/"> <!-- Replace "index.html" with the link you want the arrow to navigate to -->
-            <img src="/public/img/arrow.png" class="arrow">
-        </a>
-    </div>
+<div class="arrow-container">
+    <a href="/"> <!-- Replace "index.html" with the link you want the arrow to navigate to -->
+        <img src="/public/img/return-button.png" class="arrow">
+    </a>
+</div>
 
+<div class="main-content">
     <div id="bg">
-        <h2>Sign Up</h2>
-        <p style="color:#F49CBB; align-items: center;">Register using your DLSU email</p>
+        <h2>SIGN UP</h2>
         <form id="signupForm">
-            <div class="student-id">
-                <label for="universityID">Student ID</label>
-                <input type="text" id="universityID" pattern="\d+" title="Enter numbers only" required>
-            </div><br>
-            <div class="email">
-                <label for="email">DLSU Email</label>
-                <input type="email" id="email" name="email" required>
-            </div> <br>
-            <div class="pw">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div><br>
-            <div class="pw">
-                <label for="confirm-password">Confirm Password</label>
-                <input type="password" id="confirm-password" name="confirmPassword" required>
-            </div><br><br>
-
-            <button type="submit" class="button">Sign Up</button> 
-            <div id="errorContainer">
-                <p id="errorMessage" style="color: red; display: none;"></p>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="universityID">Student ID</label>
+                    <input type="text" id="universityID" pattern="\d+" title="Enter numbers only" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">DLSU Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
             </div>
-        </form><br>
-        <p class="login">Have an account? <a href="/login" style="color:#F49CBB;">Login</a></p>
-
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirmPassword" required>
+                </div>
+            </div>
+            <div class="button-container">
+                <button type="submit" class="button">Sign Up</button>
+            </div>
+            <div id="errorContainer">
+                <p id="errorMessage"></p>
+            </div>
+        </form>
+        <p class="login">Have an account? <a href="/api/auth/login">Log In!</a></p>
     </div>
 
-    <img class="computer-picture" src="/public/img/computer.png" alt="Profile Picture"/>
-
+    <div class="computer-picture-container">
+        <img class="computer-picture" src="/public/img/computer.png" alt="Profile Picture"/>
+    </div>
+</div>
 </body>
 
 <script>
-document.getElementById('signupForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-    
-    const submitButton = document.querySelector('button[type="submit"]');
-    submitButton.disabled = true;  // Disable submit button to prevent multiple submissions
+    document.getElementById('signupForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
 
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirm-password').value;
+        const submitButton = document.querySelector('button[type="submit"]');
+        submitButton.disabled = true;  // Disable submit button to prevent multiple submissions
 
-    console.log('DEBUG register.hbs - Password:', password);
-    console.log('DEBUG register.hbs - Confirm Password:', confirmPassword);
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
 
-    // Check passwords match
-    if (password !== confirmPassword) {
-        document.getElementById('errorMessage').textContent = 'Passwords do not match!';
-        document.getElementById('errorMessage').style.display = 'block';
-        submitButton.disabled = false;  // Enable submit button again if passwords don't match
-        return;
-    } else {
-        document.getElementById('errorMessage').style.display = 'none';
-    }
+        console.log('DEBUG register.hbs - Password:', password);
+        console.log('DEBUG register.hbs - Confirm Password:', confirmPassword);
 
-    const formData = {
-        universityID: document.getElementById('universityID').value,
-        email: document.getElementById('email').value,
-        password: password,
-        confirmPassword: confirmPassword
-    };
-
-    console.log('DEBUG register.hbs - Form Data Sent:', formData);
-
-    // Send request to backend
-    try {
-        const response = await fetch('/api/auth/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        });
-
-        const data = await response.json();
-
-        console.log('Response Data:', data); // Log the response data for further debugging
-
-        if (response.ok) {
-            alert(data.message);
-            window.location.href = '/api/profile/me/update'; 
-        } else {
-            document.getElementById('errorMessage').textContent = data.error || 'An error occurred';
+        // Check passwords match
+        if (password !== confirmPassword) {
+            document.getElementById('errorMessage').textContent = 'Passwords do not match!';
             document.getElementById('errorMessage').style.display = 'block';
+            submitButton.disabled = false;  // Enable submit button again if passwords don't match
+            return;
+        } else {
+            document.getElementById('errorMessage').style.display = 'none';
         }
-    } catch (error) {
-        console.error(error);
-        document.getElementById('errorMessage').textContent = 'Error connecting to server.';
-        document.getElementById('errorMessage').style.display = 'block';
-    } finally {
-        submitButton.disabled = false;  // Re-enable submit button if there was an error or after completion
-    }
-});
+
+        const formData = {
+            universityID: document.getElementById('universityID').value,
+            email: document.getElementById('email').value,
+            password: password,
+            confirmPassword: confirmPassword
+        };
+
+        console.log('DEBUG register.hbs - Form Data Sent:', formData);
+
+        // Send request to backend
+        try {
+            const response = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            console.log('Response Data:', data); // Log the response data for further debugging
+
+            if (response.ok) {
+                alert(data.message);
+                window.location.href = '/api/profile/me/update';
+            } else {
+                document.getElementById('errorMessage').textContent = data.error || 'An error occurred';
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        } catch (error) {
+            console.error(error);
+            document.getElementById('errorMessage').textContent = 'Error connecting to server.';
+            document.getElementById('errorMessage').style.display = 'block';
+        } finally {
+            submitButton.disabled = false;  // Re-enable submit button if there was an error or after completion
+        }
+    });
 
 </script>
