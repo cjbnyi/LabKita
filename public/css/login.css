@@ -90,15 +90,17 @@ body {
   margin: 15px 0;
   border: none;
   border-radius: 5px;
-  background: #d32f2f; /* Red color */
+  background: #DD2D4A;
   color: white;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
 }
 
 .form-container button:hover {
-  background: #b71c1c; /* Darker red on hover */
+  background: #F26A8D;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .register-link {
@@ -154,4 +156,32 @@ body {
   .error br {
     display: inline;
   }
+}
+
+/* Add footer styles at the end of the file */
+footer {
+  background-color: #880D1E;
+  color: #FFFFFF;
+  text-align: center;
+  padding: 0.35rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+footer p {
+  margin: 0;
+  font-size: 15px;
+  color: #FFF;
+}
+
+footer a {
+  color: #FFF;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: #F49CBB;
+  text-decoration: underline;
 }
