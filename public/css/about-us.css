@@ -1,41 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: white;
 }
 
 .container {
-    max-width: 900px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
 }
 
-h1, h2 {
-    color: #343a40;
-    font-weight: bold;
+.section {
+    padding: 4rem 0;
+    width: 100%;
 }
 
-.lead {
-    font-size: 1.2rem;
-    color: #6c757d;
+.section-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
 }
 
-.team-card {
-    border: none;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    padding: 20px;
-    transition: transform 0.3s ease-in-out;
+.white-section {
     background-color: white;
 }
 
+.red-section {
+    background-color: #880D1E;
+    color: white;
+}
+
+.header-section {
+    text-align: center;
+    padding-top: 6rem;
+}
+
+h1, h2 {
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    color: #880D1E;
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+    margin-bottom: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.white-section h2 {
+    color: #880D1E;
+}
+
+.red-section h2 {
+    color: white;
+}
+
+.lead {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.team-section {
+    text-align: center;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.team-card {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 150px;
+}
+
 .team-card:hover {
-    transform: scale(1.05);
+    transform: translateY(-5px);
 }
 
 .team-card .card-title {
     font-size: 1.2rem;
     font-weight: bold;
+    margin-bottom: 0.5rem;
 }
 
-.team-card .card-text {
-    font-size: 1rem;
-    color: #6c757d;
+.white-section .team-card {
+    background: rgba(136, 13, 30, 0.05);
+}
+
+.white-section .team-card .card-title {
+    color: #880D1E;
+}
+
+.red-section .team-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.red-section .team-card .card-title {
+    color: white;
+}
+
+.white-section .team-card .card-text {
+    color: #666;
+}
+
+.red-section .team-card .card-text {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.tech-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 2rem;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.tech-table th,
+.tech-table td {
+    padding: 1.5rem 2rem;
+    text-align: left;
+}
+
+.tech-table th {
+    background: #880D1E;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.tech-table td {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tech-table td:first-child {
+    font-weight: 600;
+    color: #880D1E;
+    width: 25%;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tech-table tr:last-child td {
+    border-bottom: none;
+}
+
+.tech-table tr:hover td {
+    background-color: rgba(221, 45, 74, 0.05);
+}
+
+.ai-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.ai-list li {
+    position: relative;
+    padding: 1rem 1.5rem 1rem 3rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease;
+    color: white;
+}
+
+.ai-list li:hover {
+    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.ai-list li::before {
+    content: "•";
+    color: #F49CBB;
+    font-size: 1.8rem;
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@media (max-width: 768px) {
+    .section-content {
+        padding: 0 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .tech-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .ai-list {
+        grid-template-columns: 1fr;
+    }
 }
