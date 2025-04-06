@@ -27,20 +27,6 @@ const createStudent = async (req, res) => {
 /* =============================== */
 /* UPDATE */
 /* =============================== */
-// const updateStudent = async (req, res) => {
-//     const { studentId } = req.params;
-
-//     try {
-//         const updatedStudent = await Student.updateStudent(studentId, req.body);
-//         if (!updatedStudent) {
-//             return res.status(404).json({ error: 'Student not found' });
-//         }
-//         res.status(200).json(updatedStudent);
-//     } catch (error) {
-//         res.status(500).json({ error: 'Error updating student', details: error.message });
-//     }
-// };
-
 export const updateStudent = async (req, res) => {
     try {
         const { first_name, last_name, bio } = req.body;
@@ -54,7 +40,7 @@ export const updateStudent = async (req, res) => {
 
         // If profile picture is uploaded, update it
         if (req.file) {
-            updateData.profilePicture = `/public/uploads/profile_pics/${req.file.filename}`;
+            updateData.profilePicutre = `/public/uploads/profile_pics/${req.file.filename}`;
         }
 
         console.log("DEBUG - Uploaded File:", req.file);
@@ -84,6 +70,37 @@ export const updateStudent = async (req, res) => {
     }
 };
 
+export const updateStudentPassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ message: 'Both current and new password are required.' });
+        }
+
+        const studentId = req.user._id;
+        const student = await Student.findById(studentId);
+
+        if (!student) {
+            return res.status(404).json({ message: 'Student not found.' });
+        }
+
+        const isMatch = await bcrypt.compare(currentPassword, student.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Current password is incorrect.' });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        student.password = hashedPassword;
+        await student.save();
+
+        res.status(200).json({ message: 'Password updated successfully.' });
+    } catch (error) {
+        console.error('Error updating password:', error);
+        res.status(500).json({ message: 'Server error. Could not update password.' });
+    }
+
+}
 
 /* =============================== */
 /* DELETE */
@@ -105,50 +122,6 @@ const deleteStudent = async (req, res) => {
 /* =============================== */
 /* VALIDATE */
 /* =============================== */
-const validateUniversityIDs = async (req, res) => {
-    try {
-        const { universityIDs } = req.body;
-
-        if (!Array.isArray(universityIDs) || universityIDs.length === 0) {
-            return res.status(400).json({ error: "No university IDs provided." });
-        }
-
-        // Find students with the provided university IDs
-        const foundStudents = await Student.model.find({ universityID: { $in: universityIDs } });
-
-        // Extract found university IDs and their corresponding object IDs
-        const foundStudentsData = foundStudents.map(student => ({
-            universityID: student.universityID,
-            objectID: student._id.toString()  // Convert ObjectId to string for easier handling in frontend
-        }));
-
-        // Extract found university IDs
-        const foundIDs = foundStudents.map(student => student.universityID);
-
-        // Identify missing university IDs
-        const missingIDs = universityIDs.filter(id => !foundIDs.includes(id));
-
-        if (missingIDs.length > 0) {
-            return res.status(400).json({ 
-                error: "Some university IDs are invalid.", 
-                missingIDs,
-                foundStudentsData  // Return found students' object IDs
-            });
-        }
-
-        // If all IDs are valid, return found students' object IDs
-        return res.json({ 
-            message: "All university IDs are valid.", 
-            foundStudentsData 
-        });
-
-    } catch (error) {
-        console.error("Error validating university IDs:", error);
-        return res.status(500).json({ error: "Internal server error." });
-    }
-};
-
-/*
 const validateStudents = async (req, res) => {
     try {
         const { studentNames } = req.body;
@@ -191,12 +164,11 @@ const validateStudents = async (req, res) => {
         res.status(500).json({ message: "Internal server error." });
     }
 };
-*/
 
 export default {
     getStudents,
     createStudent,
     updateStudent,
     deleteStudent,
-    validateUniversityIDs
+    validateStudents
 };

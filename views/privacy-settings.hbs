@@ -7,50 +7,22 @@
 
             <!-- Change Password -->
             <h5>Change Password</h5>
-            <form action="/api/change-password" method="POST">
+            <form id="changePasswordForm">
                 <div class="mb-3">
                     <label class="form-label">Current Password</label>
-                    <input type="password" class="form-control">
+                    <input type="password" class="form-control" name="currentPassword" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">New Password</label>
-                    <input type="password" class="form-control">
+                    <input type="password" class="form-control" name="newPassword" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Confirm New Password</label>
-                    <input type="password" class="form-control">
+                    <input type="password" class="form-control" name="confirmPassword" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Update Password</button>
             </form>
-
             <hr>
-{{!-- 
-            <!-- Notifications -->
-            <h5>Notification Preferences (Not Working)</h5>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
-                <label class="form-check-label" for="emailNotifications">Email Notifications</label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="systemAlerts">
-                <label class="form-check-label" for="systemAlerts">System Alerts</label>
-            </div>
-
-            <hr>
-
-            <!-- Delete Search History -->
-            <h5>Delete Search History</h5>
-            <p class="text-muted">Clear your search history from our system.</p>
-            <button type="button" class="btn btn-warning">Delete Search History (not available)</button>
-
-            <hr>
-
-            <!-- Privacy Policy -->
-            <h5>Privacy Policy</h5>
-            <p class="text-muted">Read more about how we handle your data.</p>
-            <a href="#" class="btn btn-info">View Privacy Policy (not available)</a>
-
-            <hr> --}}
 
             <!-- Delete Account -->
             <h5 class="text-danger">Delete Account</h5>
@@ -65,3 +37,49 @@
         </div>
     </div>
 </body>
+
+
+<script>
+document.getElementById("changePasswordForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    const currentPassword = form.currentPassword.value;
+    const newPassword = form.newPassword.value;
+    const confirmPassword = form.confirmPassword.value;
+    const msg = document.getElementById("passwordMsg");
+
+    if (newPassword !== confirmPassword) {
+        msg.textContent = "New passwords do not match.";
+        msg.style.color = "red";
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/profile/me/privacy", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                // Include auth header if needed, like:
+                // "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ currentPassword, newPassword }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            msg.textContent = "Password updated successfully!";
+            msg.style.color = "green";
+            form.reset();
+        } else {
+            msg.textContent = `${result.error || 'Failed to update password.'}`;
+            msg.style.color = "red";
+        }
+    } catch (err) {
+        msg.textContent = "Something went wrong.";
+        msg.style.color = "red";
+        console.error(err);
+    }
+});
+</script>
