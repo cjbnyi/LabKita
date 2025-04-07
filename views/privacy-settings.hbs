@@ -7,61 +7,135 @@
 
             <!-- Change Password -->
             <h5>Change Password</h5>
-            <form action="/api/change-password" method="POST">
-                <div class="mb-3">
-                    <label class="form-label">Current Password</label>
-                    <input type="password" class="form-control">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">New Password</label>
-                    <input type="password" class="form-control">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Confirm New Password</label>
-                    <input type="password" class="form-control">
-                </div>
-                <button type="submit" class="btn btn-primary">Update Password</button>
-            </form>
+            <form id="changePasswordForm" enctype="multipart/form-data">
 
-            <hr>
-{{!-- 
-            <!-- Notifications -->
-            <h5>Notification Preferences (Not Working)</h5>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
-                <label class="form-check-label" for="emailNotifications">Email Notifications</label>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="systemAlerts">
-                <label class="form-check-label" for="systemAlerts">System Alerts</label>
+            <div class="mb-3">
+                <label class="form-label fw-bold text-start d-block">Current Password</label>
+                <input type="password" id="currentPassword" name="currentPassword" class="form-control" required>
             </div>
 
+            <div class="mb-3">
+                <label class="form-label fw-bold text-start d-block">New Password</label>
+                <input type="password" id="newPassword" name="newPassword" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold text-start d-block">Confirm New Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Password</button>
+        </form>
+            <p id="passwordMsg" class="mt-2"></p>
             <hr>
-
-            <!-- Delete Search History -->
-            <h5>Delete Search History</h5>
-            <p class="text-muted">Clear your search history from our system.</p>
-            <button type="button" class="btn btn-warning">Delete Search History (not available)</button>
-
-            <hr>
-
-            <!-- Privacy Policy -->
-            <h5>Privacy Policy</h5>
-            <p class="text-muted">Read more about how we handle your data.</p>
-            <a href="#" class="btn btn-info">View Privacy Policy (not available)</a>
-
-            <hr> --}}
 
             <!-- Delete Account -->
             <h5 class="text-danger">Delete Account</h5>
             <p class="text-muted">Enter your password to confirm account deletion.</p>
-            <form>
+            <form id="deleteAccountForm">
                 <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" class="form-control">
+                    <input type="password" id="deletePassword" class="form-control" required>
                 </div>
                 <button type="submit" class="btn btn-danger">Delete Account</button>
             </form>
+            <p id="deleteMsg"></p> 
         </div>
     </div>
 </body>
+
+<script>
+    document.getElementById("changePasswordForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const currentPassword = document.getElementById("currentPassword").value;
+        const newPassword = document.getElementById("newPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        const msg = document.getElementById("passwordMsg");
+
+        // Check if new password and confirm password match
+        if (newPassword !== confirmPassword) {
+            msg.textContent = "New passwords do not match.";
+            msg.style.color = "red";
+            return;
+        }
+
+        // Send the data to the backend
+        try {
+            const response = await fetch("/api/profile/me/privacy", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    currentPassword,
+                    newPassword,
+                }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                msg.textContent = "Password updated successfully!";
+                msg.style.color = "green";
+                document.getElementById("changePasswordForm").reset();
+            } else {
+                msg.textContent = result.message || 'Failed to update password.';
+                msg.style.color = "red";
+            }
+        } catch (err) {
+            msg.textContent = "Something went wrong.";
+            msg.style.color = "red";
+            console.error(err);
+        }
+    });
+
+    document.getElementById("deleteAccountForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const password = document.getElementById("deletePassword").value;
+        const msg = document.getElementById("deleteMsg");
+
+         // Show confirmation alert
+        const confirmed = confirm("Deleting your account will also delete any group reservations you're part of. Your co-labmates will need to reserve again. Are you sure you want to continue?");
+        if (!confirmed) return; 
+
+        if (!msg) {
+            console.error("Message element not found");
+            return;
+        }
+
+        if (!password) {
+            msg.textContent = "Password is required for confirmation.";
+            msg.style.color = "red";
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/profile/me/privacy", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ password }),  // Send password for validation
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                msg.textContent = result.message;  // Display success message from the server
+                msg.style.color = "green";
+                window.location.href = '/';  // Redirect to home or login page
+            } else {
+                msg.textContent = result.message || 'Failed to delete account.';
+                msg.style.color = "red";
+            }
+        } catch (err) {
+            msg.textContent = "Something went wrong.";
+            msg.style.color = "red";
+            console.error(err);
+        }
+    });
+
+
+</script>

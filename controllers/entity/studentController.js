@@ -1,4 +1,6 @@
 import { Student } from '../../database/models/models.js';
+import { Reservation } from '../../database/models/models.js';
+import bcrypt from 'bcryptjs';
 
 /* =============================== */
 /* READ */
@@ -27,20 +29,6 @@ const createStudent = async (req, res) => {
 /* =============================== */
 /* UPDATE */
 /* =============================== */
-// const updateStudent = async (req, res) => {
-//     const { studentId } = req.params;
-
-//     try {
-//         const updatedStudent = await Student.updateStudent(studentId, req.body);
-//         if (!updatedStudent) {
-//             return res.status(404).json({ error: 'Student not found' });
-//         }
-//         res.status(200).json(updatedStudent);
-//     } catch (error) {
-//         res.status(500).json({ error: 'Error updating student', details: error.message });
-//     }
-// };
-
 export const updateStudent = async (req, res) => {
     try {
         const { first_name, last_name, bio } = req.body;
@@ -54,7 +42,7 @@ export const updateStudent = async (req, res) => {
 
         // If profile picture is uploaded, update it
         if (req.file) {
-            updateData.profilePicture = `/public/uploads/profile_pics/${req.file.filename}`;
+            updateData.profilePicutre = `/public/uploads/profile_pics/${req.file.filename}`;
         }
 
         console.log("DEBUG - Uploaded File:", req.file);
@@ -84,23 +72,99 @@ export const updateStudent = async (req, res) => {
     }
 };
 
+export const updateStudentPassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const userId = req.user.id;
+
+        // Ensure both passwords are provided
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ message: 'Both current and new passwords are required.' });
+        }
+
+        // Fetch the student user from the database, including the password field
+        const student = await Student.model.findById(userId).select('+password');
+        
+        if (!student) {
+            return res.status(404).json({ error: 'Student not found' });
+        }
+
+        // Compare the current password with the stored hashed password
+        const isMatch = await bcrypt.compare(currentPassword, student.password);
+
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Current password is incorrect.' });
+        }
+
+        // Check if the new password is different from the current password
+        if (currentPassword === newPassword) {
+            return res.status(400).json({ message: 'New password cannot be the same as the current password.' });
+        }
+
+        // Update the password only if it's not already hashed
+        student.password = newPassword;  // Password is already hashed
+        
+        // Save the updated student record
+        await student.save();
+
+        res.status(200).json({
+            message: "Password updated successfully",
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error updating password' });
+    }
+};
 
 /* =============================== */
 /* DELETE */
 /* =============================== */
 const deleteStudent = async (req, res) => {
-    const { studentId } = req.params;
+    const userId = req.user.id;  // Get the current logged-in user's ID
+    const { password } = req.body;  // Get password from the request body
 
     try {
-        const deletedStudent = await Student.deleteStudent(studentId);
-        if (!deletedStudent) {
+        console.log("Attempting to delete student with ID:", userId);  // Debug statement
+
+        // Fetch the student data to validate the password
+        const student = await Student.model.findById(userId).select('password');
+        if (!student) {
+            console.log("Student not found");  // Debug statement
             return res.status(404).json({ error: 'Student not found' });
         }
-        res.status(200).json({ message: 'Student deleted successfully' });
+
+        // Compare the password
+        const isMatch = await bcrypt.compare(password, student.password);
+        if (!isMatch) {
+            console.log("Password mismatch");  // Debug statement
+            return res.status(401).json({ error: 'Incorrect password' });
+        }
+
+        // Find and delete any reservations that have this student in creditedStudentIDs
+        const deletedReservations = await Reservation.model.deleteMany({
+            creditedStudentIDs: userId,
+        });
+
+        console.log(`Deleted ${deletedReservations.deletedCount} reservations for student ${userId}`);
+
+
+        // Proceed to delete the student account
+        const deletedStudent = await Student.deleteStudent(userId);
+        if (!deletedStudent) {
+            console.log("Error deleting student");  // Debug statement
+            return res.status(404).json({ error: 'Student not found' });
+        }
+
+        console.log("Student deleted successfully");  // Debug statement
+        res.status(200).json({
+            message: 'Student deleted successfully. Existing group reservations will be deleted. Inform your co-labmates to reserve a slot for themselves again.'
+        });
     } catch (error) {
+        console.error("Error deleting student:", error);  // Log error details
         res.status(500).json({ error: 'Error deleting student', details: error.message });
     }
 };
+
 
 /* =============================== */
 /* VALIDATE */
@@ -148,55 +212,11 @@ const validateUniversityIDs = async (req, res) => {
     }
 };
 
-/*
-const validateStudents = async (req, res) => {
-    try {
-        const { studentNames } = req.body;
-        console.log("Received student names for validation:", studentNames);
-
-        if (!Array.isArray(studentNames) || studentNames.length === 0) {
-            console.log("Invalid input: studentNames is not an array or is empty.");
-            return res.status(400).json({ message: "Invalid input. Provide an array of student names." });
-        }
-
-        // Convert names into query format
-        const queryConditions = studentNames.map(name => {
-            const nameParts = name.trim().split(" ");
-            const firstName = nameParts.slice(0, nameParts.length - 1).join(" "); // Everything except the last part is the first name
-            const lastName = nameParts[nameParts.length - 1]; // The last part is the last name
-            return { firstName, lastName };
-        });
-
-        console.log("Query conditions for MongoDB:", JSON.stringify(queryConditions, null, 2));
-
-        // Fetch students matching the provided names
-        const students = await Student.model.find({
-            $or: queryConditions
-        });
-
-        console.log("Students found in database:", students);
-
-        // Extract valid names
-        const validStudents = students.map(student => `${student.firstName} ${student.lastName}`);
-        console.log("Validated student names:", validStudents);
-
-        // Find any invalid students
-        const invalidStudents = studentNames.filter(name => !validStudents.includes(name));
-        console.log("Invalid student names:", invalidStudents);
-
-        res.json({ validStudents, invalidStudents });
-
-    } catch (error) {
-        console.error("Error validating students:", error);
-        res.status(500).json({ message: "Internal server error." });
-    }
-};
-*/
-
 export default {
     getStudents,
     createStudent,
     updateStudent,
+    updateStudentPassword,
     deleteStudent,
-    validateUniversityIDs
+    validateUniversityIDs,
 };

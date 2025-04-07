@@ -41,7 +41,7 @@ router.get('/profile/me/privacy',
 router.put('/profile/me/privacy',
     authenticateToken,
     checkValidation,
-    studentController.updateStudent
+    studentController.updateStudentPassword
 );
 
 router.delete('/profile/me/privacy',
