@@ -9,41 +9,44 @@ function cancelReservation(reservationId) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: "Cancelled" })
         })
-        .then(response => {
-            console.log("Received response from server:", response);
-            return response.json();
-        })
-        .then(data => {
-            console.log("Parsed response JSON:", data);
+            .then(response => {
+                console.log("Received response from server:", response);
+                return response.json();
+            })
+            .then(data => {
+                console.log("Parsed response JSON:", data);
 
-            if (data.success) {
-                alert("Reservation canceled successfully!");
+                if (data.success) {
+                    alert("Reservation canceled successfully!");
 
-                // Move the row to past reservations
-                let row = $(`tr[data-id="${reservationId}"]`);
-                console.log("Moving row to past reservations:", row);
+                    // Move the row to past reservations
+                    let row = $(`tr[data-id="${reservationId}"]`);
+                    console.log("Moving row to past reservations:", row);
 
-                row.find("td:nth-child(9)").html(`<span class="badge bg-danger">Cancelled</span>`);
-                row.find(".cancel-btn").remove(); // Remove cancel button
+                    // Update the status badge
+                    row.find("td:nth-child(8)").html(`<span class="badge bg-danger">Cancelled</span>`);
 
-                // Append to past reservations
-                $("#pastReservationsBody").append(row);
-                console.log("Row moved successfully");
+                    // Remove the actions column
+                    row.find("td:nth-child(9)").remove();
 
-                // Remove from upcoming reservations
-                row.remove(); // Ensure row is removed from upcomingReservationsBody
-                if ($("#upcomingReservationsBody tr").length === 0) {
-                    $("#upcomingReservationsBody").html('<tr><td colspan="10" class="text-center">No upcoming reservations found.</td></tr>');
+                    // Append to past reservations
+                    $("#pastReservationsBody").append(row);
+                    console.log("Row moved successfully");
+
+                    // Remove from upcoming reservations
+                    row.remove(); // Ensure row is removed from upcomingReservationsBody
+                    if ($("#upcomingReservationsBody tr").length === 0) {
+                        $("#upcomingReservationsBody").html('<tr><td colspan="9" class="text-center">No upcoming reservations found.</td></tr>');
+                    }
+                } else {
+                    console.error("Server returned an error:", data);
+                    alert("Error canceling reservation: " + (data.message || "Unknown error"));
                 }
-            } else {
-                console.error("Server returned an error:", data);
-                alert("Error canceling reservation: " + (data.message || "Unknown error"));
-            }
-        })
-        .catch(error => {
-            console.error("Fetch Error:", error);
-            alert("Failed to cancel reservation.");
-        });
+            })
+            .catch(error => {
+                console.error("Fetch Error:", error);
+                alert("Failed to cancel reservation.");
+            });
     } else {
         console.log("User canceled the operation");
     }
@@ -67,9 +70,9 @@ function updateReservations() {
                 // Update upcoming reservations
                 if (data.upcomingReservations.length > 0) {
                     data.upcomingReservations.forEach(reservation => {
-                        const creditedStudentLinks = reservation.isAnonymous ? 
-                            "Anonymous" : 
-                            reservation.creditedStudents.map(student => 
+                        const creditedStudentLinks = reservation.isAnonymous ?
+                            "Anonymous" :
+                            reservation.creditedStudents.map(student =>
                                 `<a href="/api/profile/${student.universityID}">${student.fullName}</a>`
                             ).join(", ");
 
@@ -78,8 +81,10 @@ function updateReservations() {
                         const diffMinutes = (now - startTime) / (1000 * 60); // Convert to minutes
 
                         const showCancel = isAdmin ? (diffMinutes >= 0 && diffMinutes <= 10) : true;
-                        const cancelButton = showCancel ? 
-                            `<button class="btn btn-danger btn-sm cancel-btn" onclick="cancelReservation('${reservation.id}')">Cancel</button>` 
+                        const cancelButton = showCancel ?
+                            `<button class="btn btn-danger btn-sm cancel-btn" onclick="cancelReservation('${reservation.id}')">
+                                <i class="fas fa-times"></i>
+                            </button>`
                             : '';
 
                         $("#upcomingReservationsBody").append(`
@@ -92,25 +97,27 @@ function updateReservations() {
                                 <td>${creditedStudentLinks}</td>
                                 <td>${reservation.purpose}</td>
                                 <td><span class="badge bg-success">Reserved</span></td>
-                                <td>
-                                    <a href="/api/manage-reservations/edit/${reservation.id}">
-                                        <button class="btn btn-warning btn-sm">Edit</button>
-                                    </a>
-                                    ${cancelButton}
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a href="/api/manage-reservations/edit/${reservation.id}" class="btn btn-warning btn-sm me-1">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        ${cancelButton}
+                                    </div>
                                 </td>
                             </tr>
                         `);
                     });
                 } else {
-                    $("#upcomingReservationsBody").html('<tr><td colspan="10" class="text-center">No upcoming reservations found.</td></tr>');
+                    $("#upcomingReservationsBody").html('<tr><td colspan="9" class="text-center">No upcoming reservations found.</td></tr>');
                 }
 
                 // Update past reservations
                 if (data.pastReservations.length > 0) {
                     data.pastReservations.forEach(reservation => {
-                        const creditedStudentLinks = reservation.isAnonymous ? 
-                            "Anonymous" : 
-                            reservation.creditedStudents.map(student => 
+                        const creditedStudentLinks = reservation.isAnonymous ?
+                            "Anonymous" :
+                            reservation.creditedStudents.map(student =>
                                 `<a href="/api/profile/${student.universityID}">${student.fullName}</a>`
                             ).join(", ");
 
@@ -132,7 +139,7 @@ function updateReservations() {
                         `);
                     });
                 } else {
-                    $("#pastReservationsBody").html('<tr><td colspan="10" class="text-center">No past reservations found.</td></tr>');
+                    $("#pastReservationsBody").html('<tr><td colspan="8" class="text-center">No past reservations found.</td></tr>');
                 }
             } else {
                 console.error("Failed to update reservations:", data.error);
@@ -142,6 +149,11 @@ function updateReservations() {
             console.error("Error fetching reservation updates:", error);
         });
 }
+
+// Initialize tooltips for better button interaction
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+});
 
 setInterval(updateReservations, 60000);
 
