@@ -42,7 +42,7 @@ export const updateStudent = async (req, res) => {
 
         // If profile picture is uploaded, update it
         if (req.file) {
-            updateData.profilePicutre = `/public/uploads/profile_pics/${req.file.filename}`;
+            updateData.profilePicture = `/public/uploads/profile_pics/${req.file.filename}`;
         }
 
         console.log("DEBUG - Uploaded File:", req.file);
