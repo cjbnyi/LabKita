@@ -75,15 +75,15 @@ const signup = async (req, res) => {
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Strict',
-            maxAge: 15 * 60 * 1000 * 1000
+            sameSite: 'Lax',
+            maxAge: 60 * 60 * 1000 // 60 minutes
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Strict',
-            maxAge: 21 * 24 * 60 * 60 * 1000
+            sameSite: 'Lax',
+            maxAge: 21 * 24 * 60 * 60 * 1000 // 21 days
         });
 
         res.status(201).json({ message: 'User registered successfully' });
@@ -106,33 +106,43 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        console.log("Received Login Request:", email);
+        console.log("🔐 Received Login Request for:", email);
+        console.log("🔑 Password Attempted:", password); // Logs the password (only for dev purposes, avoid in production)
 
         // Find user
-        const user = await Student.model.findOne({ email }).select('+password');
+        const user = await getUserByEmail(email);
+        console.log("🔍 User lookup result:", user);
+
         if (!user) {
+            console.log("❌ User not found:", email);
             return res.status(404).json({ error: 'User not found' });
         }
 
         // Validate password
+        console.log("🔑 Validating password for user:", email);
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
+            console.log("❌ Invalid credentials for:", email);
             return res.status(400).json({ error: 'Invalid credentials' });
         }
 
         // Generate tokens
+        console.log("✅ Password is correct, generating tokens for user:", email);
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
+        console.log("🔑 Access token and refresh token generated successfully");
 
         // Store access token in an httpOnly cookie
+        console.log("🍪 Storing access token in cookie");
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Lax',
-            maxAge: 15 * 60 * 1000 // 15 minutes
+            maxAge: 60 * 60 * 1000 // 60 minutes
         });
 
         // Store refresh token in an httpOnly cookie
+        console.log("🍪 Storing refresh token in cookie");
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
@@ -140,9 +150,10 @@ const login = async (req, res) => {
             maxAge: 21 * 24 * 60 * 60 * 1000 // 21 days
         });
 
+        console.log("✅ Login successful for:", email);
         return res.status(200).json({ userType: user.role, message: "Login successful!" });
     } catch (error) {
-        console.error("Login Error:", error);
+        console.error("🔥 Login Error for:", email, error);
         res.status(500).json({ error: "Internal server error" });
     }
 };
@@ -188,7 +199,7 @@ const refreshAccessToken = async (req, res) => {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'Lax',
-                maxAge: 15 * 60 * 1000 // 15 minutes
+                maxAge: 60 * 60 * 1000 // 60 minutes
             });
 
             return res.status(200).json({ message: "Access token refreshed" });

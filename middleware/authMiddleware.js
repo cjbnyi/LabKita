@@ -42,7 +42,7 @@ const attemptRefreshToken = async (req, res, next) => {
 
     if (!refreshToken) {
         console.warn("No refresh token available.");
-        return res.status(401).json({ message: "Access denied. No refresh token." });
+        return res.status(401).render('errors/page-403', { message: "Access denied. No refresh token." });
     }
 
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
@@ -50,7 +50,7 @@ const attemptRefreshToken = async (req, res, next) => {
             console.error("Refresh token invalid.");
             res.clearCookie("accessToken");
             res.clearCookie("refreshToken");
-            return res.status(403).json({ message: "Invalid refresh token." });
+            return res.status(403).render('errors/page-403', { message: "Invalid refresh token." });
         }
 
         // Fetch full user details from DB
@@ -69,7 +69,7 @@ const attemptRefreshToken = async (req, res, next) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "Lax",
-            maxAge: 15 * 60 * 1000, // 15 minutes
+            maxAge: 60 * 60 * 1000, // 60 minutes
         });
 
         req.user = user;
@@ -110,7 +110,7 @@ const tokenRefreshMiddleware = async (req, res, next) => {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'Lax',
-                maxAge: 15 * 60 * 1000  // 15 minutes
+                maxAge: 60 * 60 * 1000  // 60 minutes
             });
 
             console.log("Access token refreshed successfully.");

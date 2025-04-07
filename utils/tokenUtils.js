@@ -11,7 +11,6 @@ const generateAccessToken = (user) => {
             universityID: user.universityID,
             profilePicture: user.profilePicture,
             role: user.role,
-            bio : user.bio
         },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: process.env.ACCESS_EXPIRATION }
