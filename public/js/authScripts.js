@@ -5,6 +5,7 @@ export function initializeLogForms() {
 
             let email = $('input[name="email"]').val();
             let password = $('input[name="password"]').val();
+            let remember = $('input[name="remember"]').is(':checked');
 
             // Clear any previous error messages
             $('#errorMessage').hide();
@@ -13,7 +14,7 @@ export function initializeLogForms() {
                 url: '/api/auth/login',
                 method: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({ email, password }),
+                data: JSON.stringify({ email, password, remember }),
                 xhrFields: { withCredentials: true },
                 success: function (data) {
                     window.location.href = '/';
