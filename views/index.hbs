@@ -1,108 +1,112 @@
 <body>
-    <!-- Hero Section -->
-    <section class="hero-section text-center text-black py-5 position-relative">
-        <div class="overlay"></div>
-        <div class="container text-white d-flex flex-column align-items-center justify-content-center">
-            <div class="d-flex align-items-center">
-                <img src="/public/img/Logo.png" alt="LabKita Logo" class="logo-img">
-            </div>
-            <p class="lead subtitle">Reserve a lab slot now, with or without a date. ♡</p>
-
-            <!-- Buttons that scroll to divs -->
-            <div class="hero-buttons mt-4">
-                <a href="#get-started" class="btn btn-red">Reserve Slots</a>
-                <a href="#faqs" class="btn btn-white">FAQs</a>
-            </div>
+<!-- Hero Section -->
+<section class="hero-section text-center text-black py-5 position-relative">
+    <div class="overlay"></div>
+    <div class="container text-white d-flex flex-column align-items-center justify-content-center">
+        <div class="d-flex align-items-center">
+            <img src="/public/img/Logo.png" alt="LabKita Logo" class="logo-img">
         </div>
-    </section>
+        <p class="lead subtitle">Reserve a lab slot now, with or without a date. ♡</p>
 
-    <!-- Lab Reservation Section -->
-    <section id="get-started" class="content-section">
+        <!-- Buttons that scroll to divs -->
+        <div class="hero-buttons mt-4">
+            <a href="#get-started" class="btn btn-red">Reserve Slots</a>
+            <a href="#faqs" class="btn btn-white">FAQs</a>
+        </div>
+    </div>
+</section>
 
-        <!-- First Row (Title) -->
-        <h2 class="section-title">Lab Reservation</h2>
+<!-- Lab Reservation Section -->
+<section id="get-started" class="content-section">
 
-        <!-- Second Row (Two Columns) -->
-        <div class="row">
-            <div class="col">
-                <p class="section-note">Want to know which labs still have slots for occupancy?</p>
-                <a href="/api/view-labs" class="section-heading">View Available Labs</a>
-            </div>
-            <div class="col">
-                <p class="section-note">Already have a laboratory in mind?</p>
+    <!-- First Row (Title) -->
+    <h2 class="section-title">Lab Reservation</h2>
+
+    <!-- Second Row (Two Columns) -->
+    <div class="row">
+        <div class="col">
+            <p class="section-note">Want to know which labs still have slots for occupancy?</p>
+            <a href="/api/view-labs" class="section-heading">View Available Labs</a>
+        </div>
+        <div class="col">
+            <p class="section-note">Already have a laboratory in mind?</p>
+            {{#if user}}
                 <a href="/api/manage-reservations/create" class="section-heading">Reserve A Slot</a>
+            {{else}}
+                <a href="/api/auth/login" class="section-heading">Reserve A Slot</a>
+            {{/if}}
+        </div>
+    </div>
+
+    <!-- Third Row (Grid Format) -->
+    <div class="grid-container">
+        <div class="grid-item">
+            <img src="/public/img/free.png" alt="Free Reservation Icon">
+            <div class="grid-text">
+                <h3>Free Reservation</h3>
+                <p>No hidden charges! Lab reservations are completely free for students.</p>
             </div>
         </div>
-
-        <!-- Third Row (Grid Format) -->
-        <div class="grid-container">
-            <div class="grid-item">
-                <img src="/public/img/free.png" alt="Free Reservation Icon">
-                <div class="grid-text">
-                    <h3>Free Reservation</h3>
-                    <p>No hidden charges! Lab reservations are completely free for students.</p>
-                </div>
-            </div>
-            <div class="grid-item">
-                <img src="/public/img/unity.png" alt="Collaboration Icon">
-                <div class="grid-text">
-                    <h3>Collaborative Space</h3>
-                    <p>Work on projects with classmates and maximize productivity in a shared learning environment.</p>
-                </div>
-            </div>
-            <div class="grid-item">
-                <img src="/public/img/lab.png" alt="Modern Labs Icon">
-                <div class="grid-text">
-                    <h3>State-of-the-Art Labs</h3>
-                    <p>Our labs are equipped with the latest technology to support your learning and research needs.</p>
-                </div>
-            </div>
-            <div class="grid-item">
-                <img src="/public/img/chemist.png" alt="Helpful Instructors Icon">
-                <div class="grid-text">
-                    <h3>Helpful Lab Instructors</h3>
-                    <p>Need guidance? Our lab instructors are available to assist you with your experiments and projects.</p>
-                </div>
+        <div class="grid-item">
+            <img src="/public/img/unity.png" alt="Collaboration Icon">
+            <div class="grid-text">
+                <h3>Collaborative Space</h3>
+                <p>Work on projects with classmates and maximize productivity in a shared learning environment.</p>
             </div>
         </div>
-    </section>
+        <div class="grid-item">
+            <img src="/public/img/lab.png" alt="Modern Labs Icon">
+            <div class="grid-text">
+                <h3>State-of-the-Art Labs</h3>
+                <p>Our labs are equipped with the latest technology to support your learning and research needs.</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="/public/img/chemist.png" alt="Helpful Instructors Icon">
+            <div class="grid-text">
+                <h3>Helpful Lab Instructors</h3>
+                <p>Need guidance? Our lab instructors are available to assist you with your experiments and projects.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <section id="faqs" class="faq-section">
-        <div class="container">
-            <h2 class="text-center mb-4 faq-title">Frequently Asked Questions</h2>
-            <div class="accordion" id="faqAccordion">
+<section id="faqs" class="faq-section">
+    <div class="container">
+        <h2 class="text-center mb-4 faq-title">Frequently Asked Questions</h2>
+        <div class="accordion" id="faqAccordion">
 
-                <!-- Question 1 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            How do I reserve a lab slot?
-                        </button>
-                    </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            You can reserve a lab slot by navigating to the "Manage Reservations" section and selecting an available time slot.
-                        </div>
+            <!-- Question 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        How do I reserve a lab slot?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        You can reserve a lab slot by navigating to the "Manage Reservations" section and selecting an available time slot.
                     </div>
                 </div>
+            </div>
 
-                <!-- Question 2 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingTwo">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Can I cancel my reservation?
-                        </button>
-                    </h2>
-                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            Yes, you can cancel your reservation in the "Manage Reservations" section before the scheduled time.
-                        </div>
+            <!-- Question 2 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Can I cancel my reservation?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Yes, you can cancel your reservation in the "Manage Reservations" section before the scheduled time.
                     </div>
                 </div>
-
             </div>
+
         </div>
-    </section>
+    </div>
+</section>
 </body>

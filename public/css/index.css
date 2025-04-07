@@ -21,6 +21,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transform: translateY(5%);
+    z-index: 1;
 }
 
 .overlay {
@@ -190,6 +192,7 @@ html {
 .container {
     position: relative;
     z-index: 2;
+    margin-top: -5vh;
 }
 
 h1 {
@@ -246,8 +249,10 @@ footer {
 
 .navbar {
     background-color: #880D1E !important;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
 }
-
 
 .deep-red {
     color: #880D1E;
