@@ -60,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedLab = labs.find(lab => lab.building === selectedBuilding && lab.room === selectedRoom);
 
         console.log("Room selected:", selectedRoom);
+
         if (selectedLab) {
             console.log("Lab found:", selectedLab);
 
@@ -86,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // If the lab is open on that day, add to the list of available dates
             if (availableDays.includes(dayOfWeek)) {
-                nextDays.push(futureDate.toISOString().split("T")[0]);
+                nextDays.push(futureDate.toLocaleDateString("en-US"));
             }
         }
 
@@ -124,37 +125,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function populateTimeSlots(startTime, endTime) {
         console.log("Populating time slots with start:", startTime, "and end:", endTime);
-    
+        
         startTimeSelect.innerHTML = '<option value="" disabled selected>Select a start time</option>';
         endTimeSelect.innerHTML = '<option value="" disabled selected>Select an end time</option>';
     
-        // Convert startTime and endTime from 12-hour format to 24-hour format
         const start = convertTo24HourFormat(startTime);
         const end = convertTo24HourFormat(endTime);
+        
+        console.log("Start hour:", start.hours, "Start minute:", start.minutes, "End hour:", end.hours, "End minute:", end.minutes);
     
-        console.log("Start hour:", start.hours, "End hour:", end.hours);
+        let currentHour = start.hours;
+        let currentMinute = start.minutes;
     
-        // Populate start time slots from the converted 24-hour start time
-        for (let hour = start.hours; hour < end.hours; hour++) {
-            for (let minute = 0; minute < 60; minute += 30) {
-                let timeString = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-                startTimeSelect.appendChild(new Option(timeString, timeString));
+        // Loop until we reach the end time
+        while (currentHour < end.hours || (currentHour === end.hours && currentMinute < end.minutes)) {
+            let timeString = `${String(currentHour).padStart(2, "0")}:${String(currentMinute).padStart(2, "0")}`;
+    
+            console.log("Adding time slot:", timeString);
+            startTimeSelect.appendChild(new Option(timeString, timeString));
+    
+            currentMinute += 30;
+    
+            if (currentMinute === 60) {
+                currentMinute = 0;
+                currentHour++;
             }
         }
     
-        // Handle case when start and end times are in the same hour (e.g., 2:00 PM to 2:30 PM)
-        if (start.hours === end.hours) {
-            for (let minute = start.minutes; minute < end.minutes; minute += 30) {
-                let timeString = `${String(start.hours).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-                startTimeSelect.appendChild(new Option(timeString, timeString));
-            }
-        }
-    
-        // Ensure the end time is locked initially
         endTimeSelect.disabled = true;
         console.log("Start time slots populated.");
-    }
-
+    }        
+    
     startTimeSelect.addEventListener("change", function () {
         const selectedBuilding = buildingSelect.value;
         const selectedRoom = roomSelect.value;
