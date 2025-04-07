@@ -103,7 +103,7 @@ const renderLogin = (req, res) => {
 }
 
 const login = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, remember } = req.body;
 
     try {
         console.log("🔐 Received Login Request for:", email);
@@ -129,7 +129,10 @@ const login = async (req, res) => {
         // Generate tokens
         console.log("✅ Password is correct, generating tokens for user:", email);
         const accessToken = generateAccessToken(user);
-        const refreshToken = generateRefreshToken(user);
+        let refreshToken;
+        if (remember) {
+            refreshToken = generateRefreshToken(user);
+        }
         console.log("🔑 Access token and refresh token generated successfully");
 
         // Store access token in an httpOnly cookie
