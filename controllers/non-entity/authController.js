@@ -128,7 +128,7 @@ const login = async (req, res) => {
 
         // Generate tokens
         console.log("✅ Password is correct, generating tokens for user:", email);
-        const accessToken = generateAccessToken(user);
+        let accessToken = generateAccessToken(user);
         let refreshToken;
         if (remember) {
             refreshToken = generateRefreshToken(user);
@@ -145,7 +145,9 @@ const login = async (req, res) => {
         });
 
         // Store refresh token in an httpOnly cookie
-        console.log("🍪 Storing refresh token in cookie");
+        if (remember) {
+            console.log("🍪 Storing refresh token in cookie");
+        }
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
