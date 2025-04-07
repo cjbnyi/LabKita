@@ -21,7 +21,6 @@ const router = express.Router();
 /* ADMIN */
 /* =============================== */
 router.get('/admins',
-    authenticateToken,
     checkValidation,
     adminController.getAdmins
 );
@@ -125,13 +124,11 @@ router.delete('/labs/:labId',
 /* SEAT */
 /* =============================== */
 router.get('/seats',
-    authenticateToken,
     checkValidation,
     seatController.getSeats
 );
 
 router.get('/seats-by-lab',
-    authenticateToken,
     checkValidation,
     seatController.getLabSeats
 );
