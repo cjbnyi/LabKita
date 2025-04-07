@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { getUserByEmail, getUserById } from "../utils/userUtils.js"; // ← make sure this is imported
 import { getStudentByID } from "../utils/userUtils.js"; // Function to fetch user from DB
 
 const verifyToken = (token) => {
@@ -29,7 +30,7 @@ const setAuthLocals = async (req, res, next) => {
         const decoded = await verifyToken(token); // Now this works with await!
 
         // Fetch updated user data from DB
-        const freshUser = await getStudentByID(decoded.universityID);
+        const freshUser = await getUserByEmail(decoded.email);
         if (!freshUser) {
             return next();
         }
