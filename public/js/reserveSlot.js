@@ -47,35 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Load buildings on page load
     loadBuildings();
 
-    // Load rooms based on selected building
-    buildingSelect.addEventListener("change", function () {
-        const selectedBuilding = this.value;
-        roomSelect.innerHTML = '<option value="" disabled selected>Select a room</option>';
-        roomSelect.disabled = !selectedBuilding;
-        dateInput.value = "";
-        dateInput.disabled = true;
-        startTimeSelect.innerHTML = '<option value="" disabled selected>Select start time</option>';
-        startTimeSelect.disabled = true;
-        endTimeSelect.innerHTML = '<option value="" disabled selected>Select end time</option>';
-        endTimeSelect.disabled = true;
-        seatSelectionDiv.innerHTML = '';  // Reset seat selection area
-        studentsSection.style.display = 'none';  // Hide students input section
-        confirmSeatsButton.disabled = true;  // Disable the confirm button until seats are selected
-
-        console.log("Building selected:", selectedBuilding);
-
-        if (selectedBuilding) {
-            const rooms = labs.filter(lab => lab.building === selectedBuilding);
-            console.log("Rooms available in the selected building:", rooms);
-            rooms.forEach(lab => {
-                const option = document.createElement("option");
-                option.value = lab.room;
-                option.textContent = lab.room;
-                roomSelect.appendChild(option);
-            });
-        }
-    });
-
     // Load seats and time slots when room is selected
     roomSelect.addEventListener("change", function () {
         const selectedBuilding = buildingSelect.value;
@@ -92,8 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
             // Populate available dates based on the lab's available days of the week
             populateDates(selectedLab);
 
-            // Populate available start times based on the selected room's opening and closing times
-            populateTimeSlots(selectedLab.openingTime, selectedLab.closingTime);
+            // Reset time selects
+            startTimeSelect.innerHTML = '<option value="" disabled selected>Select a start time</option>';
+            endTimeSelect.innerHTML = '<option value="" disabled selected>Select an end time</option>';
+            startTimeSelect.disabled = true;
+            endTimeSelect.disabled = true;
         }
     });
 
@@ -342,8 +316,26 @@ document.addEventListener("DOMContentLoaded", function () {
         await checkRequiredFields();
     });
 
+    // Handle date selection
     dateInput.addEventListener("change", async function () {
         console.log("Date selected:", this.value);
+
+        // Get the selected lab
+        const selectedBuilding = buildingSelect.value;
+        const selectedRoom = roomSelect.value;
+        const selectedLab = labs.find(lab => lab.building === selectedBuilding && lab.room === selectedRoom);
+
+        if (selectedLab && this.value) {
+            // Populate time slots based on the selected date
+            populateTimeSlots(selectedLab.openingTime, selectedLab.closingTime);
+        } else {
+            // Reset time selects if no date is selected
+            startTimeSelect.innerHTML = '<option value="" disabled selected>Select a start time</option>';
+            endTimeSelect.innerHTML = '<option value="" disabled selected>Select an end time</option>';
+            startTimeSelect.disabled = true;
+            endTimeSelect.disabled = true;
+        }
+
         await checkRequiredFields();
     });
 
