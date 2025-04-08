@@ -608,21 +608,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Step 3: Create the reservation data
             const selectedDate = dateInput.value;
-            const startTime = startTimeSelect.value;
-            const endTime = endTimeSelect.value;
+            console.log("Selected date:", selectedDate);
 
-            // Create Date objects for start and end times
+            // Get the start and end times from the dropdowns (these are in 24-hour format)
+            const startTime = startTimeSelect.value; // e.g., "08:00"
+            const endTime = endTimeSelect.value;   // e.g., "08:30"
+            console.log("Start time (24h):", startTime);
+            console.log("End time (24h):", endTime);
+
+            // Parse the date string to create a base date
+            const [month, day, year] = selectedDate.split('/');
+
+            // Create start date
+            const startDateTime = new Date(year, parseInt(month) - 1, parseInt(day));
             const [startHour, startMinute] = startTime.split(':');
-            const [endHour, endMinute] = endTime.split(':');
-
-            const startDateTime = new Date(selectedDate);
             startDateTime.setHours(parseInt(startHour), parseInt(startMinute), 0, 0);
 
-            const endDateTime = new Date(selectedDate);
+            // Create end date
+            const endDateTime = new Date(year, parseInt(month) - 1, parseInt(day));
+            const [endHour, endMinute] = endTime.split(':');
             endDateTime.setHours(parseInt(endHour), parseInt(endMinute), 0, 0);
 
-            console.log("Start DateTime:", startDateTime.toISOString());
-            console.log("End DateTime:", endDateTime.toISOString());
+            console.log("Start DateTime:", startDateTime);
+            console.log("End DateTime:", endDateTime);
+            console.log("Start DateTime ISO:", startDateTime.toISOString());
+            console.log("End DateTime ISO:", endDateTime.toISOString());
+
+            // Verify that end time is after start time
+            if (endDateTime <= startDateTime) {
+                alert("End time must be later than start time.");
+                return;
+            }
 
             const reservationData = {
                 seatIDs: selectedSeats,
