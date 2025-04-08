@@ -40,20 +40,16 @@
         <button id="view-seats-btn" class="btn btn-primary" disabled>View Available Lab Seats</button>
     </div>
 
-    <!-- Seat selection (hidden initially) -->
-    <div class="mt-4" id="seat-selection" style="display: none;">
-        <h4>Select a Seat</h4>
-        <select id="seat-select" class="form-select">
-            <option value="" selected disabled>Select a seat</option>
-        </select>
-    </div>
-
-    <!-- Available time slots for the selected seat -->
-    <div class="mt-4" id="seat-times" style="display: none;">
-        <h4>Available Time Slots</h4>
-        <ul id="seat-time-list" class="list-group"></ul>
+    <!-- Available seats section -->
+    <div class="mt-4" id="seat-availability" style="display: none;">
+        <h4>
+            Available Seats 
+            <span id="seat-count" class="badge bg-success ms-2">0</span>
+        </h4>
+        <ul id="available-seat-list" class="list-group mt-2"></ul>
     </div>
 </div>
+
 <script>
     window.labsData = {{{ json labs }}};
 </script>

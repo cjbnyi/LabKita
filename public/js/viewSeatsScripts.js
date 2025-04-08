@@ -6,13 +6,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const endTimeSelect = document.getElementById("end-time-select");
     const viewSeatsBtn = document.getElementById("view-seats-btn");
 
-    const seatSelectionDiv = document.getElementById("seat-selection");
-    const seatSelect = document.getElementById("seat-select");
-    const seatTimesDiv = document.getElementById("seat-times");
-    const seatTimeList = document.getElementById("seat-time-list");
+    const seatAvailabilityDiv = document.getElementById("seat-availability");
+    const seatCountBadge = document.getElementById("seat-count");
+    const availableSeatList = document.getElementById("available-seat-list");
 
     let labs = window.labsData || [];
     const buildings = [...new Set(labs.map(lab => lab.building))];
+
+    resetPage();
 
     buildings.forEach(building => {
         const option = document.createElement("option");
@@ -21,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
         buildingSelect.appendChild(option);
     });
 
-    // Handle building selection to load rooms
     buildingSelect.addEventListener("change", function () {
         const selectedBuilding = this.value;
         roomSelect.innerHTML = '<option value="" selected disabled>Select a room</option>';
@@ -38,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Populate date selection (Today + Next 7 days)
     let today = new Date();
     for (let i = 0; i <= 7; i++) {
         let futureDate = new Date();
@@ -58,12 +57,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     dateSelect.addEventListener("change", function () {
-        const selectedDate = this.value;
         const selectedRoom = roomSelect.value;
         const selectedLab = labs.find(lab => lab.room === selectedRoom);
-    
-        // Check if building, room, and date are selected
-        if (selectedLab && buildingSelect.value && selectedDate) {
+
+        if (selectedLab && buildingSelect.value && this.value) {
             populateTimeSlots(selectedLab.openingTime, selectedLab.closingTime);
         }
     });
@@ -73,141 +70,73 @@ document.addEventListener("DOMContentLoaded", function () {
         let [minutes, period] = minutesPeriod.split(" ");
         hours = parseInt(hours, 10);
         minutes = parseInt(minutes, 10);
-    
-        if (period === "PM" && hours !== 12) {
-            hours += 12;
-        } else if (period === "AM" && hours === 12) {
-            hours = 0;
-        }
-    
+
+        if (period === "PM" && hours !== 12) hours += 12;
+        else if (period === "AM" && hours === 12) hours = 0;
+
         return { hours, minutes };
     }
-    
+
     function populateTimeSlots(startTime, endTime) {
-        console.log("Populating time slots with:", startTime, "-", endTime); 
-        
         startTimeSelect.innerHTML = '<option value="" selected disabled>Select a start time</option>';
         endTimeSelect.innerHTML = '<option value="" selected disabled>Select an end time</option>';
         endTimeSelect.disabled = true;
-    
-        // Convert start and end time to 24-hour format
-        let startTimeParts = convertTo24HourFormat(startTime);
-        let endTimeParts = convertTo24HourFormat(endTime);
-    
-        console.log("Start Time Parts (24-hour format):", startTimeParts);
-        console.log("End Time Parts (24-hour format):", endTimeParts);
-        
+
+        let startParts = convertTo24HourFormat(startTime);
+        let endParts = convertTo24HourFormat(endTime);
+
         let startDate = new Date();
-        startDate.setHours(startTimeParts.hours);
-        startDate.setMinutes(startTimeParts.minutes);
-        
+        startDate.setHours(startParts.hours);
+        startDate.setMinutes(startParts.minutes);
+
         let endDate = new Date();
-        endDate.setHours(endTimeParts.hours);
-        endDate.setMinutes(endTimeParts.minutes);
-    
-        console.log("Start Date:", startDate);
-        console.log("End Date:", endDate);
-        
-        // If start time > end time, make sure to move end time to the next day
-        if (endDate <= startDate) {
-            console.log("End time is before start time, adjusting end time to next day.");
-            endDate.setDate(endDate.getDate() + 1);
-            console.log("Adjusted End Date:", endDate);
-        }
-        
-        let currentTime = startDate;
+        endDate.setHours(endParts.hours);
+        endDate.setMinutes(endParts.minutes);
+
+        if (endDate <= startDate) endDate.setDate(endDate.getDate() + 1);
+
+        let currentTime = new Date(startDate);
         let hasOptions = false;
-        
-        console.log("Creating time slots...");
-        // Create time slots in 30-minute intervals between startTime and endTime
+
         while (currentTime < endDate) {
-            let timeString = `${String(currentTime.getHours()).padStart(2, "0")}:${String(currentTime.getMinutes()).padStart(2, "0")}`;
-            console.log("Current Time:", timeString);
-            let option = new Option(timeString, timeString);
-            startTimeSelect.appendChild(option);
-            hasOptions = true;
-            
+            let timeStr = `${String(currentTime.getHours()).padStart(2, "0")}:${String(currentTime.getMinutes()).padStart(2, "0")}`;
+            startTimeSelect.appendChild(new Option(timeStr, timeStr));
             currentTime.setMinutes(currentTime.getMinutes() + 30);
+            hasOptions = true;
         }
-        
-        if (hasOptions) {
-            startTimeSelect.disabled = false; 
-            console.log("Time slots successfully populated.");
-        } else {
-            console.warn("No valid start times available!");
-            let noStartOptions = new Option("No valid start times available!", "");
-            let noEndOptions = new Option("No valid end times available!", "");
-            
-            startTimeSelect.innerHTML = '';
-            startTimeSelect.appendChild(noStartOptions);
-            endTimeSelect.innerHTML = '';
-            endTimeSelect.appendChild(noEndOptions);
-        }
+
+        startTimeSelect.disabled = !hasOptions;
     }
 
     startTimeSelect.addEventListener("change", function () {
-        console.log("Start time selected:", this.value);  // Log the selected start time
-    
         endTimeSelect.innerHTML = '<option value="" selected disabled>Select an end time</option>';
         endTimeSelect.disabled = false;
-        
-        let startTime = this.value;
-        let [startHour, startMinutes] = startTime.split(":").map(Number);
-        
-        console.log("Start time parts:", startHour, startMinutes); // Log parsed start time
-        
-        const selectedLab = labs.find(lab => lab.room === roomSelect.value);
-        if (!selectedLab) {
-            console.error("Selected lab not found for the room:", roomSelect.value);
-            return;
-        }
-        
-        let closingTime = selectedLab.closingTime;
-        
-        console.log("Closing time for lab:", closingTime);  // Log the closing time
-        const { hours: endHour, minutes: endMinutes } = convertTo24HourFormat(closingTime);
-        
-        console.log("Converted end time parts:", endHour, endMinutes); // Log converted end time
-    
-        let currentHour = startHour;
-        let currentMinutes = startMinutes + 30; // Adding 30 minutes to start time
-        
-        console.log("Starting to create time slots...");
-    
-        while (
-            currentHour < endHour || 
-            (currentHour === endHour && currentMinutes <= endMinutes)
-        ) {
-            if (currentMinutes >= 60) {
-                currentMinutes = 0;
-                currentHour++;
+
+        let [startHour, startMinutes] = this.value.split(":").map(Number);
+        let selectedLab = labs.find(lab => lab.room === roomSelect.value);
+        if (!selectedLab) return;
+
+        let { hours: endHour, minutes: endMinutes } = convertTo24HourFormat(selectedLab.closingTime);
+
+        let currHour = startHour;
+        let currMin = startMinutes + 30;
+
+        while (currHour < endHour || (currHour === endHour && currMin <= endMinutes)) {
+            if (currMin >= 60) {
+                currMin = 0;
+                currHour++;
             }
-            
-            // Ensure that the end time doesn't exceed the selected closing time
-            if (currentHour > endHour || (currentHour === endHour && currentMinutes > endMinutes)) {
-                break;
-            }
-    
-            let timeString = `${String(currentHour).padStart(2, "0")}:${String(currentMinutes).padStart(2, "0")}`;
-            console.log("Generated end time option:", timeString);  // Log the generated time string
-    
-            let option = new Option(timeString, timeString);
-            endTimeSelect.appendChild(option);
-        
-            // Increase the minutes by 30 for the next end time option
-            currentMinutes += 30;
+
+            if (currHour > endHour || (currHour === endHour && currMin > endMinutes)) break;
+
+            let timeStr = `${String(currHour).padStart(2, "0")}:${String(currMin).padStart(2, "0")}`;
+            endTimeSelect.appendChild(new Option(timeStr, timeStr));
+
+            currMin += 30;
         }
-        
-        console.log("End time options added, checking if any options are available...");
-    
-        // Disable the end time select if no valid options are available
-        if (endTimeSelect.options.length <= 1) {
-            console.warn("No valid end times available!");
-            endTimeSelect.disabled = true;
-        } else {
-            console.log("Valid end time options available.");
-        }
-    });    
+
+        if (endTimeSelect.options.length <= 1) endTimeSelect.disabled = true;
+    });
 
     function checkFormCompletion() {
         viewSeatsBtn.disabled = !(
@@ -222,197 +151,41 @@ document.addEventListener("DOMContentLoaded", function () {
     [buildingSelect, roomSelect, dateSelect, startTimeSelect, endTimeSelect].forEach(select => {
         select.addEventListener("change", checkFormCompletion);
     });
-    
+
     viewSeatsBtn.addEventListener("click", function () {
-        const selectedBuilding = String(buildingSelect.value).trim();
-        const selectedRoom = String(roomSelect.value).trim();
-        const selectedDate = dateSelect.value;
-        const selectedStartTime = startTimeSelect.value;
-        const selectedEndTime = endTimeSelect.value;
-    
-        console.log("---- Debug Info ----");
-        console.log("Selected Building:", selectedBuilding);
-        console.log("Selected Room:", selectedRoom);
-        console.log("Selected Date:", selectedDate);
-        console.log("Selected Start Time:", selectedStartTime);
-        console.log("Selected End Time:", selectedEndTime);
-        console.log("Labs array:", labs);
-    
-        // Find the selected lab
-        const selectedLab = labs.find(lab => 
-            lab.building.trim().toLowerCase() === selectedBuilding.toLowerCase() &&
-            lab.room.trim().toLowerCase() === selectedRoom.toLowerCase()
+        const selectedLab = labs.find(lab =>
+            lab.building.trim().toLowerCase() === buildingSelect.value.trim().toLowerCase() &&
+            lab.room.trim().toLowerCase() === roomSelect.value.trim().toLowerCase()
         );
-    
-        if (!selectedLab) {
-            console.error("Lab not found! Check if the building/room matches exactly.");
-            return;
-        }
-    
-        console.log("Found Lab:", selectedLab);
-    
-        const apiUrl = `/api/seats?labID=${selectedLab._id}`;
-        console.log("Fetching seats from API:", apiUrl);
-    
-        fetch(apiUrl)
-            .then(response => {
-                console.log("Raw response:", response);
-    
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.status} ${response.statusText}`);
-                }
-    
-                return response.json();
-            })
+
+        if (!selectedLab) return;
+
+        fetch(`/api/seats?labID=${selectedLab._id}`)
+            .then(res => res.json())
             .then(data => {
-                console.log("Fetched data (parsed JSON):", data, "Type:", typeof data);
-    
-                // Ensure 'seats' is an array
                 const seats = Array.isArray(data) ? data : data.seats;
-                console.log("Processed seats array:", seats, "Type:", typeof seats);
-    
-                seatSelect.innerHTML = '<option value="" selected disabled>Select a seat</option>';
-    
-                if (!Array.isArray(seats)) {
-                    console.error("Unexpected API response format. Expected an array but got:", seats);
-                    return;
-                }
-    
-                const availableSeats = seats.filter(seat => {
-                    console.log(`Checking seat ${seat.seatNumber} (status: ${seat.status})`);
-                    return seat.status === 'Available';
-                });
-    
-                console.log("Available seats after filtering:", availableSeats);
-    
+
+                const availableSeats = seats.filter(seat => seat.status === 'Available');
+
+                availableSeatList.innerHTML = "";
+                seatCountBadge.textContent = availableSeats.length;
+
                 if (availableSeats.length === 0) {
-                    console.warn("No available seats found!");
-                    seatSelect.innerHTML = '<option value="" disabled>No seats available</option>';
-                    seatSelectionDiv.style.display = "none"; // Hide if no available seats
+                    availableSeatList.innerHTML = '<li class="list-group-item text-danger">No available seats</li>';
                 } else {
                     availableSeats.forEach(seat => {
-                        let option = document.createElement("option");
-                        option.value = seat._id;
-                        option.textContent = `Seat ${seat.seatNumber}`;
-                        seatSelect.appendChild(option);
-                    });
-    
-                    seatSelectionDiv.style.display = "block"; // Show only if seats are available
-                }
-            })
-            .catch(error => console.error("Error fetching seats:", error));
-    });    
-
-    function formatDateTimeForParsing(date, time) {
-        // Convert to 24-hour time if necessary (you can reuse your existing helper or handle it here)
-        let [hours, minutes, period] = time.split(/[: ]/);
-        hours = parseInt(hours);
-        minutes = parseInt(minutes);
-    
-        if (period === 'PM' && hours !== 12) {
-            hours += 12;
-        }
-        if (period === 'AM' && hours === 12) {
-            hours = 0;
-        }
-    
-        // Format the time as HH:mm
-        let formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-    
-        // Format and return the datetime string as YYYY-MM-DDTHH:mm
-        return `${date}T${formattedTime}`;
-    }    
-
-    // Handle seat selection to fetch available time slots
-    seatSelect.addEventListener("change", function () {
-        const selectedSeatId = seatSelect.value;
-        const selectedDate = dateSelect.value;
-        const selectedLab = labs.find(lab => lab.room === roomSelect.value);
-
-        if (!selectedSeatId || !selectedLab) {
-            console.error("Seat or Lab not found.");
-            return;
-        }
-
-        const openingTime = selectedLab.openingTime;
-        const closingTime = selectedLab.closingTime;
-
-        console.log("Opening Time:", openingTime);
-        console.log("Closing Time:", closingTime);
-
-        fetch(`/api/reservations?seatIDs=${selectedSeatId}`)
-            .then(response => response.json())
-            .then(reservations => {
-                console.log("All reservations for this seat:", reservations);
-
-                // Filter reservations for the selected date
-                const filteredReservations = reservations.filter(reservation => {
-                    const resDate = new Date(reservation.startDateTime).toISOString().split("T")[0];
-                    return resDate === selectedDate;
-                });
-
-                console.log("Reservations for this seat on selected date:", filteredReservations);
-
-                let timeSlots = [];
-                let currentTimeString = formatDateTimeForParsing(selectedDate, openingTime);
-                let endTimeString = formatDateTimeForParsing(selectedDate, closingTime);
-
-                let currentTime = new Date(currentTimeString);
-                let endTime = new Date(endTimeString);
-
-                console.log(`Current time: ${currentTime} | End time: ${endTime}`); // DEBUGGING
-                
-                while (currentTime < endTime) {
-                    let nextTime = new Date(currentTime);
-                    nextTime.setMinutes(nextTime.getMinutes() + 30);
-
-                    // Filter reservations that overlap with the current time slot
-                    let overlappingReservations = filteredReservations.filter(reservation => {
-                        let resStart = new Date(reservation.startDateTime);
-                        let resEnd = new Date(reservation.endDateTime);
-
-                        console.log(`Checking time slot: ${currentTime.toTimeString().slice(0, 5)} - ${nextTime.toTimeString().slice(0, 5)}`);
-                        console.log(`Reservation start: ${resStart.toTimeString().slice(0, 5)}, end: ${resEnd.toTimeString().slice(0, 5)}`);
-
-                        // Ensure the time slot is fully inside the reservation period
-                        return currentTime >= resStart && nextTime <= resEnd;
-                    });
-
-                    // If there are no overlapping reservations, the slot is available
-                    let isAvailable = overlappingReservations.length === 0;
-
-                    timeSlots.push({
-                        timeRange: `${currentTime.toTimeString().slice(0, 5)} - ${nextTime.toTimeString().slice(0, 5)}`,
-                        available: isAvailable
-                    });
-
-                    currentTime = nextTime; // Move to the next time slot
-                }
-
-                seatTimeList.innerHTML = "";
-
-                if (timeSlots.length > 0) {
-                    timeSlots.forEach(slot => {
                         let li = document.createElement("li");
                         li.className = "list-group-item";
-                        li.textContent = slot.timeRange;
-                        if (!slot.available) {
-                            li.style.backgroundColor = "red"; 
-                            li.style.color = "white";
-                        }
-                        seatTimeList.appendChild(li);
+                        li.textContent = `Seat ${seat.seatNumber}`;
+                        availableSeatList.appendChild(li);
                     });
-                } else {
-                    seatTimeList.innerHTML = '<li class="list-group-item text-danger">No available times</li>';
                 }
 
-                seatTimesDiv.style.display = "block";
+                seatAvailabilityDiv.style.display = "block";
             })
-            .catch(error => console.error("Error fetching reservations:", error));
-
+            .catch(err => console.error("Error fetching seats:", err));
     });
 
-    // Reset the form to default values on page refresh
     function resetPage() {
         buildingSelect.value = "";
         roomSelect.value = "";
@@ -423,9 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
         endTimeSelect.innerHTML = '<option value="" selected disabled>Select an end time</option>';
         endTimeSelect.disabled = true;
         viewSeatsBtn.disabled = true;
-        seatSelectionDiv.style.display = "none";
-        seatTimesDiv.style.display = "none";
-        seatSelect.innerHTML = '<option value="" selected disabled>Select a seat</option>';
+        seatAvailabilityDiv.style.display = "none";
     }
 
     resetPage();
