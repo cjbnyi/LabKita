@@ -47,6 +47,35 @@ document.addEventListener("DOMContentLoaded", function () {
     // Load buildings on page load
     loadBuildings();
 
+    // Load rooms based on selected building
+    buildingSelect.addEventListener("change", function () {
+        const selectedBuilding = this.value;
+        roomSelect.innerHTML = '<option value="" disabled selected>Select a room</option>';
+        roomSelect.disabled = !selectedBuilding;
+        dateInput.value = "";
+        dateInput.disabled = true;
+        startTimeSelect.innerHTML = '<option value="" disabled selected>Select start time</option>';
+        startTimeSelect.disabled = true;
+        endTimeSelect.innerHTML = '<option value="" disabled selected>Select end time</option>';
+        endTimeSelect.disabled = true;
+        seatSelectionDiv.innerHTML = '';  // Reset seat selection area
+        studentsSection.style.display = 'none';  // Hide students input section
+        confirmSeatsButton.disabled = true;  // Disable the confirm button until seats are selected
+
+        console.log("Building selected:", selectedBuilding);
+
+        if (selectedBuilding) {
+            const rooms = labs.filter(lab => lab.building === selectedBuilding);
+            console.log("Rooms available in the selected building:", rooms);
+            rooms.forEach(lab => {
+                const option = document.createElement("option");
+                option.value = lab.room;
+                option.textContent = lab.room;
+                roomSelect.appendChild(option);
+            });
+        }
+    });
+
     // Load seats and time slots when room is selected
     roomSelect.addEventListener("change", function () {
         const selectedBuilding = buildingSelect.value;
