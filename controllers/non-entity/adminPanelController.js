@@ -1,6 +1,6 @@
 import { Reservation } from '../../database/models/models.js';
 
-const formatDate = (date) => new Date(date).toLocaleString(); 
+import { formatDate } from '../../utils/generalUtils.js';
 
 const getAdminPanel = async (req, res) => {
     try {
