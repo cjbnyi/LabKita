@@ -619,20 +619,33 @@ document.addEventListener("DOMContentLoaded", function () {
             // Parse the date string to create a base date
             const [month, day, year] = selectedDate.split('/');
 
-            // Create start date
-            const startDateTime = new Date(year, parseInt(month) - 1, parseInt(day));
-            const [startHour, startMinute] = startTime.split(':');
-            startDateTime.setHours(parseInt(startHour), parseInt(startMinute), 0, 0);
+            // Function to create a date with the correct timezone offset
+            function createLocalDateTime(year, month, day, hour, minute) {
+                // Create date in local timezone
+                const date = new Date(year, parseInt(month) - 1, parseInt(day), hour, minute, 0, 0);
 
-            // Create end date
-            const endDateTime = new Date(year, parseInt(month) - 1, parseInt(day));
-            const [endHour, endMinute] = endTime.split(':');
-            endDateTime.setHours(parseInt(endHour), parseInt(endMinute), 0, 0);
+                // Get the timezone offset in minutes
+                const offset = date.getTimezoneOffset();
 
-            console.log("Start DateTime:", startDateTime);
-            console.log("End DateTime:", endDateTime);
-            console.log("Start DateTime ISO:", startDateTime.toISOString());
-            console.log("End DateTime ISO:", endDateTime.toISOString());
+                // Adjust the date by adding the offset (to counteract the automatic timezone conversion)
+                date.setMinutes(date.getMinutes() + offset);
+
+                return date;
+            }
+
+            // Create start date with timezone handling
+            const [startHour, startMinute] = startTime.split(':').map(Number);
+            const startDateTime = createLocalDateTime(year, month, day, startHour, startMinute);
+
+            // Create end date with timezone handling
+            const [endHour, endMinute] = endTime.split(':').map(Number);
+            const endDateTime = createLocalDateTime(year, month, day, endHour, endMinute);
+
+            console.log("Local timezone offset (minutes):", new Date().getTimezoneOffset());
+            console.log("Start DateTime (local):", startDateTime.toLocaleString());
+            console.log("End DateTime (local):", endDateTime.toLocaleString());
+            console.log("Start DateTime (ISO):", startDateTime.toISOString());
+            console.log("End DateTime (ISO):", endDateTime.toISOString());
 
             // Verify that end time is after start time
             if (endDateTime <= startDateTime) {
