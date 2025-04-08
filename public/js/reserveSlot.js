@@ -181,26 +181,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log("Start hour:", start.hours, "Start minute:", start.minutes, "End hour:", end.hours, "End minute:", end.minutes);
 
-        let currentHour = start.hours;
-        let currentMinute = start.minutes;
-
-        // Get current time
+        // Get current time and selected date
         const now = new Date();
         const selectedDate = new Date(dateInput.value);
         const isToday = selectedDate.toDateString() === now.toDateString();
 
-        // If it's today and current time is after opening time
+        let currentHour = start.hours;
+        let currentMinute = start.minutes;
+
+        // If it's today, adjust the start time based on current time
         if (isToday) {
             const currentHourNow = now.getHours();
             const currentMinuteNow = now.getMinutes();
 
+            // If current time is after lab opening time
             if (currentHourNow > start.hours || (currentHourNow === start.hours && currentMinuteNow >= start.minutes)) {
                 // Round up to the next 30-minute slot
                 currentHour = currentHourNow;
                 currentMinute = Math.ceil(currentMinuteNow / 30) * 30;
+
+                // If we rounded up to the next hour
                 if (currentMinute === 60) {
                     currentHour++;
                     currentMinute = 0;
+                }
+
+                // If the rounded time is after lab closing time, no slots available
+                if (currentHour > end.hours || (currentHour === end.hours && currentMinute >= end.minutes)) {
+                    startTimeSelect.innerHTML = '<option value="" disabled>No available slots for today</option>';
+                    startTimeSelect.disabled = true;
+                    return;
                 }
             }
         }
