@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Populate available dates based on the lab's available days of the week
             populateDates(selectedLab);
 
-            // Reset time selects
+            // Reset and disable time selects
             startTimeSelect.innerHTML = '<option value="" disabled selected>Select a start time</option>';
             endTimeSelect.innerHTML = '<option value="" disabled selected>Select an end time</option>';
             startTimeSelect.disabled = true;
