@@ -76,7 +76,15 @@ function updateReservations() {
                                 `<a href="/api/profile/${student.universityID}">${student.fullName}</a>`
                             ).join(", ");
 
+                        // Shift start and end datetime by -8 hours
                         const startTime = new Date(reservation.start_datetime);
+                        const endTime = new Date(reservation.end_datetime);
+                        startTime.setHours(startTime.getHours() - 8);
+                        endTime.setHours(endTime.getHours() - 8);
+
+                        const formattedStart = startTime.toISOString().slice(0, 16).replace("T", " ");
+                        const formattedEnd = endTime.toISOString().slice(0, 16).replace("T", " ");
+
                         const now = new Date();
                         const diffMinutes = (now - startTime) / (1000 * 60); // Convert to minutes
 
@@ -92,8 +100,8 @@ function updateReservations() {
                                 <td>${reservation.building}</td>
                                 <td>${reservation.room}</td>
                                 <td>${reservation.seats}</td>
-                                <td>${reservation.start_datetime}</td>
-                                <td>${reservation.end_datetime}</td>
+                                <td>${formattedStart}</td>
+                                <td>${formattedEnd}</td>
                                 <td>${creditedStudentLinks}</td>
                                 <td>${reservation.purpose}</td>
                                 <td><span class="badge bg-success">Reserved</span></td>
@@ -121,13 +129,22 @@ function updateReservations() {
                                 `<a href="/api/profile/${student.universityID}">${student.fullName}</a>`
                             ).join(", ");
 
+                        // Shift past reservation datetime too
+                        const startTime = new Date(reservation.start_datetime);
+                        const endTime = new Date(reservation.end_datetime);
+                        startTime.setHours(startTime.getHours() - 8);
+                        endTime.setHours(endTime.getHours() - 8);
+
+                        const formattedStart = startTime.toISOString().slice(0, 16).replace("T", " ");
+                        const formattedEnd = endTime.toISOString().slice(0, 16).replace("T", " ");
+
                         $("#pastReservationsBody").append(`
                             <tr data-id="${reservation.id}">
                                 <td>${reservation.building}</td>
                                 <td>${reservation.room}</td>
                                 <td>${reservation.seats}</td>
-                                <td>${reservation.start_datetime}</td>
-                                <td>${reservation.end_datetime}</td>
+                                <td>${formattedStart}</td>
+                                <td>${formattedEnd}</td>
                                 <td>${creditedStudentLinks}</td>
                                 <td>${reservation.purpose}</td>
                                 <td>
