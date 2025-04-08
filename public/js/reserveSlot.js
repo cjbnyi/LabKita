@@ -538,9 +538,56 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Update button styles and behavior
+    confirmSeatsButton.classList.add('btn', 'btn-secondary');
+    confirmSeatsButton.style.backgroundColor = '#880D1E';
+    confirmSeatsButton.style.color = 'white';
+    confirmSeatsButton.style.border = 'none';
+    confirmSeatsButton.style.opacity = '0.5';
+    confirmSeatsButton.disabled = true;
+
+    reserveButton.classList.add('btn', 'btn-primary');
+    reserveButton.style.backgroundColor = '#880D1E';
+    reserveButton.style.color = 'white';
+    reserveButton.style.border = 'none';
+    reserveButton.style.opacity = '0.5';
+    reserveButton.disabled = true;
+
+    // Update button styles when seats are selected
     seatSelectionDiv.addEventListener("change", () => {
         const selectedSeats = document.querySelectorAll('input[name="seats"]:checked');
-        confirmSeatsButton.disabled = selectedSeats.length === 0;
+        const hasSelectedSeats = selectedSeats.length > 0;
+
+        confirmSeatsButton.disabled = !hasSelectedSeats;
+        confirmSeatsButton.style.opacity = hasSelectedSeats ? '1' : '0.5';
+
+        if (hasSelectedSeats) {
+            confirmSeatsButton.style.backgroundColor = '#880D1E';
+            confirmSeatsButton.style.cursor = 'pointer';
+        } else {
+            confirmSeatsButton.style.backgroundColor = '#880D1E';
+            confirmSeatsButton.style.cursor = 'not-allowed';
+        }
+    });
+
+    // Update reserve button style when all required fields are filled
+    function updateReserveButton() {
+        const isSelected = areRequiredFieldsSelected();
+        reserveButton.disabled = !isSelected;
+        reserveButton.style.opacity = isSelected ? '1' : '0.5';
+
+        if (isSelected) {
+            reserveButton.style.backgroundColor = '#880D1E';
+            reserveButton.style.cursor = 'pointer';
+        } else {
+            reserveButton.style.backgroundColor = '#880D1E';
+            reserveButton.style.cursor = 'not-allowed';
+        }
+    }
+
+    // Add event listeners to update reserve button
+    [buildingSelect, roomSelect, dateInput, startTimeSelect, endTimeSelect].forEach(select => {
+        select.addEventListener("change", updateReserveButton);
     });
 
     confirmSeatsButton.addEventListener("click", function () {
