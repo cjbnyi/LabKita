@@ -570,8 +570,20 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        if (!purpose) {
+            alert("Please enter a purpose for the reservation.");
+            return;
+        }
+
         try {
+            console.log("Starting reservation process...");
+            console.log("Selected lab:", selectedLab);
+            console.log("Selected seats:", selectedSeats);
+            console.log("Selected students:", selectedStudents);
+            console.log("Purpose:", purpose);
+
             // Step 1: Validate university IDs
+            console.log("Validating university IDs...");
             const validationResponse = await fetch(`/api/students/validate-university-ids`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -579,6 +591,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             const validationData = await validationResponse.json();
+            console.log("Validation response:", validationData);
 
             if (!validationResponse.ok) {
                 console.error("Validation failed:", validationData);
@@ -591,12 +604,30 @@ document.addEventListener("DOMContentLoaded", function () {
             // Step 2: Extract student ObjectIDs for the valid students
             const foundStudentsData = validationData.foundStudentsData;
             const creditedStudentIDs = foundStudentsData.map(student => student.objectID);
+            console.log("Credited student IDs:", creditedStudentIDs);
 
             // Step 3: Create the reservation data
+            const selectedDate = dateInput.value;
+            const startTime = startTimeSelect.value;
+            const endTime = endTimeSelect.value;
+
+            // Create Date objects for start and end times
+            const [startHour, startMinute] = startTime.split(':');
+            const [endHour, endMinute] = endTime.split(':');
+
+            const startDateTime = new Date(selectedDate);
+            startDateTime.setHours(parseInt(startHour), parseInt(startMinute), 0, 0);
+
+            const endDateTime = new Date(selectedDate);
+            endDateTime.setHours(parseInt(endHour), parseInt(endMinute), 0, 0);
+
+            console.log("Start DateTime:", startDateTime.toISOString());
+            console.log("End DateTime:", endDateTime.toISOString());
+
             const reservationData = {
                 seatIDs: selectedSeats,
-                startDateTime: new Date(`${dateInput.value}T${startTimeSelect.value}:00.000`),
-                endDateTime: new Date(`${dateInput.value}T${endTimeSelect.value}:00.000`),
+                startDateTime: startDateTime.toISOString(),
+                endDateTime: endDateTime.toISOString(),
                 creditedStudentIDs: creditedStudentIDs,
                 purpose: purpose,
                 status: "Reserved",
@@ -606,17 +637,20 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Reservation data to be sent:", reservationData);
 
             // Step 4: API call
+            console.log("Sending reservation request...");
             const reservationResponse = await fetch(`/api/reservations`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(reservationData),
             });
 
+            console.log("Raw reservation response:", reservationResponse);
             const reservationResult = await reservationResponse.json();
+            console.log("Parsed reservation response:", reservationResult);
 
             if (!reservationResponse.ok) {
                 console.error("Reservation failed:", reservationResult);
-                alert("Reservation failed! Please try again.");
+                alert("Reservation failed! " + (reservationResult.details || reservationResult.error || "Please try again."));
                 return;
             }
 
@@ -625,7 +659,7 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Reservation successful!");
         } catch (error) {
             console.error("Error making reservation:", error);
-            alert("An error occurred. Please try again.");
+            alert("An error occurred. Please try again. Error: " + error.message);
         }
     });
 
