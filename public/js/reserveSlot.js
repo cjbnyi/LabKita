@@ -619,33 +619,37 @@ document.addEventListener("DOMContentLoaded", function () {
             // Parse the date string to create a base date
             const [month, day, year] = selectedDate.split('/');
 
-            // Function to create a date with the correct timezone offset
-            function createLocalDateTime(year, month, day, hour, minute) {
-                // Create date in local timezone
-                const date = new Date(year, parseInt(month) - 1, parseInt(day), hour, minute, 0, 0);
+            // Function to create a date string in UTC that represents the desired local time
+            function createUTCDateString(year, month, day, timeStr) {
+                const [hours, minutes] = timeStr.split(':').map(Number);
 
-                // Get the timezone offset in minutes
-                const offset = date.getTimezoneOffset();
+                // Create a date object in local time
+                const localDate = new Date(year, parseInt(month) - 1, parseInt(day), hours, minutes, 0, 0);
 
-                // Adjust the date by adding the offset (to counteract the automatic timezone conversion)
-                date.setMinutes(date.getMinutes() + offset);
+                // Convert the local time to UTC time that will represent the same wall clock time
+                const utcYear = localDate.getUTCFullYear();
+                const utcMonth = String(localDate.getUTCMonth() + 1).padStart(2, '0');
+                const utcDay = String(localDate.getUTCDate()).padStart(2, '0');
+                const utcHours = String(localDate.getUTCHours()).padStart(2, '0');
+                const utcMinutes = String(localDate.getUTCMinutes()).padStart(2, '0');
 
-                return date;
+                // Return the UTC date string
+                return `${utcYear}-${utcMonth}-${utcDay}T${utcHours}:${utcMinutes}:00.000Z`;
             }
 
-            // Create start date with timezone handling
-            const [startHour, startMinute] = startTime.split(':').map(Number);
-            const startDateTime = createLocalDateTime(year, month, day, startHour, startMinute);
+            // Create the UTC date strings that will represent our local times
+            const startDateTimeStr = createUTCDateString(year, month, day, startTime);
+            const endDateTimeStr = createUTCDateString(year, month, day, endTime);
 
-            // Create end date with timezone handling
-            const [endHour, endMinute] = endTime.split(':').map(Number);
-            const endDateTime = createLocalDateTime(year, month, day, endHour, endMinute);
+            // Create Date objects for validation
+            const startDateTime = new Date(startDateTimeStr);
+            const endDateTime = new Date(endDateTimeStr);
 
-            console.log("Local timezone offset (minutes):", new Date().getTimezoneOffset());
-            console.log("Start DateTime (local):", startDateTime.toLocaleString());
-            console.log("End DateTime (local):", endDateTime.toLocaleString());
-            console.log("Start DateTime (ISO):", startDateTime.toISOString());
-            console.log("End DateTime (ISO):", endDateTime.toISOString());
+            console.log("Local timezone:", Intl.DateTimeFormat().resolvedOptions().timeZone);
+            console.log("Selected local start time:", `${year}-${month}-${day} ${startTime}`);
+            console.log("Selected local end time:", `${year}-${month}-${day} ${endTime}`);
+            console.log("UTC start time to be sent:", startDateTimeStr);
+            console.log("UTC end time to be sent:", endDateTimeStr);
 
             // Verify that end time is after start time
             if (endDateTime <= startDateTime) {
@@ -655,8 +659,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const reservationData = {
                 seatIDs: selectedSeats,
-                startDateTime: startDateTime.toISOString(),
-                endDateTime: endDateTime.toISOString(),
+                startDateTime: startDateTimeStr,
+                endDateTime: endDateTimeStr,
                 creditedStudentIDs: creditedStudentIDs,
                 purpose: purpose,
                 status: "Reserved",
