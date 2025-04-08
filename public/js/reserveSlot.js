@@ -110,18 +110,38 @@ document.addEventListener("DOMContentLoaded", function () {
             futureDate.setDate(today.getDate() + i);
             const dayOfWeek = futureDate.toLocaleString("en-US", { weekday: "short" });
 
+            // Map short day names to match the format in the lab data
+            const dayMap = {
+                'Mon': 'Mon',
+                'Tue': 'Tue',
+                'Wed': 'Wed',
+                'Thu': 'Thu',
+                'Fri': 'Fri',
+                'Sat': 'Sat',
+                'Sun': 'Sun'
+            };
+
             // If the lab is open on that day, add to the list of available dates
-            if (availableDays.includes(dayOfWeek)) {
-                nextDays.push(futureDate.toLocaleDateString("en-US"));
+            if (availableDays.includes(dayMap[dayOfWeek])) {
+                const formattedDate = futureDate.toLocaleDateString("en-US", {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                const dayName = futureDate.toLocaleDateString("en-US", { weekday: 'long' });
+                nextDays.push({
+                    date: futureDate.toLocaleDateString("en-US"),
+                    display: `${formattedDate} (${dayName})`
+                });
             }
         }
 
         // Populate the date dropdown with the next 7 available dates
         dateInput.innerHTML = '<option value="" disabled selected>Select a date</option>';
-        nextDays.forEach(date => {
+        nextDays.forEach(dateObj => {
             const option = document.createElement("option");
-            option.value = date;
-            option.textContent = date;
+            option.value = dateObj.date;
+            option.textContent = dateObj.display;
             dateInput.appendChild(option);
         });
 
@@ -134,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function convertTo24HourFormat(time) {
-        // Converts a 12-hour time string (e.g., "02:00 PM") to a 24-hour format (e.g., "14:00")
+        // Converts a 12-hour time string (e.g., "07:00 AM") to a 24-hour format (e.g., "07:00")
         const [hour, minute] = time.split(":");
         const [timePart, period] = minute.split(" ");
         let hours = parseInt(hour);
@@ -166,29 +186,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Get current time
         const now = new Date();
-        const currentHourNow = now.getHours();
-        const currentMinuteNow = now.getMinutes();
+        const selectedDate = new Date(dateInput.value);
+        const isToday = selectedDate.toDateString() === now.toDateString();
 
-        // If current time is before opening time, start from opening time
-        if (currentHourNow < start.hours || (currentHourNow === start.hours && currentMinuteNow < start.minutes)) {
-            currentHour = start.hours;
-            currentMinute = start.minutes;
-        } else {
-            // Round up to the next 30-minute slot
-            currentHour = currentHourNow;
-            currentMinute = Math.ceil(currentMinuteNow / 30) * 30;
-            if (currentMinute === 60) {
-                currentHour++;
-                currentMinute = 0;
+        // If it's today and current time is after opening time
+        if (isToday) {
+            const currentHourNow = now.getHours();
+            const currentMinuteNow = now.getMinutes();
+
+            if (currentHourNow > start.hours || (currentHourNow === start.hours && currentMinuteNow >= start.minutes)) {
+                // Round up to the next 30-minute slot
+                currentHour = currentHourNow;
+                currentMinute = Math.ceil(currentMinuteNow / 30) * 30;
+                if (currentMinute === 60) {
+                    currentHour++;
+                    currentMinute = 0;
+                }
             }
         }
 
         // Loop until we reach the end time
         while (currentHour < end.hours || (currentHour === end.hours && currentMinute < end.minutes)) {
-            let timeString = `${String(currentHour).padStart(2, "0")}:${String(currentMinute).padStart(2, "0")}`;
+            // Format the time in 12-hour format
+            let displayHour = currentHour;
+            let period = "AM";
 
-            console.log("Adding time slot:", timeString);
-            startTimeSelect.appendChild(new Option(timeString, timeString));
+            if (displayHour >= 12) {
+                period = "PM";
+                if (displayHour > 12) {
+                    displayHour -= 12;
+                }
+            }
+            if (displayHour === 0) {
+                displayHour = 12;
+            }
+
+            const timeString = `${String(currentHour).padStart(2, "0")}:${String(currentMinute).padStart(2, "0")}`;
+            const displayString = `${String(displayHour).padStart(2, "0")}:${String(currentMinute).padStart(2, "0")} ${period}`;
+
+            console.log("Adding time slot:", displayString);
+            const option = new Option(displayString, timeString);
+            startTimeSelect.appendChild(option);
 
             currentMinute += 30;
 
