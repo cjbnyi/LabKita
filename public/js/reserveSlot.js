@@ -18,21 +18,46 @@ document.addEventListener("DOMContentLoaded", function () {
 
     resetForm();
 
-    // Load buildings
-    const buildings = [...new Set(labs.map(lab => lab.building))];
-    buildingSelect.innerHTML = '<option value="" disabled selected>Select a building</option>';
-    buildings.forEach(building => {
-        const option = document.createElement("option");
-        option.value = building;
-        option.textContent = building;
-        buildingSelect.appendChild(option);
-    });
+    // Load buildings with available slots
+    async function loadBuildings() {
+        const buildings = [...new Set(labs.map(lab => lab.building))];
+        buildingSelect.innerHTML = '<option value="" disabled selected>Select a building</option>';
+
+        for (const building of buildings) {
+            const buildingLabs = labs.filter(lab => lab.building === building);
+            let hasAvailableSlots = false;
+
+            for (const lab of buildingLabs) {
+                const seats = await fetchLabSeats(lab._id);
+                if (seats.length > 0) {
+                    hasAvailableSlots = true;
+                    break;
+                }
+            }
+
+            if (hasAvailableSlots) {
+                const option = document.createElement("option");
+                option.value = building;
+                option.textContent = building;
+                buildingSelect.appendChild(option);
+            }
+        }
+    }
+
+    // Load buildings on page load
+    loadBuildings();
 
     // Load rooms based on selected building
     buildingSelect.addEventListener("change", function () {
         const selectedBuilding = this.value;
         roomSelect.innerHTML = '<option value="" disabled selected>Select a room</option>';
         roomSelect.disabled = !selectedBuilding;
+        dateInput.value = "";
+        dateInput.disabled = true;
+        startTimeSelect.innerHTML = '<option value="" disabled selected>Select start time</option>';
+        startTimeSelect.disabled = true;
+        endTimeSelect.innerHTML = '<option value="" disabled selected>Select end time</option>';
+        endTimeSelect.disabled = true;
         seatSelectionDiv.innerHTML = '';  // Reset seat selection area
         studentsSection.style.display = 'none';  // Hide students input section
         confirmSeatsButton.disabled = true;  // Disable the confirm button until seats are selected
@@ -102,6 +127,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Enable date input after room is selected
         dateInput.disabled = false;
+        startTimeSelect.disabled = true;
+        endTimeSelect.disabled = true;
 
         console.log("Available dates populated:", nextDays);
     }
@@ -112,97 +139,117 @@ document.addEventListener("DOMContentLoaded", function () {
         const [timePart, period] = minute.split(" ");
         let hours = parseInt(hour);
         const minutes = parseInt(timePart);
-    
+
         if (period === "PM" && hours !== 12) {
             hours += 12;  // Convert PM hours (except 12 PM) to 24-hour format
         }
         if (period === "AM" && hours === 12) {
             hours = 0;  // Convert 12 AM to 00 hours
         }
-    
+
         return { hours, minutes };
     }
 
     function populateTimeSlots(startTime, endTime) {
         console.log("Populating time slots with start:", startTime, "and end:", endTime);
-        
+
         startTimeSelect.innerHTML = '<option value="" disabled selected>Select a start time</option>';
         endTimeSelect.innerHTML = '<option value="" disabled selected>Select an end time</option>';
-    
+
         const start = convertTo24HourFormat(startTime);
         const end = convertTo24HourFormat(endTime);
-        
+
         console.log("Start hour:", start.hours, "Start minute:", start.minutes, "End hour:", end.hours, "End minute:", end.minutes);
-    
+
         let currentHour = start.hours;
         let currentMinute = start.minutes;
-    
+
+        // Get current time
+        const now = new Date();
+        const currentHourNow = now.getHours();
+        const currentMinuteNow = now.getMinutes();
+
+        // If current time is before opening time, start from opening time
+        if (currentHourNow < start.hours || (currentHourNow === start.hours && currentMinuteNow < start.minutes)) {
+            currentHour = start.hours;
+            currentMinute = start.minutes;
+        } else {
+            // Round up to the next 30-minute slot
+            currentHour = currentHourNow;
+            currentMinute = Math.ceil(currentMinuteNow / 30) * 30;
+            if (currentMinute === 60) {
+                currentHour++;
+                currentMinute = 0;
+            }
+        }
+
         // Loop until we reach the end time
         while (currentHour < end.hours || (currentHour === end.hours && currentMinute < end.minutes)) {
             let timeString = `${String(currentHour).padStart(2, "0")}:${String(currentMinute).padStart(2, "0")}`;
-    
+
             console.log("Adding time slot:", timeString);
             startTimeSelect.appendChild(new Option(timeString, timeString));
-    
+
             currentMinute += 30;
-    
+
             if (currentMinute === 60) {
                 currentMinute = 0;
                 currentHour++;
             }
         }
-    
+
         endTimeSelect.disabled = true;
+        startTimeSelect.disabled = false;
         console.log("Start time slots populated.");
-    }        
-    
+    }
+
     startTimeSelect.addEventListener("change", function () {
         const selectedBuilding = buildingSelect.value;
         const selectedRoom = roomSelect.value;
         const selectedStartTime = this.value;
         console.log("Start time selected:", selectedStartTime);
-    
+
         // Clear existing end time options
         endTimeSelect.innerHTML = '<option value="" disabled selected>Select an end time</option>';
-    
+
         // Convert selected start time to hours and minutes
         const [startHour, startMinute] = selectedStartTime.split(":");
         let hour = parseInt(startHour);
         let minute = parseInt(startMinute);
-    
+
         console.log("Start time in hours and minutes:", hour, minute);
-    
+
         // Get the lab's closing time
         const selectedLab = labs.find(lab => lab.building === selectedBuilding && lab.room === selectedRoom);
-        
+
         if (!selectedLab || !selectedLab.closingTime) {
             console.error("Closing time not found for the selected lab.");
             return;
         }
-        
+
         console.log("Selected lab:", selectedLab);  // Debugging log
-        
+
         // The closingTime is a string like "08:00 PM"
         const { hours: closingHour, minutes: closingMinute } = convertTo24HourFormat(selectedLab.closingTime);
-        
+
         console.log("Lab closing time (from converted Date):", closingHour, closingMinute);
-    
+
         // Populate end time options starting 30 minutes after the selected start time
         let nextStartTime = new Date();
         nextStartTime.setHours(hour, minute + 30, 0, 0); // Add 30 minutes to the selected start time
-    
+
         // Loop to populate end times up until the lab's closing time
         while (
             nextStartTime.getHours() < closingHour ||
             (nextStartTime.getHours() === closingHour && nextStartTime.getMinutes() <= closingMinute)
-        ) {
+            ) {
             let endTimeString = `${String(nextStartTime.getHours()).padStart(2, "0")}:${String(nextStartTime.getMinutes()).padStart(2, "0")}`;
             endTimeSelect.appendChild(new Option(endTimeString, endTimeString));
-    
+
             // Increment by 30 minutes
             nextStartTime.setMinutes(nextStartTime.getMinutes() + 30);
         }
-    
+
         // Enable the end time once a start time is selected
         endTimeSelect.disabled = false;
         console.log("End time options populated.");
@@ -258,23 +305,23 @@ document.addEventListener("DOMContentLoaded", function () {
             return [];
         }
     }
-    
+
     function populateSeats(seats) {
         console.log("Populating seats with data:", seats);
         seatSelectionDiv.innerHTML = '';
-    
+
         const selectedBuilding = buildingSelect.value;
         const selectedRoom = roomSelect.value;
         const selectedDate = dateInput.value;
         const selectedStartTime = startTimeSelect.value;
         const selectedEndTime = endTimeSelect.value;
-    
+
         console.log("Selected building:", selectedBuilding);
         console.log("Selected room:", selectedRoom);
         console.log("Selected date:", selectedDate);
         console.log("Selected start time:", selectedStartTime);
         console.log("Selected end time:", selectedEndTime);
-    
+
         // Convert start and end times to Date objects for comparison (in local time)
         const [startHour, startMinute] = selectedStartTime.split(":");
         const [endHour, endMinute] = selectedEndTime.split(":");
@@ -333,16 +380,40 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
+                // Create a container for the seat grid
+                const seatGrid = document.createElement('div');
+                seatGrid.className = 'seat-grid';
+                seatGrid.style.display = 'grid';
+                seatGrid.style.gridTemplateColumns = 'repeat(5, 1fr)';
+                seatGrid.style.gap = '10px';
+                seatGrid.style.marginBottom = '20px';
+
                 // Create checkboxes for each available seat
                 availableSeats.forEach(seat => {
+                    const seatContainer = document.createElement('div');
+                    seatContainer.className = 'seat-container';
+
                     const seatLabel = document.createElement('label');
-                    seatLabel.innerHTML = `
-                        <input type="checkbox" name="seats" value="${seat._id}">
-                        Seat ${seat.seatNumber}
-                    `;
-                    seatSelectionDiv.appendChild(seatLabel);
-                    seatSelectionDiv.appendChild(document.createElement('br')); // Line break for readability
+                    seatLabel.className = 'seat-label';
+                    seatLabel.style.display = 'flex';
+                    seatLabel.style.alignItems = 'center';
+                    seatLabel.style.gap = '5px';
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.name = 'seats';
+                    checkbox.value = seat._id;
+
+                    const seatNumber = document.createElement('span');
+                    seatNumber.textContent = `Seat ${seat.seatNumber}`;
+
+                    seatLabel.appendChild(checkbox);
+                    seatLabel.appendChild(seatNumber);
+                    seatContainer.appendChild(seatLabel);
+                    seatGrid.appendChild(seatContainer);
                 });
+
+                seatSelectionDiv.appendChild(seatGrid);
             })
             .catch(error => {
                 console.error("Error fetching reservations:", error);
@@ -352,10 +423,10 @@ document.addEventListener("DOMContentLoaded", function () {
     async function fetchReservations(building, room, startDate, endDate) {
         try {
             console.log("Fetching reservations for:", { building, room, startDate, endDate });
-    
+
             const response = await fetch(`/api/manage-reservations/reservations?building=${building}&room=${room}&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`);
             const reservations = await response.json();
-    
+
             console.log("Reservations fetched:", reservations);
             return reservations;
         } catch (error) {
@@ -372,52 +443,52 @@ document.addEventListener("DOMContentLoaded", function () {
     confirmSeatsButton.addEventListener("click", function () {
         const selectedSeats = Array.from(seatSelectionDiv.querySelectorAll("input[type='checkbox']:checked"))
             .map(checkbox => checkbox.value);
-    
+
         console.log("Selected seats:", selectedSeats);
-    
+
         if (selectedSeats.length === 0) {
             alert("Please select at least one seat.");
             return;
         }
-    
-        studentsSection.style.display = 'block'; 
+
+        studentsSection.style.display = 'block';
         generateStudentFields(selectedSeats.length);
 
         document.getElementById("purpose-section").style.display = 'block';
         document.getElementById("anonymous-section").style.display = 'block';
         document.getElementById("reserveButton").style.display = 'block';
-    });     
+    });
 
     function generateStudentFields(numberOfSeats) {
         console.log("Generating student input fields for:", numberOfSeats, "seats");
-    
+
         creditedStudentFields.innerHTML = '';
-    
+
         const studentInputs = [];
-        
+
         for (let i = 0; i < numberOfSeats; i++) {
             const input = document.createElement("input");
             input.type = "text";
             input.classList.add("form-control", "mb-2");
             input.placeholder = `Enter university ID of student #${i + 1}`;
-            
+
             // Store reference for validation
             studentInputs.push(input);
             creditedStudentFields.appendChild(input);
         }
-    
+
         function validateInputs() {
             const ids = studentInputs.map(input => input.value.trim());
             const allValid = ids.every(id => id.length === 8 && /^\d+$/.test(id));
             const unique = new Set(ids).size === ids.length;
-            
+
             reserveButton.disabled = !(allValid && unique);
         }
-    
+
         studentInputs.forEach(input => input.addEventListener("input", validateInputs));
-    
+
         console.log("Student input fields generated.");
-    }    
+    }
 
     purposeInput.addEventListener("input", function () {
         const maxLength = 200;
@@ -441,13 +512,13 @@ document.addEventListener("DOMContentLoaded", function () {
             .map(input => input.value.trim())
             .filter(value => value);
         const purpose = purposeInput.value.trim();
-    
+
         // Validation check for required fields
         if (!selectedLab || selectedSeats.length === 0 || selectedStudents.length === 0) {
             alert("Please ensure all required fields are filled out.");
             return;
         }
-    
+
         try {
             // Step 1: Validate university IDs
             const validationResponse = await fetch(`/api/students/validate-university-ids`, {
@@ -455,21 +526,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ universityIDs: selectedStudents }),
             });
-    
+
             const validationData = await validationResponse.json();
-    
+
             if (!validationResponse.ok) {
                 console.error("Validation failed:", validationData);
                 alert(`Invalid university IDs: ${validationData.missingIDs.join(", ")}`);
                 return;
             }
-    
+
             console.log("All university IDs validated successfully.");
-    
+
             // Step 2: Extract student ObjectIDs for the valid students
             const foundStudentsData = validationData.foundStudentsData;
             const creditedStudentIDs = foundStudentsData.map(student => student.objectID);
-    
+
             // Step 3: Create the reservation data
             const reservationData = {
                 seatIDs: selectedSeats,
@@ -480,24 +551,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 status: "Reserved",
                 isAnonymous: anonymousCheck.checked,
             };
-    
+
             console.log("Reservation data to be sent:", reservationData);
-    
+
             // Step 4: API call
             const reservationResponse = await fetch(`/api/reservations`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(reservationData),
             });
-        
+
             const reservationResult = await reservationResponse.json();
-        
+
             if (!reservationResponse.ok) {
                 console.error("Reservation failed:", reservationResult);
                 alert("Reservation failed! Please try again.");
                 return;
             }
-        
+
             console.log("Reservation successful. Server response:", reservationResult);
             resetForm();
             alert("Reservation successful!");
@@ -512,28 +583,30 @@ document.addEventListener("DOMContentLoaded", function () {
         roomSelect.innerHTML = '<option value="" disabled selected>Select a building first</option>';
         roomSelect.disabled = true;
         dateInput.value = "";
+        dateInput.disabled = true;
         startTimeSelect.innerHTML = '<option value="" disabled selected>Select start time</option>';
+        startTimeSelect.disabled = true;
         endTimeSelect.innerHTML = '<option value="" disabled selected>Select end time</option>';
         endTimeSelect.disabled = true;
         confirmSeatsButton.disabled = true;
-        
+
         // Hide seat selection, students section, purpose, and reserve anonymously checkbox
         seatSelectionDiv.style.display = 'none';
         studentsSection.style.display = 'none';
         document.getElementById("purpose-section").style.display = 'none';
         document.getElementById("anonymous-section").style.display = 'none';
         document.getElementById("reserveButton").style.display = 'none';
-        
+
         // Clear students section and input fields
         creditedStudentFields.innerHTML = '';
-        
+
         // Reset purpose input field
         purposeInput.value = '';
-        
+
         // Reset reserve button
         reserveButton.disabled = true;
         anonymousCheck.checked = false;
-    
+
         console.log("Form reset.");
     }
 });
