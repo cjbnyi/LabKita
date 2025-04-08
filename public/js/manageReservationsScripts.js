@@ -79,8 +79,8 @@ function updateReservations() {
                         // Shift start and end datetime by -8 hours
                         const startTime = new Date(reservation.start_datetime);
                         const endTime = new Date(reservation.end_datetime);
-                        startTime.setHours(startTime.getHours() + 8);
-                        endTime.setHours(endTime.getHours() + 8);
+                        startTime.setHours(startTime.getHours() - 8);
+                        endTime.setHours(endTime.getHours() - 8);
 
                         const formattedStart = startTime.toISOString().slice(0, 16).replace("T", " ");
                         const formattedEnd = endTime.toISOString().slice(0, 16).replace("T", " ");
@@ -132,8 +132,8 @@ function updateReservations() {
                         // Shift past reservation datetime too
                         const startTime = new Date(reservation.start_datetime);
                         const endTime = new Date(reservation.end_datetime);
-                        startTime.setHours(startTime.getHours() + 8);
-                        endTime.setHours(endTime.getHours() + 8);
+                        startTime.setHours(startTime.getHours() - 8);
+                        endTime.setHours(endTime.getHours() - 8);
 
                         const formattedStart = startTime.toISOString().slice(0, 16).replace("T", " ");
                         const formattedEnd = endTime.toISOString().slice(0, 16).replace("T", " ");
