@@ -186,8 +186,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedDateStr = dateInput.value;
         console.log("Selected date string:", selectedDateStr);
 
-        // Parse the selected date string (format: MM/DD/YYYY)
-        const [month, day, year] = selectedDateStr.split('/');
+        // Parse the selected date string (format: M/D/YYYY)
+        const dateParts = selectedDateStr.split('/');
+        const month = parseInt(dateParts[0]);
+        const day = parseInt(dateParts[1]);
+        const year = parseInt(dateParts[2]);
+
         const selectedDate = new Date(year, month - 1, day);
 
         // Compare dates by year, month, and day only
