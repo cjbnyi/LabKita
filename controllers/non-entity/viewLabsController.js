@@ -10,7 +10,7 @@ const getViewLabsPage = async (req, res) => {
 
         res.render('view-labs', { title: "View Labs", labs, buildings });
     } catch (error) {
-        res.status(500).json({ error: 'Error loading view labs page' });
+        res.status(500).json({ error: 'Error loading view labs page ' });
     }
 };
 
