@@ -274,21 +274,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Populate end time options starting 30 minutes after the selected start time
         let nextStartTime = new Date();
-        nextStartTime.setHours(hour, minute + 30, 0, 0); // Add 30 minutes to the selected start time
+        nextStartTime.setHours(hour, minute + 30, 0, 0);
 
-        // Loop to populate end times up until the lab's closing time
-        while (
-            nextStartTime.getHours() < closingHour ||
-            (nextStartTime.getHours() === closingHour && nextStartTime.getMinutes() <= closingMinute)
-            ) {
-            let endTimeString = `${String(nextStartTime.getHours()).padStart(2, "0")}:${String(nextStartTime.getMinutes()).padStart(2, "0")}`;
-            endTimeSelect.appendChild(new Option(endTimeString, endTimeString));
+        // Loop until we reach the end time
+        while (nextStartTime.getHours() < closingHour ||
+        (nextStartTime.getHours() === closingHour && nextStartTime.getMinutes() <= closingMinute)) {
+            let displayHour = nextStartTime.getHours();
+            let period = "AM";
+
+            if (displayHour >= 12) {
+                period = "PM";
+                if (displayHour > 12) {
+                    displayHour -= 12;
+                }
+            }
+            if (displayHour === 0) {
+                displayHour = 12;
+            }
+
+            const timeString = `${String(nextStartTime.getHours()).padStart(2, "0")}:${String(nextStartTime.getMinutes()).padStart(2, "0")}`;
+            const displayString = `${String(displayHour).padStart(2, "0")}:${String(nextStartTime.getMinutes()).padStart(2, "0")} ${period}`;
+
+            const option = new Option(displayString, timeString);
+            endTimeSelect.appendChild(option);
 
             // Increment by 30 minutes
             nextStartTime.setMinutes(nextStartTime.getMinutes() + 30);
         }
 
-        // Enable the end time once a start time is selected
         endTimeSelect.disabled = false;
         console.log("End time options populated.");
     });
