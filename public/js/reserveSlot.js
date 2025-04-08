@@ -183,8 +183,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Get current time and selected date
         const now = new Date();
-        const selectedDate = new Date(dateInput.value);
-        const isToday = selectedDate.toDateString() === now.toDateString();
+        const selectedDateStr = dateInput.value;
+        console.log("Selected date string:", selectedDateStr);
+
+        // Parse the selected date string (format: MM/DD/YYYY)
+        const [month, day, year] = selectedDateStr.split('/');
+        const selectedDate = new Date(year, month - 1, day);
+
+        // Compare dates by year, month, and day only
+        const isToday = now.getFullYear() === selectedDate.getFullYear() &&
+            now.getMonth() === selectedDate.getMonth() &&
+            now.getDate() === selectedDate.getDate();
+
+        console.log("Current date:", now.toLocaleDateString());
+        console.log("Selected date:", selectedDate.toLocaleDateString());
+        console.log("Is today?", isToday);
 
         let currentHour = start.hours;
         let currentMinute = start.minutes;
@@ -193,6 +206,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isToday) {
             const currentHourNow = now.getHours();
             const currentMinuteNow = now.getMinutes();
+
+            console.log("Current time:", currentHourNow + ":" + currentMinuteNow);
 
             // If current time is after lab opening time
             if (currentHourNow > start.hours || (currentHourNow === start.hours && currentMinuteNow >= start.minutes)) {
@@ -205,6 +220,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     currentHour++;
                     currentMinute = 0;
                 }
+
+                console.log("Adjusted start time:", currentHour + ":" + currentMinute);
 
                 // If the rounded time is after lab closing time, no slots available
                 if (currentHour > end.hours || (currentHour === end.hours && currentMinute >= end.minutes)) {
