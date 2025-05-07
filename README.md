@@ -22,12 +22,12 @@ The following students of De La Salle University - Manila, Philippines collabora
   <tbody>
     <tr>
       <td align="center">
-        <img src="https://github.com/cjbnyi.png" width="50" height="50" style="border-radius: 50%;" />
+        <img src="https://github.com/qu1r0ra.png" width="50" height="50" style="border-radius: 50%;" />
       </td>
       <td>
         <strong>Christian Joseph Bunyi</strong>  
         <br />
-        <a href="https://github.com/cjbnyi">@cjbnyi</a>
+        <a href="https://github.com/qu1r0ra">@qu1r0ra</a>
       </td>
       <td>Fullstack</td>
     </tr>
