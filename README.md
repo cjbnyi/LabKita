@@ -82,8 +82,6 @@ The following web technologies and frameworks were used for this project:
 
 ### NPM packages
 
-### Dependencies
-
 | Package                  | Description                                                   |
 |--------------------------|---------------------------------------------------------------|
 | **bcryptjs**              | Password hashing library for authentication.                  |
